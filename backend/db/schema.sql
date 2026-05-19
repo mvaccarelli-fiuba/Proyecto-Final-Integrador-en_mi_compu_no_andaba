@@ -16,8 +16,8 @@ CREATE TABLE platos (
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT,
     precio DECIMAL(10,2) NOT NULL,
-    vegano BOOLEAN NOT NULL DEFAULT FALSE
-    vegetariano BOOLEAN NOT NULL DEFAULT FALSE
+    vegano BOOLEAN NOT NULL DEFAULT FALSE,
+    vegetariano BOOLEAN NOT NULL DEFAULT FALSE,
     gluten BOOLEAN NOT NULL DEFAULT FALSE,
     imagen_url VARCHAR(200),
     activo BOOLEAN DEFAULT TRUE,
