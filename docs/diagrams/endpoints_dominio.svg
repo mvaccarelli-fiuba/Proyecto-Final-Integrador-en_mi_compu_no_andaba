@@ -1,0 +1,174 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 760" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12">
+  <style>
+    .pub-box  { fill: #E6F1FB; stroke: #185FA5; stroke-width: 1; }
+    .pub-text { fill: #042C53; }
+    .adm-box  { fill: #FAECE7; stroke: #993C1D; stroke-width: 1; }
+    .adm-text { fill: #4A1B0C; }
+    .tok-box  { fill: #FAEEDA; stroke: #854F0B; stroke-width: 1; }
+    .tok-text { fill: #412402; }
+    .tbl-box  { fill: #F1EFE8; stroke: #5F5E5A; stroke-width: 0.5; }
+    .tbl-text { fill: #2C2C2A; font-weight: 600; }
+    .title    { fill: #2C2C2A; font-weight: 600; font-size: 13px; }
+    .sub      { font-size: 11px; }
+    .arr      { stroke: #888780; stroke-width: 1; fill: none; }
+    .legend-box-bg { fill: #ffffff; stroke: #B4B2A9; stroke-width: 0.5; }
+    @media (prefers-color-scheme: dark) {
+      .pub-box  { fill: #0C447C; stroke: #B5D4F4; }
+      .pub-text { fill: #E6F1FB; }
+      .adm-box  { fill: #712B13; stroke: #F5C4B3; }
+      .adm-text { fill: #FAECE7; }
+      .tok-box  { fill: #633806; stroke: #FAC775; }
+      .tok-text { fill: #FAEEDA; }
+      .tbl-box  { fill: #2C2C2A; stroke: #B4B2A9; }
+      .tbl-text { fill: #F1EFE8; }
+      .title    { fill: #F1EFE8; }
+      .arr      { stroke: #B4B2A9; }
+      .legend-box-bg { fill: #1f1f1d; stroke: #5F5E5A; }
+    }
+    .arrow-head { fill: #888780; }
+    @media (prefers-color-scheme: dark) {
+      .arrow-head { fill: #B4B2A9; }
+    }
+  </style>
+
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path class="arrow-head" d="M0 0 L10 5 L0 10 z"/>
+    </marker>
+  </defs>
+
+  <!-- Leyenda -->
+  <g transform="translate(40,30)">
+    <rect class="legend-box-bg" x="0" y="0" width="540" height="44" rx="6"/>
+    <rect class="pub-box" x="14" y="14" width="16" height="16" rx="3"/>
+    <text class="title sub" x="36" y="26">Público</text>
+    <rect class="adm-box" x="120" y="14" width="16" height="16" rx="3"/>
+    <text class="title sub" x="142" y="26">Admin (JWT)</text>
+    <rect class="tok-box" x="260" y="14" width="16" height="16" rx="3"/>
+    <text class="title sub" x="282" y="26">Token de reserva (QR / email)</text>
+  </g>
+
+  <!-- ===== Fila 1: Autenticación ===== -->
+  <g transform="translate(40,100)">
+    <rect class="adm-box" x="0" y="0" width="280" height="74" rx="6"/>
+    <text class="adm-text title" x="140" y="22" text-anchor="middle">Autenticación admin</text>
+    <text class="adm-text sub"   x="140" y="44" text-anchor="middle">POST /api/admin/login</text>
+    <text class="adm-text sub"   x="140" y="60" text-anchor="middle">GET /me, POST /logout</text>
+  </g>
+  <rect class="tbl-box" x="440" y="115" width="160" height="44" rx="4"/>
+  <text class="tbl-text" x="520" y="143" text-anchor="middle">admin</text>
+  <line class="arr" x1="320" y1="137" x2="438" y2="137" marker-end="url(#ah)"/>
+
+  <!-- ===== Fila 2: Menú ===== -->
+  <g transform="translate(40,200)">
+    <rect class="pub-box" x="0" y="0" width="135" height="80" rx="6"/>
+    <text class="pub-text title" x="67" y="22" text-anchor="middle">Menú público</text>
+    <text class="pub-text sub"   x="67" y="44" text-anchor="middle">GET /platos</text>
+    <text class="pub-text sub"   x="67" y="60" text-anchor="middle">GET /categorias</text>
+  </g>
+  <g transform="translate(185,200)">
+    <rect class="adm-box" x="0" y="0" width="135" height="80" rx="6"/>
+    <text class="adm-text title" x="67" y="22" text-anchor="middle">Menú admin</text>
+    <text class="adm-text sub"   x="67" y="44" text-anchor="middle">POST/PUT/DELETE</text>
+    <text class="adm-text sub"   x="67" y="60" text-anchor="middle">/admin/platos</text>
+  </g>
+  <rect class="tbl-box" x="440" y="200" width="160" height="22" rx="4"/>
+  <text class="tbl-text" x="520" y="216" text-anchor="middle">plato</text>
+  <rect class="tbl-box" x="440" y="229" width="160" height="22" rx="4"/>
+  <text class="tbl-text" x="520" y="245" text-anchor="middle">categoria_plato</text>
+  <rect class="tbl-box" x="440" y="258" width="160" height="22" rx="4"/>
+  <text class="tbl-text" x="520" y="274" text-anchor="middle">plato_restriccion</text>
+  <line class="arr" x1="320" y1="240" x2="438" y2="240" marker-end="url(#ah)"/>
+
+  <!-- ===== Fila 3: Servicios ===== -->
+  <g transform="translate(40,310)">
+    <rect class="pub-box" x="0" y="0" width="135" height="60" rx="6"/>
+    <text class="pub-text title" x="67" y="22" text-anchor="middle">Servicios públ.</text>
+    <text class="pub-text sub"   x="67" y="44" text-anchor="middle">GET /servicios</text>
+  </g>
+  <g transform="translate(185,310)">
+    <rect class="adm-box" x="0" y="0" width="135" height="60" rx="6"/>
+    <text class="adm-text title" x="67" y="22" text-anchor="middle">Servicios admin</text>
+    <text class="adm-text sub"   x="67" y="44" text-anchor="middle">ABM /admin/servicios</text>
+  </g>
+  <rect class="tbl-box" x="440" y="320" width="160" height="40" rx="4"/>
+  <text class="tbl-text" x="520" y="345" text-anchor="middle">servicio_extra</text>
+  <line class="arr" x1="320" y1="340" x2="438" y2="340" marker-end="url(#ah)"/>
+
+  <!-- ===== Fila 4: Mesas ===== -->
+  <g transform="translate(40,400)">
+    <rect class="adm-box" x="0" y="0" width="280" height="60" rx="6"/>
+    <text class="adm-text title" x="140" y="22" text-anchor="middle">Mesas (solo admin)</text>
+    <text class="adm-text sub"   x="140" y="44" text-anchor="middle">ABM /admin/mesas</text>
+  </g>
+  <rect class="tbl-box" x="440" y="410" width="160" height="40" rx="4"/>
+  <text class="tbl-text" x="520" y="435" text-anchor="middle">mesa</text>
+  <line class="arr" x1="320" y1="430" x2="438" y2="430" marker-end="url(#ah)"/>
+
+  <!-- ===== Fila 5: Reservas ===== -->
+  <g transform="translate(40,490)">
+    <rect class="pub-box" x="0" y="0" width="92" height="100" rx="6"/>
+    <text class="pub-text title" x="46" y="22" text-anchor="middle">Reservas</text>
+    <text class="pub-text title" x="46" y="38" text-anchor="middle">público</text>
+    <text class="pub-text sub"   x="46" y="64" text-anchor="middle">GET /dispo-</text>
+    <text class="pub-text sub"   x="46" y="80" text-anchor="middle">nibilidad</text>
+  </g>
+  <g transform="translate(140,490)">
+    <rect class="tok-box" x="0" y="0" width="92" height="100" rx="6"/>
+    <text class="tok-text title" x="46" y="22" text-anchor="middle">Reservas</text>
+    <text class="tok-text title" x="46" y="38" text-anchor="middle">por token</text>
+    <text class="tok-text sub"   x="46" y="64" text-anchor="middle">POST crear</text>
+    <text class="tok-text sub"   x="46" y="80" text-anchor="middle">PUT cancelar</text>
+  </g>
+  <g transform="translate(240,490)">
+    <rect class="adm-box" x="0" y="0" width="92" height="100" rx="6"/>
+    <text class="adm-text title" x="46" y="22" text-anchor="middle">Reservas</text>
+    <text class="adm-text title" x="46" y="38" text-anchor="middle">admin</text>
+    <text class="adm-text sub"   x="46" y="64" text-anchor="middle">GET listado</text>
+    <text class="adm-text sub"   x="46" y="80" text-anchor="middle">POST consumir</text>
+  </g>
+  <rect class="tbl-box" x="440" y="500" width="160" height="22" rx="4"/>
+  <text class="tbl-text" x="520" y="516" text-anchor="middle">reserva</text>
+  <rect class="tbl-box" x="440" y="529" width="160" height="22" rx="4"/>
+  <text class="tbl-text" x="520" y="545" text-anchor="middle">mesa</text>
+  <line class="arr" x1="332" y1="540" x2="438" y2="540" marker-end="url(#ah)"/>
+
+  <!-- ===== Fila 6: Reseñas ===== -->
+  <g transform="translate(40,620)">
+    <rect class="pub-box" x="0" y="0" width="92" height="80" rx="6"/>
+    <text class="pub-text title" x="46" y="22" text-anchor="middle">Reseñas</text>
+    <text class="pub-text title" x="46" y="38" text-anchor="middle">público</text>
+    <text class="pub-text sub"   x="46" y="64" text-anchor="middle">GET /resenas</text>
+  </g>
+  <g transform="translate(140,620)">
+    <rect class="tok-box" x="0" y="0" width="92" height="80" rx="6"/>
+    <text class="tok-text title" x="46" y="22" text-anchor="middle">Publicar</text>
+    <text class="tok-text title" x="46" y="38" text-anchor="middle">reseña</text>
+    <text class="tok-text sub"   x="46" y="64" text-anchor="middle">POST /resenas</text>
+  </g>
+  <g transform="translate(240,620)">
+    <rect class="adm-box" x="0" y="0" width="92" height="80" rx="6"/>
+    <text class="adm-text title" x="46" y="22" text-anchor="middle">Moderar</text>
+    <text class="adm-text title" x="46" y="38" text-anchor="middle">reseñas</text>
+    <text class="adm-text sub"   x="46" y="64" text-anchor="middle">DELETE admin</text>
+  </g>
+  <rect class="tbl-box" x="440" y="640" width="160" height="40" rx="4"/>
+  <text class="tbl-text" x="520" y="665" text-anchor="middle">resena</text>
+  <line class="arr" x1="332" y1="660" x2="438" y2="660" marker-end="url(#ah)"/>
+
+  <!-- ===== Detalle del lado derecho: tablas auxiliares del dashboard ===== -->
+  <g transform="translate(720,490)">
+    <rect class="adm-box" x="0" y="0" width="200" height="100" rx="6"/>
+    <text class="adm-text title" x="100" y="22" text-anchor="middle">Dashboard + informes</text>
+    <text class="adm-text title" x="100" y="38" text-anchor="middle">+ logs</text>
+    <text class="adm-text sub"   x="100" y="60" text-anchor="middle">GET /admin/stats/*</text>
+    <text class="adm-text sub"   x="100" y="78" text-anchor="middle">GET /admin/informes/*.pdf</text>
+  </g>
+  <rect class="tbl-box" x="950" y="500" width="120" height="22" rx="4"/>
+  <text class="tbl-text" x="1010" y="516" text-anchor="middle">reserva</text>
+  <rect class="tbl-box" x="950" y="529" width="120" height="22" rx="4"/>
+  <text class="tbl-text" x="1010" y="545" text-anchor="middle">resena</text>
+  <rect class="tbl-box" x="950" y="558" width="120" height="22" rx="4"/>
+  <text class="tbl-text" x="1010" y="574" text-anchor="middle">log_actividad</text>
+  <line class="arr" x1="920" y1="540" x2="948" y2="540" marker-end="url(#ah)"/>
+</svg>

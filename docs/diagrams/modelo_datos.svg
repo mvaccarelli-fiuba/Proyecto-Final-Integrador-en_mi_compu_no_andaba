@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 720" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12">
+  <style>
+    .table-header { fill: #185FA5; }
+    .table-header-text { fill: #ffffff; font-weight: 600; font-size: 13px; }
+    .table-body { fill: #ffffff; stroke: #B5D4F4; stroke-width: 1; }
+    .pk { font-weight: 600; fill: #042C53; }
+    .fk { font-style: italic; fill: #534AB7; }
+    .col { fill: #2C2C2A; }
+    .rel { stroke: #5F5E5A; stroke-width: 1.5; fill: none; }
+    .rel-label { fill: #5F5E5A; font-size: 11px; font-style: italic; }
+    .legend-box { fill: #F1EFE8; stroke: #B4B2A9; stroke-width: 0.5; }
+    @media (prefers-color-scheme: dark) {
+      .table-body { fill: #1f1f1d; stroke: #444441; }
+      .pk { fill: #B5D4F4; }
+      .fk { fill: #AFA9EC; }
+      .col { fill: #D3D1C7; }
+      .rel { stroke: #B4B2A9; }
+      .rel-label { fill: #B4B2A9; }
+      .legend-box { fill: #2C2C2A; stroke: #5F5E5A; }
+    }
+  </style>
+
+  <!-- ADMIN -->
+  <g transform="translate(40,40)">
+    <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
+    <rect class="table-body"   x="0" y="24" width="180" height="96"/>
+    <text class="table-header-text" x="90" y="16" text-anchor="middle">admin</text>
+    <text class="pk"  x="10" y="42">id (PK)</text>
+    <text class="col" x="10" y="60">email</text>
+    <text class="col" x="10" y="78">password_hash</text>
+    <text class="col" x="10" y="96">nombre</text>
+    <text class="col" x="10" y="114">activo</text>
+  </g>
+
+  <!-- LOG_ACTIVIDAD -->
+  <g transform="translate(40,200)">
+    <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
+    <rect class="table-body"   x="0" y="24" width="180" height="114"/>
+    <text class="table-header-text" x="90" y="16" text-anchor="middle">log_actividad</text>
+    <text class="pk"  x="10" y="42">id (PK)</text>
+    <text class="fk"  x="10" y="60">admin_id (FK)</text>
+    <text class="col" x="10" y="78">accion</text>
+    <text class="col" x="10" y="96">entidad</text>
+    <text class="col" x="10" y="114">detalle (JSON)</text>
+    <text class="col" x="10" y="132">creado_en</text>
+  </g>
+
+  <!-- CATEGORIA_PLATO -->
+  <g transform="translate(280,40)">
+    <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
+    <rect class="table-body"   x="0" y="24" width="180" height="42"/>
+    <text class="table-header-text" x="90" y="16" text-anchor="middle">categoria_plato</text>
+    <text class="pk"  x="10" y="42">id (PK)</text>
+    <text class="col" x="10" y="60">nombre</text>
+  </g>
+
+  <!-- PLATO -->
+  <g transform="translate(280,140)">
+    <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
+    <rect class="table-body"   x="0" y="24" width="180" height="132"/>
+    <text class="table-header-text" x="90" y="16" text-anchor="middle">plato</text>
+    <text class="pk"  x="10" y="42">id (PK)</text>
+    <text class="col" x="10" y="60">nombre</text>
+    <text class="col" x="10" y="78">descripcion</text>
+    <text class="col" x="10" y="96">precio</text>
+    <text class="col" x="10" y="114">imagen_url</text>
+    <text class="fk"  x="10" y="132">categoria_id (FK)</text>
+    <text class="col" x="10" y="150">disponible</text>
+  </g>
+
+  <!-- PLATO_RESTRICCION -->
+  <g transform="translate(280,320)">
+    <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
+    <rect class="table-body"   x="0" y="24" width="180" height="42"/>
+    <text class="table-header-text" x="90" y="16" text-anchor="middle">plato_restriccion</text>
+    <text class="pk"  x="10" y="42">plato_id (PK,FK)</text>
+    <text class="pk"  x="10" y="60">restriccion_id (PK,FK)</text>
+  </g>
+
+  <!-- RESTRICCION_ALIMENTICIA -->
+  <g transform="translate(280,400)">
+    <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
+    <rect class="table-body"   x="0" y="24" width="180" height="42"/>
+    <text class="table-header-text" x="90" y="16" text-anchor="middle">restriccion_alimenticia</text>
+    <text class="pk"  x="10" y="42">id (PK)</text>
+    <text class="col" x="10" y="60">nombre</text>
+  </g>
+
+  <!-- SERVICIO_EXTRA -->
+  <g transform="translate(280,500)">
+    <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
+    <rect class="table-body"   x="0" y="24" width="180" height="78"/>
+    <text class="table-header-text" x="90" y="16" text-anchor="middle">servicio_extra</text>
+    <text class="pk"  x="10" y="42">id (PK)</text>
+    <text class="col" x="10" y="60">nombre</text>
+    <text class="col" x="10" y="78">descripcion</text>
+    <text class="col" x="10" y="96">activo</text>
+  </g>
+
+  <!-- MESA -->
+  <g transform="translate(520,40)">
+    <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
+    <rect class="table-body"   x="0" y="24" width="180" height="60"/>
+    <text class="table-header-text" x="90" y="16" text-anchor="middle">mesa</text>
+    <text class="pk"  x="10" y="42">id (PK)</text>
+    <text class="col" x="10" y="60">numero</text>
+    <text class="col" x="10" y="78">capacidad</text>
+  </g>
+
+  <!-- RESERVA -->
+  <g transform="translate(520,160)">
+    <rect class="table-header" x="0" y="0" width="200" height="24" rx="4"/>
+    <rect class="table-body"   x="0" y="24" width="200" height="222"/>
+    <text class="table-header-text" x="100" y="16" text-anchor="middle">reserva</text>
+    <text class="pk"  x="10" y="42">id (PK)</text>
+    <text class="col" x="10" y="60">token (UUID)</text>
+    <text class="col" x="10" y="78">cliente_nombre</text>
+    <text class="col" x="10" y="96">cliente_email</text>
+    <text class="col" x="10" y="114">cantidad_personas</text>
+    <text class="col" x="10" y="132">fecha</text>
+    <text class="col" x="10" y="150">hora_inicio</text>
+    <text class="fk"  x="10" y="168">mesa_id (FK)</text>
+    <text class="col" x="10" y="186">estado</text>
+    <text class="col" x="10" y="204">creado_en</text>
+    <text class="col" x="10" y="222">cancelado_en</text>
+    <text class="col" x="10" y="240">consumido_en</text>
+  </g>
+
+  <!-- RESENA -->
+  <g transform="translate(800,200)">
+    <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
+    <rect class="table-body"   x="0" y="24" width="180" height="132"/>
+    <text class="table-header-text" x="90" y="16" text-anchor="middle">resena</text>
+    <text class="pk"  x="10" y="42">id (PK)</text>
+    <text class="fk"  x="10" y="60">reserva_id (FK, único)</text>
+    <text class="col" x="10" y="78">puntaje</text>
+    <text class="col" x="10" y="96">comentario</text>
+    <text class="col" x="10" y="114">autor</text>
+    <text class="col" x="10" y="132">publicada</text>
+    <text class="col" x="10" y="150">creado_en</text>
+  </g>
+
+  <!-- Relaciones -->
+  <!-- admin -> log_actividad (1:N) -->
+  <path class="rel" d="M 130 160 L 130 200"/>
+  <text class="rel-label" x="135" y="184">1:N</text>
+
+  <!-- categoria_plato -> plato (1:N) -->
+  <path class="rel" d="M 370 106 L 370 140"/>
+  <text class="rel-label" x="375" y="128">1:N</text>
+
+  <!-- plato -> plato_restriccion (1:N) -->
+  <path class="rel" d="M 370 292 L 370 320"/>
+  <text class="rel-label" x="375" y="310">1:N</text>
+
+  <!-- restriccion -> plato_restriccion (1:N) -->
+  <path class="rel" d="M 370 400 L 370 386"/>
+  <text class="rel-label" x="375" y="394">1:N</text>
+
+  <!-- mesa -> reserva (1:N) -->
+  <path class="rel" d="M 610 124 L 610 160"/>
+  <text class="rel-label" x="615" y="146">1:N</text>
+
+  <!-- reserva -> resena (1:0..1) -->
+  <path class="rel" d="M 720 280 L 800 280"/>
+  <text class="rel-label" x="735" y="274">1:0..1</text>
+
+  <!-- Leyenda -->
+  <g transform="translate(800,420)">
+    <rect class="legend-box" x="0" y="0" width="260" height="180" rx="6"/>
+    <text class="col" x="14" y="24" font-weight="600">Notación</text>
+    <text class="pk"  x="14" y="50">id (PK)</text>
+    <text class="col" x="120" y="50">→ clave primaria</text>
+    <text class="fk"  x="14" y="72">campo (FK)</text>
+    <text class="col" x="120" y="72">→ clave foránea</text>
+    <text class="col" x="14" y="100" font-weight="600">Relaciones</text>
+    <text class="col" x="14" y="120">1:N    uno a muchos</text>
+    <text class="col" x="14" y="140">1:0..1  uno a cero o uno</text>
+    <text class="col" x="14" y="160">N:M    via tabla puente</text>
+  </g>
+</svg>
