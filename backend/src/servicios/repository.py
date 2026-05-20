@@ -71,6 +71,30 @@ def create_servicio(data):
             conn.close()
 
 
+def delete_servicio(id):
+    conn = get_connection()
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            UPDATE servicio_extra
+            SET activo = FALSE
+            WHERE id = %s AND activo = TRUE
+            """,
+            (id,)
+        )
+        conn.commit()
+        affected = cursor.rowcount
+        cursor.close()
+        if affected == 0:
+            raise ValueError(f"Servicio {id} no encontrado")
+    except mysql.connector.Error:
+        raise
+    finally:
+        if conn.is_connected():
+            conn.close()
+
+
 def update_servicio(id, data):
     conn = get_connection()
     try:

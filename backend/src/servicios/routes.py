@@ -50,3 +50,18 @@ def editar_servicio(id):
         return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
     except Exception as err:
         return error("500", "Internal Server Error", f"Ocurrió un error al actualizar el servicio: {err}", 500)
+
+
+#ELIMINAR SERVICIO
+
+@servicios_bp.route("/servicios/<int:id>", methods=["DELETE"])
+def eliminar_servicio(id):
+    try:
+        service.delete_servicio(id)
+        return jsonify({"message": "Servicio eliminado correctamente"}), 200
+    except ValueError as err:
+        return error("404", "Not Found", str(err), 404)
+    except mysql.connector.Error as err:
+        return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
+    except Exception as err:
+        return error("500", "Internal Server Error", f"Ocurrió un error al eliminar el servicio: {err}", 500)
