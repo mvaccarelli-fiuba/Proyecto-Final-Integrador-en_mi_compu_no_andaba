@@ -1,6 +1,7 @@
 # Arquitectura — Crusty Crab
 
 **Grupo 20 — en_mi_compu_andaba**
+Sitio web gastronómico con sistema de reservas.
 
 Este documento describe el modelo de datos y la organización de los endpoints REST del proyecto. Acompaña a [`schema.sql`](./schema.sql) y [`endpoints.md`](./endpoints.md).
 
@@ -14,10 +15,11 @@ Este documento describe el modelo de datos y la organización de los endpoints R
 
 ### Notas de diseño
 
-- **`plato_restriccion`** modela la relación N:M entre platos y restricciones alimenticias. Un plato puede ser vegetariano *y* sin TACC; una restricción aplica a muchos platos.
+- **Restricciones alimenticias como atributos del plato**: en lugar de modelar las restricciones como una tabla relacionada (N:M), las representamos como columnas booleanas en `plato` (`es_vegetariano`, `es_vegano`, `sin_gluten`). Esta decisión simplifica las consultas (una sola query en lugar de N+1) y el código del repository, dado que el conjunto de restricciones que ofrece el restaurant es cerrado y conocido. Si en el futuro el negocio necesitara soportar restricciones agregadas dinámicamente por el admin, migraríamos a un modelo N:M con tabla puente.
 - **`servicio_extra`** no se relaciona con otras tablas: es un catálogo independiente que se muestra en la landing.
-- **El estado `expirada` no se persiste** en la columna `estado` de `reserva`. Se calcula al vuelo cuando se consulta: `estado='confirmada' AND fecha < CURDATE()`.
-- **`cancelado_en` y `consumido_en`** permiten estadísticas finas en el dashboard (cancelaciones por período, etc.) además del estado actual.
+- **El estado `expirada` no se persiste** en la columna `estado` de `reserva`. Se calcula al vuelo cuando se consulta: `estado='confirmada' AND fecha < CURDATE()`. Así se evita correr un job de mantenimiento.
+- **`cancelado_en` y `consumido_en`** permiten estadísticas finas en el dashboard (cancelaciones por período, tasa de no-show, etc.) además del estado actual.
+- **`created_at`** en cada tabla permite auditar cuándo se creó cada registro. Lo carga MySQL automáticamente con `DEFAULT CURRENT_TIMESTAMP`.
 - **`log_actividad`** registra acciones de admins para auditoría. El campo `detalle` es JSON para guardar contexto variable según la acción.
 - Hay un **índice único** sobre `(mesa_id, fecha, hora_inicio, estado)` que evita por base de datos que dos reservas confirmadas pisen la misma mesa en el mismo slot.
 
@@ -32,14 +34,15 @@ Este documento describe el modelo de datos y la organización de los endpoints R
 ### Convenciones de seguridad
 
 - **Público** (azul): sin autenticación. Frontend de la landing — menú, servicios, reseñas publicadas.
-- **Admin** (rojo/coral): requiere JWT del administrador logueado. Todo lo que empieza con `/api/admin/*`.
+- **Admin** (rojo/coral): requiere JWT del administrador logueado. Todo lo que empieza con `/admin/*`.
 - **Token de reserva** (ámbar): el `token` UUID generado al crear la reserva oficia de credencial. Va en el QR y en los links del email. Permite al cliente cancelar la reserva o publicar una reseña sin necesidad de registrarse.
 
 ### Notas sobre el diagrama
 
-- Las flechas muestran la tabla "principal" que toca cada grupo de endpoints. Algunos endpoints tocan más de una tabla (ej. `POST /api/reservas` lee `mesa` para asignar y escribe en `reserva`).
+- Las flechas muestran la tabla "principal" que toca cada grupo de endpoints. Algunos endpoints tocan más de una tabla (ej. `POST /reservas` lee `mesa` para asignar y escribe en `reserva`).
 - **`log_actividad`** se escribe como side-effect de casi todos los endpoints admin, no sólo desde el dashboard. En la implementación va a ser un decorador o middleware aplicado a todas las acciones autenticadas.
 - **Dashboard e informes** leen de varias tablas (`reserva`, `resena`, `log_actividad`). El diagrama simplifica esto agrupándolos.
+- **Las restricciones alimenticias** se filtran como query params del endpoint `/platos` (`?es_vegano=true`, `?sin_gluten=true`), no como recurso aparte.
 
 ---
 
@@ -47,9 +50,9 @@ Este documento describe el modelo de datos y la organización de los endpoints R
 
 | Capa | Componente | Cantidad |
 |------|------------|----------|
-| Datos | Tablas SQL | 10 |
-| Datos | Relaciones | 6 directas + 1 N:M vía tabla puente |
-| API  | Grupos de endpoints | 13 |
+| Datos | Tablas SQL | 8 |
+| Datos | Relaciones | 4 (todas 1:N o 1:0..1) |
+| API  | Grupos de endpoints | 12 |
 | API  | Modos de autenticación | 3 (público / admin JWT / token de reserva) |
 
 Para el detalle completo de cada endpoint (verbo, path, payload, respuesta), ver [`endpoints.md`](./endpoints.md).
