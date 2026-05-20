@@ -55,6 +55,24 @@ def create_reserva():
         return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
     except Exception as err:
         return error("500", "Internal Server Error", f"Ocurrió un error al crear la reserva: {err}", 500)
+
+
+@reservas_bp.route("/reservas/<string:token>", methods=["GET"])
+def get_reserva(token):
+    try:
+        reserva = service.get_reserva(token)
+
+        return jsonify(reserva), 200
+    except ValueError as err:
+        return error("404", "Not Found", f"Reserva no encontrada: {err}", 404
+    except mysql.connector.Error as err:
+        return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500) 
+    except Exception as err:
+        return error("500", "Internal Server Error", f"Ocurrio un error al obtener la reserva: {err}", 500)
+
+
+
+        
    
                                          
 
