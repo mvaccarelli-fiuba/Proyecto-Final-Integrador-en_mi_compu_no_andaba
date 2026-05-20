@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 720" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 660" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12">
   <style>
     .table-header { fill: #185FA5; }
     .table-header-text { fill: #ffffff; font-weight: 600; font-size: 13px; }
@@ -42,7 +42,7 @@
     <text class="col" x="10" y="78">accion</text>
     <text class="col" x="10" y="96">entidad</text>
     <text class="col" x="10" y="114">detalle (JSON)</text>
-    <text class="col" x="10" y="132">creado_en</text>
+    <text class="col" x="10" y="132">created_at</text>
   </g>
 
   <!-- CATEGORIA_PLATO -->
@@ -54,10 +54,10 @@
     <text class="col" x="10" y="60">nombre</text>
   </g>
 
-  <!-- PLATO -->
+  <!-- PLATO con booleanos y created_at -->
   <g transform="translate(280,140)">
     <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
-    <rect class="table-body"   x="0" y="24" width="180" height="132"/>
+    <rect class="table-body"   x="0" y="24" width="180" height="222"/>
     <text class="table-header-text" x="90" y="16" text-anchor="middle">plato</text>
     <text class="pk"  x="10" y="42">id (PK)</text>
     <text class="col" x="10" y="60">nombre</text>
@@ -66,28 +66,14 @@
     <text class="col" x="10" y="114">imagen_url</text>
     <text class="fk"  x="10" y="132">categoria_id (FK)</text>
     <text class="col" x="10" y="150">disponible</text>
-  </g>
-
-  <!-- PLATO_RESTRICCION -->
-  <g transform="translate(280,320)">
-    <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
-    <rect class="table-body"   x="0" y="24" width="180" height="42"/>
-    <text class="table-header-text" x="90" y="16" text-anchor="middle">plato_restriccion</text>
-    <text class="pk"  x="10" y="42">plato_id (PK,FK)</text>
-    <text class="pk"  x="10" y="60">restriccion_id (PK,FK)</text>
-  </g>
-
-  <!-- RESTRICCION_ALIMENTICIA -->
-  <g transform="translate(280,400)">
-    <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
-    <rect class="table-body"   x="0" y="24" width="180" height="42"/>
-    <text class="table-header-text" x="90" y="16" text-anchor="middle">restriccion_alimenticia</text>
-    <text class="pk"  x="10" y="42">id (PK)</text>
-    <text class="col" x="10" y="60">nombre</text>
+    <text class="col" x="10" y="168">es_vegetariano</text>
+    <text class="col" x="10" y="186">es_vegano</text>
+    <text class="col" x="10" y="204">sin_gluten</text>
+    <text class="col" x="10" y="222">created_at</text>
   </g>
 
   <!-- SERVICIO_EXTRA -->
-  <g transform="translate(280,500)">
+  <g transform="translate(280,420)">
     <rect class="table-header" x="0" y="0" width="180" height="24" rx="4"/>
     <rect class="table-body"   x="0" y="24" width="180" height="78"/>
     <text class="table-header-text" x="90" y="16" text-anchor="middle">servicio_extra</text>
@@ -121,7 +107,7 @@
     <text class="col" x="10" y="150">hora_inicio</text>
     <text class="fk"  x="10" y="168">mesa_id (FK)</text>
     <text class="col" x="10" y="186">estado</text>
-    <text class="col" x="10" y="204">creado_en</text>
+    <text class="col" x="10" y="204">created_at</text>
     <text class="col" x="10" y="222">cancelado_en</text>
     <text class="col" x="10" y="240">consumido_en</text>
   </g>
@@ -137,31 +123,23 @@
     <text class="col" x="10" y="96">comentario</text>
     <text class="col" x="10" y="114">autor</text>
     <text class="col" x="10" y="132">publicada</text>
-    <text class="col" x="10" y="150">creado_en</text>
+    <text class="col" x="10" y="150">created_at</text>
   </g>
 
   <!-- Relaciones -->
-  <!-- admin -> log_actividad (1:N) -->
+  <!-- admin -> log_actividad -->
   <path class="rel" d="M 130 160 L 130 200"/>
   <text class="rel-label" x="135" y="184">1:N</text>
 
-  <!-- categoria_plato -> plato (1:N) -->
+  <!-- categoria_plato -> plato -->
   <path class="rel" d="M 370 106 L 370 140"/>
   <text class="rel-label" x="375" y="128">1:N</text>
 
-  <!-- plato -> plato_restriccion (1:N) -->
-  <path class="rel" d="M 370 292 L 370 320"/>
-  <text class="rel-label" x="375" y="310">1:N</text>
-
-  <!-- restriccion -> plato_restriccion (1:N) -->
-  <path class="rel" d="M 370 400 L 370 386"/>
-  <text class="rel-label" x="375" y="394">1:N</text>
-
-  <!-- mesa -> reserva (1:N) -->
+  <!-- mesa -> reserva -->
   <path class="rel" d="M 610 124 L 610 160"/>
   <text class="rel-label" x="615" y="146">1:N</text>
 
-  <!-- reserva -> resena (1:0..1) -->
+  <!-- reserva -> resena -->
   <path class="rel" d="M 720 280 L 800 280"/>
   <text class="rel-label" x="735" y="274">1:0..1</text>
 
@@ -176,6 +154,5 @@
     <text class="col" x="14" y="100" font-weight="600">Relaciones</text>
     <text class="col" x="14" y="120">1:N    uno a muchos</text>
     <text class="col" x="14" y="140">1:0..1  uno a cero o uno</text>
-    <text class="col" x="14" y="160">N:M    via tabla puente</text>
   </g>
 </svg>

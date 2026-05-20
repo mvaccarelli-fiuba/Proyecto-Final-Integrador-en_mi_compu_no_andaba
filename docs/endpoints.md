@@ -1,16 +1,23 @@
 # API REST — Crusty Crab
 
 **Grupo 20 — en_mi_compu_andaba**
-Entregable hito 20/05 — Listado de endpoints
+Listado consolidado de endpoints del backend.
 
 ---
 
 ## Convenciones
 
-- Todas las respuestas son JSON.
-- Errores: `{ "error": "<mensaje>", "code": "<slug>" }` con códigos HTTP coherentes (400, 401, 403, 404, 409, 422, 500).
-- Autenticación admin: `Authorization: Bearer <jwt>` o cookie de sesión (a decidir en implementación).
-- Endpoints marcados con 🔒 requieren admin autenticado. Los demás son públicos.
+- Todas las respuestas son JSON, salvo cuando son 204 No Content (body vacío) o cuando devuelven un PDF.
+- Errores con el formato:
+  ```json
+  {
+    "errors": [
+      { "code": "404", "message": "Not Found", "level": "error", "description": "..." }
+    ]
+  }
+  ```
+- Autenticación admin: `Authorization: Bearer <jwt>`.
+- Endpoints marcados con 🔒 requieren admin autenticado.
 - Endpoints marcados con 🎫 usan el `token` de la reserva como autorización (el que va en el QR / link del email).
 
 ---
@@ -19,11 +26,11 @@ Entregable hito 20/05 — Listado de endpoints
 
 | Método | Path              | Auth | Descripción                          |
 |--------|-------------------|------|--------------------------------------|
-| POST   | `/api/admin/login`  | —    | Login del administrador              |
-| POST   | `/api/admin/logout` | 🔒   | Cierra la sesión                     |
-| GET    | `/api/admin/me`     | 🔒   | Devuelve datos del admin logueado    |
+| POST   | `/auth/login`     | —    | Login del administrador              |
+| POST   | `/auth/logout`    | 🔒   | Cierra la sesión                     |
+| GET    | `/auth/me`        | 🔒   | Devuelve datos del admin logueado    |
 
-**POST `/api/admin/login`**
+**POST `/auth/login`**
 ```json
 // request
 { "email": "admin@crustycrab.com", "password": "admin1234" }
@@ -35,42 +42,58 @@ Entregable hito 20/05 — Listado de endpoints
 
 ## 2. Menú (platos)
 
-| Método | Path                       | Auth | Descripción                                |
-|--------|----------------------------|------|--------------------------------------------|
-| GET    | `/api/platos`              | —    | Lista todos los platos disponibles         |
-| GET    | `/api/platos/:id`          | —    | Detalle de un plato                        |
-| GET    | `/api/categorias`          | —    | Lista de categorías del menú               |
-| GET    | `/api/restricciones`       | —    | Catálogo de restricciones alimenticias     |
-| POST   | `/api/admin/platos`        | 🔒   | Crear plato                                |
-| PUT    | `/api/admin/platos/:id`    | 🔒   | Editar plato                               |
-| DELETE | `/api/admin/platos/:id`    | 🔒   | Eliminar plato                             |
-| POST   | `/api/admin/platos/:id/imagen` | 🔒 | Subir imagen del plato (multipart)        |
+| Método | Path                          | Auth | Descripción                                |
+|--------|-------------------------------|------|--------------------------------------------|
+| GET    | `/platos`                     | —    | Lista todos los platos disponibles         |
+| GET    | `/platos/<id>`                | —    | Detalle de un plato                        |
+| GET    | `/categorias`                 | —    | Lista de categorías del menú               |
+| POST   | `/admin/platos`               | 🔒   | Crear plato                                |
+| PUT    | `/admin/platos/<id>`          | 🔒   | Editar plato                               |
+| DELETE | `/admin/platos/<id>`          | 🔒   | Eliminar plato                             |
+| POST   | `/admin/platos/<id>/imagen`   | 🔒   | Subir imagen del plato (multipart)         |
 
-**GET `/api/platos`** — query params opcionales: `categoria_id`, `restriccion_id`
+**GET `/platos`** — query params opcionales:
+- `categoria_id` (int): filtra por categoría
+- `es_vegetariano` (true/false): filtra platos vegetarianos
+- `es_vegano` (true/false): filtra platos veganos
+- `sin_gluten` (true/false): filtra platos sin gluten
+
 ```json
 // response 200
 [
   {
-    "id": 1,
-    "nombre": "Krabby Patty",
-    "descripcion": "La hamburguesa secreta de la casa.",
-    "precio": 5500.00,
-    "imagen_url": "/static/platos/1.jpg",
-    "categoria": { "id": 1, "nombre": "Hamburguesas" },
-    "restricciones": []
+    "id": 3,
+    "nombre": "Veggie Patty",
+    "descripcion": "Versión vegetariana con medallón de lentejas.",
+    "precio": 5200.0,
+    "imagen_url": "/static/platos/3.jpg",
+    "disponible": true,
+    "created_at": "2026-05-19T03:25:30",
+    "categoria": {
+      "id": 1,
+      "nombre": "Hamburguesas"
+    },
+    "restricciones": {
+      "es_vegetariano": true,
+      "es_vegano": false,
+      "sin_gluten": false
+    }
   }
 ]
+// response 204 si no hay platos
 ```
 
-**POST `/api/admin/platos`**
+**POST `/admin/platos`**
 ```json
 // request
 {
   "nombre": "Krabby Patty",
   "descripcion": "...",
-  "precio": 5500.00,
+  "precio": 5500.0,
   "categoria_id": 1,
-  "restriccion_ids": [1, 3]
+  "es_vegetariano": false,
+  "es_vegano": false,
+  "sin_gluten": false
 }
 // response 201 → mismo formato que GET
 ```
@@ -81,24 +104,24 @@ Entregable hito 20/05 — Listado de endpoints
 
 | Método | Path                          | Auth | Descripción                     |
 |--------|-------------------------------|------|---------------------------------|
-| GET    | `/api/servicios`              | —    | Lista de servicios activos      |
-| POST   | `/api/admin/servicios`        | 🔒   | Crear servicio                  |
-| PUT    | `/api/admin/servicios/:id`    | 🔒   | Editar servicio                 |
-| DELETE | `/api/admin/servicios/:id`    | 🔒   | Eliminar servicio               |
+| GET    | `/servicios`                  | —    | Lista de servicios activos      |
+| POST   | `/admin/servicios`            | 🔒   | Crear servicio                  |
+| PUT    | `/admin/servicios/<id>`       | 🔒   | Editar servicio                 |
+| DELETE | `/admin/servicios/<id>`       | 🔒   | Eliminar servicio               |
 
 ---
 
 ## 4. Mesas (sólo admin)
 
-| Método | Path                     | Auth | Descripción          |
-|--------|--------------------------|------|----------------------|
-| GET    | `/api/admin/mesas`       | 🔒   | Lista todas las mesas|
-| POST   | `/api/admin/mesas`       | 🔒   | Crear mesa           |
-| PUT    | `/api/admin/mesas/:id`   | 🔒   | Editar mesa          |
-| DELETE | `/api/admin/mesas/:id`   | 🔒   | Dar de baja mesa     |
+| Método | Path                  | Auth | Descripción          |
+|--------|-----------------------|------|----------------------|
+| GET    | `/admin/mesas`        | 🔒   | Lista todas las mesas|
+| POST   | `/admin/mesas`        | 🔒   | Crear mesa           |
+| PUT    | `/admin/mesas/<id>`   | 🔒   | Editar mesa          |
+| DELETE | `/admin/mesas/<id>`   | 🔒   | Dar de baja mesa     |
 
 ```json
-// POST /api/admin/mesas
+// POST /admin/mesas
 { "numero": 7, "capacidad": 4 }
 ```
 
@@ -108,14 +131,14 @@ Entregable hito 20/05 — Listado de endpoints
 
 ### Flujo público
 
-| Método | Path                                  | Auth | Descripción                                                |
-|--------|---------------------------------------|------|------------------------------------------------------------|
-| GET    | `/api/disponibilidad`                 | —    | Slots disponibles para una fecha + cantidad de personas    |
-| POST   | `/api/reservas`                       | —    | Crear reserva (asigna mesa automáticamente)                |
-| GET    | `/api/reservas/:token`                | 🎫   | Consultar reserva por su token (el del QR)                 |
-| PUT    | `/api/reservas/:token/cancelar`       | 🎫   | Cancelar reserva (link del email)                          |
+| Método | Path                              | Auth | Descripción                                                |
+|--------|-----------------------------------|------|------------------------------------------------------------|
+| GET    | `/disponibilidad`                 | —    | Slots disponibles para una fecha + cantidad de personas    |
+| POST   | `/reservas`                       | —    | Crear reserva (asigna mesa automáticamente)                |
+| GET    | `/reservas/<token>`               | 🎫   | Consultar reserva por su token (el del QR)                 |
+| PUT    | `/reservas/<token>/cancelar`      | 🎫   | Cancelar reserva (link del email)                          |
 
-**GET `/api/disponibilidad?fecha=2026-05-30&personas=4`**
+**GET `/disponibilidad?fecha=2026-05-30&personas=4`**
 ```json
 // response 200
 {
@@ -129,7 +152,7 @@ Entregable hito 20/05 — Listado de endpoints
 }
 ```
 
-**POST `/api/reservas`**
+**POST `/reservas`**
 ```json
 // request
 {
@@ -146,21 +169,21 @@ Entregable hito 20/05 — Listado de endpoints
   "mesa": { "numero": 3, "capacidad": 4 },
   "fecha": "2026-05-30",
   "hora_inicio": "20:00",
-  "qr_url": "/api/reservas/f7c1b8a2-.../qr"
+  "qr_url": "/reservas/f7c1b8a2-.../qr"
 }
 // response 409 si no hay mesa para ese slot/cantidad
 ```
 
-**GET `/api/reservas/:token/qr`** — devuelve la imagen PNG del QR (también se adjunta por mail).
+**GET `/reservas/<token>/qr`** — devuelve la imagen PNG del QR (también se adjunta por mail).
 
 ### Admin
 
-| Método | Path                                     | Auth | Descripción                                  |
-|--------|------------------------------------------|------|----------------------------------------------|
-| GET    | `/api/admin/reservas`                    | 🔒   | Listado con filtros (fecha, estado, email)   |
-| POST   | `/api/admin/reservas/consumir`           | 🔒   | Validar QR y marcar reserva como consumida   |
+| Método | Path                                | Auth | Descripción                                  |
+|--------|-------------------------------------|------|----------------------------------------------|
+| GET    | `/admin/reservas`                   | 🔒   | Listado con filtros (fecha, estado, email)   |
+| POST   | `/admin/reservas/consumir`          | 🔒   | Validar QR y marcar reserva como consumida   |
 
-**POST `/api/admin/reservas/consumir`**
+**POST `/admin/reservas/consumir`**
 ```json
 // request
 { "token": "f7c1b8a2-..." }
@@ -169,19 +192,19 @@ Entregable hito 20/05 — Listado de endpoints
 // errores: 404 token inexistente, 409 ya consumida/cancelada/expirada
 ```
 
-**GET `/api/admin/reservas`** — query params: `desde`, `hasta`, `estado`, `email`, `page`, `page_size`.
+**GET `/admin/reservas`** — query params: `desde`, `hasta`, `estado`, `email`.
 
 ---
 
 ## 6. Reseñas
 
-| Método | Path                              | Auth | Descripción                                       |
-|--------|-----------------------------------|------|---------------------------------------------------|
-| GET    | `/api/resenas`                    | —    | Lista de reseñas publicadas                       |
-| POST   | `/api/resenas`                    | 🎫   | Publicar reseña (requiere token de reserva consumida) |
-| DELETE | `/api/admin/resenas/:id`          | 🔒   | Baja lógica de reseña inapropiada                 |
+| Método | Path                          | Auth | Descripción                                       |
+|--------|-------------------------------|------|---------------------------------------------------|
+| GET    | `/resenas`                    | —    | Lista de reseñas publicadas                       |
+| POST   | `/resenas`                    | 🎫   | Publicar reseña (requiere token de reserva consumida) |
+| DELETE | `/admin/resenas/<id>`         | 🔒   | Baja lógica de reseña inapropiada                 |
 
-**POST `/api/resenas`**
+**POST `/resenas`**
 ```json
 // request
 {
@@ -191,7 +214,7 @@ Entregable hito 20/05 — Listado de endpoints
   "autor": "Bob Esponja"
 }
 // response 201
-{ "id": 42, "puntaje": 5, "comentario": "...", "autor": "Bob Esponja", "creado_en": "..." }
+{ "id": 42, "puntaje": 5, "comentario": "...", "autor": "Bob Esponja", "created_at": "..." }
 // errores: 403 si la reserva no está consumida, 409 si ya hay reseña para esa reserva
 ```
 
@@ -199,11 +222,11 @@ Entregable hito 20/05 — Listado de endpoints
 
 ## 7. Dashboard / Estadísticas (admin)
 
-| Método | Path                                     | Auth | Descripción                                       |
-|--------|------------------------------------------|------|---------------------------------------------------|
-| GET    | `/api/admin/stats/reservas`              | 🔒   | Reservas agregadas por período                    |
-| GET    | `/api/admin/stats/cancelaciones`         | 🔒   | Cancelaciones + top emails con más cancelaciones  |
-| GET    | `/api/admin/stats/ocupacion`             | 🔒   | Ocupación promedio del local por período          |
+| Método | Path                                | Auth | Descripción                                       |
+|--------|-------------------------------------|------|---------------------------------------------------|
+| GET    | `/admin/stats/reservas`             | 🔒   | Reservas agregadas por período                    |
+| GET    | `/admin/stats/cancelaciones`        | 🔒   | Cancelaciones + top emails con más cancelaciones  |
+| GET    | `/admin/stats/ocupacion`            | 🔒   | Ocupación promedio del local por período          |
 
 Query params comunes: `desde`, `hasta`, `granularidad` (`dia`, `semana`, `mes`).
 
@@ -211,11 +234,11 @@ Query params comunes: `desde`, `hasta`, `granularidad` (`dia`, `semana`, `mes`).
 
 ## 8. Informes en PDF (admin)
 
-| Método | Path                                  | Auth | Descripción                                |
-|--------|---------------------------------------|------|--------------------------------------------|
-| GET    | `/api/admin/informes/reservas.pdf`    | 🔒   | PDF con listado de reservas (con filtros)  |
-| GET    | `/api/admin/informes/estadisticas.pdf`| 🔒   | PDF con estadísticas del período           |
-| GET    | `/api/admin/informes/menu.pdf`        | 🔒   | PDF del menú completo                      |
+| Método | Path                                | Auth | Descripción                                |
+|--------|-------------------------------------|------|--------------------------------------------|
+| GET    | `/admin/informes/reservas.pdf`      | 🔒   | PDF con listado de reservas (con filtros)  |
+| GET    | `/admin/informes/estadisticas.pdf`  | 🔒   | PDF con estadísticas del período           |
+| GET    | `/admin/informes/menu.pdf`          | 🔒   | PDF del menú completo                      |
 
 Responden `Content-Type: application/pdf`. Aceptan los mismos filtros que los listados correspondientes.
 
@@ -225,21 +248,19 @@ Responden `Content-Type: application/pdf`. Aceptan los mismos filtros que los li
 
 | Método | Path                  | Auth | Descripción                                |
 |--------|-----------------------|------|--------------------------------------------|
-| GET    | `/api/admin/logs`     | 🔒   | Listado de eventos del sistema (paginado)  |
+| GET    | `/admin/logs`         | 🔒   | Listado de eventos del sistema             |
 
 ---
 
 ## Resumen de tablas usadas
 
-| Tabla                      | Usada por                                            |
-|----------------------------|------------------------------------------------------|
-| `admin`                    | login, logs                                          |
-| `categoria_plato`          | menú                                                 |
-| `plato`                    | menú                                                 |
-| `restriccion_alimenticia`  | menú                                                 |
-| `plato_restriccion`        | menú                                                 |
-| `servicio_extra`           | landing + admin                                      |
-| `mesa`                     | reservas (asignación automática) + admin             |
-| `reserva`                  | reservas, dashboard, informes                        |
-| `resena`                   | reseñas, landing                                     |
-| `log_actividad`            | auditoría                                            |
+| Tabla              | Usada por                                            |
+|--------------------|------------------------------------------------------|
+| `admin`            | login, logs                                          |
+| `categoria_plato`  | menú                                                 |
+| `plato`            | menú (incluye flags de restricciones)                |
+| `servicio_extra`   | landing + admin                                      |
+| `mesa`             | reservas (asignación automática) + admin             |
+| `reserva`          | reservas, dashboard, informes                        |
+| `resena`           | reseñas, landing                                     |
+| `log_actividad`    | auditoría                                            |
