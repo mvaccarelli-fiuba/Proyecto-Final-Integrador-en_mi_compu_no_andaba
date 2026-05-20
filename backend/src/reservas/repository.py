@@ -98,3 +98,34 @@ def create_reserva(reserva_data):
         conn.close()
 
 
+def get_reserva(token):
+    conn = get_connection()
+
+    try: 
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT *
+            FROM reserva 
+            WHERE token = %s
+            """,
+            (token,)
+        )
+
+        reserva = cursor.fetchone()
+        cursor.close()
+
+        if not reserva:
+            raise ValueError("Reserva no encontrada")
+
+       return convert_row_to_dict(reserva)
+    
+     except mysql.connector.Error:
+        raise
+     finally:
+         if conn.is_connected():
+             conn.close()
+        
+
+
