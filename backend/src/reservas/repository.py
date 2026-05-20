@@ -45,11 +45,56 @@ def get_disponibilidad(cantidad_personas):
         if conn.is_connected():
             conn.close()
 
+def create_reserva():
+    conn = get_connection()
+    try:
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            SELECT id
+            FROM mesa
+            WHERE capacidad >= %s
+            AND activa = TRUE
+            LIMIT 1
+            """,
+            (cantidad_personas,)
+        )
+        mesa = cursor.fetchone()
+        
+        if not mesa:
+            raise ValueError("No hay mesas disponibles")
 
+        cursor.execute(
+            """
+            INSERT INTO reserva
+            (
+                token,
+                cliente_nombre,
+                cliente_email,
+                cantidad_personas,
+                fecha,
+                hora_inicio,
+                mesa_id
+            )   
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """,
+            (   
+                token,
+                cliente_nombre,
+                cliente_email,
+                cantidad_personas,
+                fecha,
+                hora_inicio,
+            )   mesa["id"]
 
-
-            
-
-
+        )
+        conn.commit
+        nueva_reserva_id = cursor.lastrowid
+        cursor.close()
+        return nueva_reserva_id
+    except mysql.connector.Error:
+        raise
+    finally:
+        conn.close()
 
 
