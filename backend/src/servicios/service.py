@@ -7,3 +7,7 @@ def get_servicios():
 
 def create_servicio(data):
     return repository.create_servicio(data)
+
+
+def update_servicio(id, data):
+    return repository.update_servicio(id, data)
