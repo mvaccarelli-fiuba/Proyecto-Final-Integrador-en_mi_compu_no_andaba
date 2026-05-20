@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 import mysql.connector
 
 from src.platos import service
-from src.utils import error
+from src.utils import error, require_admin
 
 platos_bp = Blueprint("platos", __name__)
 
@@ -52,6 +52,7 @@ def get_platos_con_restriccion(restriccion):
 
 
 @platos_bp.route("/platos", methods=["POST"])
+@require_admin
 def create_plato():
     try:
         plato = service.create_plato(request.json)
@@ -65,6 +66,7 @@ def create_plato():
 
 
 @platos_bp.route("/platos/<int:id>", methods=["PUT"])
+@require_admin
 def update_plato(id):
     try:
         plato = service.update_plato(id, request.json)
@@ -78,6 +80,7 @@ def update_plato(id):
 
 
 @platos_bp.route("/platos/<int:id>", methods=["DELETE"])
+@require_admin
 def delete_plato(id):
     try:
         service.delete_plato(id)
@@ -91,6 +94,7 @@ def delete_plato(id):
 
 
 @platos_bp.route("/admin/platos/<int:id>/imagen", methods=["POST"])
+@require_admin
 def set_plato_imagen(id):
     data = request.get_json()
     if not data:
