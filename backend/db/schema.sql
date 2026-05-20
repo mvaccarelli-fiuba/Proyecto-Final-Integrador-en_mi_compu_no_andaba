@@ -24,6 +24,13 @@ CREATE TABLE restriccion_alimenticia (
     nombre VARCHAR(60) NOT NULL UNIQUE
 );
 -- -------------------------------------------------------------
+-- Categorías de plato (catálogo: hamburguesas, bebidas, postres, etc.)
+-- -------------------------------------------------------------
+CREATE TABLE categoria_plato (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(80) NOT NULL UNIQUE
+);
+-- -------------------------------------------------------------
 -- Platos del menú
 -- -------------------------------------------------------------
 CREATE TABLE plato (
