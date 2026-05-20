@@ -34,7 +34,7 @@ def get_plato(id):
 
 @platos_bp.route("/platos/<string:restriccion>", methods=["GET"])
 def get_platos_con_restriccion(restriccion):
-    restriction_types = ["vegano", "vegetariano", "gluten"]
+    restriction_types = ["es_vegano", "es_vegetariano", "sin_gluten"]
     if restriccion not in restriction_types:
         return error(
             "400",

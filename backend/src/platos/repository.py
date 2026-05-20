@@ -23,12 +23,12 @@ def convert_row_to_dict(row):
 def get_all_platos():
     conn = get_connection()
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(
             """
-            SELECT id, nombre, descripcion, precio, vegano, vegetariano, gluten, imagen_url, activo, created_at
-            FROM platos
-            WHERE activo = TRUE
+            SELECT id, nombre, descripcion, precio, es_vegano, es_vegetariano, sin_gluten, imagen_url, disponible, created_at
+            FROM plato
+            WHERE disponible = TRUE
             ORDER BY id
             """
         )
@@ -44,11 +44,11 @@ def get_all_platos():
 def get_plato(id):
     conn = get_connection()
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(
             """
-            SELECT id, nombre, descripcion, precio, vegano, vegetariano, gluten, imagen_url, activo, created_at
-            FROM platos
+            SELECT id, nombre, descripcion, precio, es_vegano, es_vegetariano, sin_gluten, imagen_url, disponible, created_at
+            FROM plato
             WHERE id = %s
             """,
             (id,)
@@ -67,12 +67,12 @@ def get_plato(id):
 def get_platos_con_restriccion(restriccion):
     conn = get_connection()
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(
             """
-            SELECT id, nombre, descripcion, precio, vegano, vegetariano, gluten, imagen_url, activo, created_at
-            FROM platos
-            WHERE %s = TRUE AND activo = TRUE
+            SELECT id, nombre, descripcion, precio, es_vegano, es_vegetariano, sin_gluten, imagen_url, disponible, created_at
+            FROM plato
+            WHERE %s = TRUE AND disponible = TRUE
             ORDER BY id
             LIMIT 10
             """,
@@ -89,19 +89,19 @@ def get_platos_con_restriccion(restriccion):
 def create_plato(plato_data):
     conn = get_connection()
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(
             """
-            INSERT INTO platos (nombre, descripcion, precio, vegano, vegetariano, gluten, imagen_url)
+            INSERT INTO plato (nombre, descripcion, precio, es_vegano, es_vegetariano, sin_gluten, imagen_url)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 plato_data["nombre"],
                 plato_data.get("descripcion", ""),
                 plato_data["precio"],
-                plato_data.get("vegano", False),
-                plato_data.get("vegetariano", False),
-                plato_data.get("gluten", False),
+                plato_data.get("es_vegano", False),
+                plato_data.get("es_vegetariano", False),
+                plato_data.get("sin_gluten", False),
                 plato_data.get("imagen_url", "")
             )
         )
@@ -117,20 +117,20 @@ def create_plato(plato_data):
 def update_plato(id, plato_data):
     conn = get_connection()
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(
             """
-            UPDATE platos
-            SET nombre = %s, descripcion = %s, precio = %s, vegano = %s, vegetariano = %s, gluten = %s, imagen_url = %s
+            UPDATE plato
+            SET nombre = %s, descripcion = %s, precio = %s, es_vegano = %s, es_vegetariano = %s, sin_gluten = %s, imagen_url = %s
             WHERE id = %s
             """,
             (
                 plato_data["nombre"],
                 plato_data.get("descripcion", ""),
                 plato_data["precio"],
-                plato_data.get("vegano", False),
-                plato_data.get("vegetariano", False),
-                plato_data.get("gluten", False),
+                plato_data.get("es_vegano", False),
+                plato_data.get("es_vegetariano", False),
+                plato_data.get("sin_gluten", False),
                 plato_data.get("imagen_url", ""),
                 id
             )
@@ -146,10 +146,10 @@ def update_plato(id, plato_data):
 def update_plato_imagen(id, imagen_url):
     conn = get_connection()
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(
             """
-            UPDATE platos
+            UPDATE plato
             SET imagen_url = %s
             WHERE id = %s
             """,
@@ -169,11 +169,11 @@ def update_plato_imagen(id, imagen_url):
 def delete_plato(id):
     conn = get_connection()
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(
             """
-            UPDATE platos
-            SET activo = FALSE
+            UPDATE plato
+            SET disponible = FALSE
             WHERE id = %s
             """,
             (id,)
