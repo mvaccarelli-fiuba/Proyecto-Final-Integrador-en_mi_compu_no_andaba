@@ -143,7 +143,7 @@ def update_plato(id, plato_data):
     finally:
         conn.close()   
 
-def update_plato_imagen(id, imagen_url):
+def update_plato_imagen_url(id, imagen_url):
     conn = get_connection()
     try:
         cursor = conn.cursor(dictionary=True)

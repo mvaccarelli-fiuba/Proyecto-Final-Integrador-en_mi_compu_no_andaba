@@ -96,13 +96,18 @@ def delete_plato(id):
 
 @platos_bp.route("/admin/platos/<int:id>/imagen", methods=["POST"])
 @require_admin
-def upload_plato_imagen(id):
-    if "imagen" not in request.files:
-        return error("400", "Bad Request", "Campo 'imagen' requerido (multipart)", 400)
+def set_plato_imagen(id):
+    data = request.get_json()
+    if not data:
+        return error("400", "Bad Request", "No se enviaron datos", 400)
+
+    url = data.get("url")
+    if not url:
+        return error("400", "Bad Request", "El campo 'url' es requerido", 400)
 
     try:
-        plato = service.upload_plato_imagen(id, request.files["imagen"])
-        return jsonify({"message": "Imagen subida correctamente", "data": plato}), 200
+        plato = service.set_plato_imagen_url(id, url)
+        return jsonify({"message": "Url de imagen guardada correctamente", "data": plato}), 200
     except ValueError as err:
         message = str(err) or "Plato no encontrado"
         if "no encontrado" in message.lower():
@@ -111,4 +116,4 @@ def upload_plato_imagen(id):
     except mysql.connector.Error as err:
         return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
     except Exception as err:
-        return error("500", "Internal Server Error", f"Ocurrió un error al subir la imagen: {err}", 500)
+        return error("500", "Internal Server Error", f"Ocurrió un error al guardar la url: {err}", 500)
