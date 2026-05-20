@@ -2,17 +2,9 @@ from flask import Blueprint, request, jsonify
 from flask import request, session
 import mysql.connector
 from src.resenas import service
-from src.utils import error
-from functools import wraps
+from src.utils import error, require_admin
 
 
-def requiere_admin(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if not session.get("admin"):
-            return error("401", "Unauthorized", "Se requiere autenticación de administrador", 401)
-        return f(*args, **kwargs)
-    return decorated
 
 resenas_bp = Blueprint("resenas", __name__)
 
@@ -55,7 +47,7 @@ def create_resena():
 
 
 @resenas_bp.route("/admin/resenas/<int:id>", methods=["DELETE"])
-@requiere_admin
+@require_admin
 def delete_resena(id):
     try:
         service.delete_resena(id)
