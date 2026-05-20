@@ -3,7 +3,7 @@ import mysql.connector
 
 from src.reservas import service
 from src.utils import error, require admin
-reservas_bp = Blueprint("reservas, __name__)
+reservas_bp = Blueprint("reservas", __name__)
 
 
 @reservas_bp.route("/disponibilidad", methods=["GET"]
