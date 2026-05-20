@@ -15,3 +15,5 @@ DB_CONFIG = {
     "password": "1234",
     "database": "crusty_crab",
 }
+
+SECRET_KEY = "dev-secret-key-change-in-production"
