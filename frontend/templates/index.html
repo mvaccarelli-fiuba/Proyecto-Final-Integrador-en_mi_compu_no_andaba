@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crusty Crab — Hamburguesería Gourmet</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <!-- ===========================
+       NAVBAR
+  ============================ -->
+  <header class="navbar" id="inicio">
+    <div class="navbar__inner">
+
+      <a href="#inicio" class="navbar__brand">
+        <div class="navbar__logo">⚓</div>
+        <span class="navbar__name">Crusty Crab</span>
+      </a>
+
+      <nav class="navbar__nav" id="nav-menu" aria-label="Navegación principal">
+        <ul class="navbar__list">
+          <li><a href="#menu"     class="navbar__link">Menú</a></li>
+          <li><a href="#resenas"  class="navbar__link">Reseñas</a></li>
+          <li><a href="#servicios" class="navbar__link">Servicios</a></li>
+          <li><a href="#contacto" class="navbar__link">Contacto</a></li>
+        </ul>
+        <div class="navbar__actions">
+          <a href="#" class="btn btn--ghost">Ingresar</a>
+          <a href="#menu" class="btn btn--filled">Reservar</a>
+        </div>
+      </nav>
+
+      <button class="navbar__hamburger" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+  </header>
+
+
+  <main>
+
+    <!-- ===========================
+         HERO
+    ============================ -->
+    <section class="hero">
+
+      <!-- Burbujas animadas -->
+      <div class="hero__bubbles" aria-hidden="true">
+        <span class="bubble bubble--1"></span>
+        <span class="bubble bubble--2"></span>
+        <span class="bubble bubble--3"></span>
+        <span class="bubble bubble--4"></span>
+        <span class="bubble bubble--5"></span>
+        <span class="bubble bubble--6"></span>
+        <span class="bubble bubble--7"></span>
+        <span class="bubble bubble--8"></span>
+      </div>
+
+      <div class="hero__content">
+        <p class="hero__tag">🦀 Hamburguesería Gourmet</p>
+        <h1 class="hero__title">Crusty Crab</h1>
+        <p class="hero__subtitle">
+          La mejor hamburguesa del mar,<br />ahora en tierra firme
+        </p>
+        <a href="#menu" class="btn btn--hero">🍔 Reservar una mesa</a>
+      </div>
+
+      <!-- Ola inferior con SVG -->
+      <div class="hero__wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,60 C360,120 1080,0 1440,60 L1440,100 L0,100 Z" fill="#FAFFF8" />
+        </svg>
+      </div>
+
+    </section>
+
+
+    <!-- ===========================
+         MENÚ
+    ============================ -->
+    <section class="menu" id="menu">
+      <div class="section-inner">
+
+        <div class="section-header">
+          <h2 class="section-title">Nuestro Menú</h2>
+          <div class="wave-underline" aria-hidden="true">
+            <svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0,10 C40,0 80,20 120,10 C160,0 180,15 200,10" stroke="#2ECAD5" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="section-subtitle">Burguers crafteadas con los mejores ingredientes del océano</p>
+        </div>
+
+        <div class="menu__grid">
+
+          <!-- Carta 1 -->
+          <article class="menu-card">
+            <div class="menu-card__img-wrap">
+              <img
+                src="https://placehold.co/320x200/2ECAD5/FFFFFF?text=🍔"
+                alt="Cangreburger Clásica"
+                class="menu-card__img"
+                loading="lazy"
+              />
+              <span class="menu-card__badge">⭐ La favorita</span>
+            </div>
+            <div class="menu-card__body">
+              <h3 class="menu-card__name">Cangreburger Clásica</h3>
+              <p class="menu-card__desc">
+                Medallón de angus, lechuga crespa, tomate fresco, cebolla caramelizada y nuestra salsa secreta de mar.
+              </p>
+              <p class="menu-card__price">$5.500</p>
+            </div>
+          </article>
+
+          <!-- Carta 2 -->
+          <article class="menu-card">
+            <div class="menu-card__img-wrap">
+              <img
+                src="https://placehold.co/320x200/FF6B6B/FFFFFF?text=🔥"
+                alt="Cangreburger Extreme"
+                class="menu-card__img"
+                loading="lazy"
+              />
+              <span class="menu-card__badge menu-card__badge--hot">🔥 Picante</span>
+            </div>
+            <div class="menu-card__body">
+              <h3 class="menu-card__name">Cangreburger Extreme</h3>
+              <p class="menu-card__desc">
+                Doble medallón, jalapeños, queso pepper jack, bacon crujiente y salsa sriracha de arrecife.
+              </p>
+              <p class="menu-card__price">$7.800</p>
+            </div>
+          </article>
+
+          <!-- Carta 3 -->
+          <article class="menu-card">
+            <div class="menu-card__img-wrap">
+              <img
+                src="https://placehold.co/320x200/6BCB77/FFFFFF?text=🌱"
+                alt="Cangreburger Veggie"
+                class="menu-card__img"
+                loading="lazy"
+              />
+              <span class="menu-card__badge menu-card__badge--veggie">🌱 Veggie</span>
+            </div>
+            <div class="menu-card__body">
+              <h3 class="menu-card__name">Cangreburger Veggie</h3>
+              <p class="menu-card__desc">
+                Medallón de legumbres y algas marinas, aguacate, rúcula, tomates cherry y aderezo de limón.
+              </p>
+              <p class="menu-card__price">$5.200</p>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="menu__footer">
+          <a href="#menu" class="menu__ver-carta">Ver carta completa →</a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ===========================
+         RESEÑAS
+    ============================ -->
+    <section class="resenas" id="resenas">
+      <div class="section-inner">
+
+        <div class="section-header">
+          <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+          <div class="wave-underline" aria-hidden="true">
+            <svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0,10 C40,0 80,20 120,10 C160,0 180,15 200,10" stroke="#FF6B6B" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="resenas__grid">
+
+          <article class="resena-card">
+            <div class="resena-card__header">
+              <div class="resena-card__avatar" style="background-color: #2ECAD5;">MG</div>
+              <div>
+                <p class="resena-card__user">Marina González</p>
+                <p class="resena-card__stars" aria-label="5 estrellas">⭐⭐⭐⭐⭐</p>
+              </div>
+            </div>
+            <p class="resena-card__comment">
+              "Juro que nunca pensé que una burger me haría sentir como sirena. La Clásica es un crimen delicioso, ya voy cuatro veces este mes 🧜‍♀️"
+            </p>
+          </article>
+
+          <article class="resena-card">
+            <div class="resena-card__header">
+              <div class="resena-card__avatar" style="background-color: #FF6B6B;">TP</div>
+              <div>
+                <p class="resena-card__user">Tomás Pereyra</p>
+                <p class="resena-card__stars" aria-label="5 estrellas">⭐⭐⭐⭐⭐</p>
+              </div>
+            </div>
+            <p class="resena-card__comment">
+              "Me encargué la Extreme pensando que iba a aguantar el picante... spoiler: no. Pero volví al día siguiente por más 🥵🔥"
+            </p>
+          </article>
+
+          <article class="resena-card">
+            <div class="resena-card__header">
+              <div class="resena-card__avatar" style="background-color: #6BCB77;">LR</div>
+              <div>
+                <p class="resena-card__user">Luna Ramos</p>
+                <p class="resena-card__stars" aria-label="5 estrellas">⭐⭐⭐⭐⭐</p>
+              </div>
+            </div>
+            <p class="resena-card__comment">
+              "Soy vegetariana y siempre terminaba mirando el menú ajeno... hasta que probé la Veggie. Me hicieron creer en el mar 🌱🌊"
+            </p>
+          </article>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ===========================
+         SERVICIOS
+    ============================ -->
+    <section class="servicios" id="servicios">
+      <div class="section-inner">
+
+        <div class="section-header">
+          <h2 class="section-title">Nuestros servicios</h2>
+          <div class="wave-underline" aria-hidden="true">
+            <svg viewBox="0 0 200 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0,10 C40,0 80,20 120,10 C160,0 180,15 200,10" stroke="#FFE566" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="section-subtitle">Todo lo que necesitás para una experiencia sin olas</p>
+        </div>
+
+        <div class="servicios__grid">
+
+          <div class="servicio-card">
+            <span class="servicio-card__icon" aria-hidden="true">🅿️</span>
+            <h3 class="servicio-card__name">Estacionamiento</h3>
+            <p class="servicio-card__desc">Playa de estacionamiento gratuita para todos nuestros clientes</p>
+          </div>
+
+          <div class="servicio-card">
+            <span class="servicio-card__icon" aria-hidden="true">📶</span>
+            <h3 class="servicio-card__name">WiFi gratis</h3>
+            <p class="servicio-card__desc">Conectividad de alta velocidad para que no dejes de compartir tu burger</p>
+          </div>
+
+          <div class="servicio-card">
+            <span class="servicio-card__icon" aria-hidden="true">♿</span>
+            <h3 class="servicio-card__name">Accesibilidad</h3>
+            <p class="servicio-card__desc">Instalaciones completamente accesibles y personal entrenado</p>
+          </div>
+
+          <div class="servicio-card">
+            <span class="servicio-card__icon" aria-hidden="true">🛵</span>
+            <h3 class="servicio-card__name">Delivery</h3>
+            <p class="servicio-card__desc">Llevamos el sabor del mar directo a tu puerta, rápido y fresquito</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ===========================
+       FOOTER
+  ============================ -->
+  <footer class="footer" id="contacto">
+    <div class="footer__inner">
+
+      <div class="footer__brand">
+        <div class="footer__logo">⚓</div>
+        <span class="footer__name">Crusty Crab</span>
+        <p class="footer__tagline">La mejor hamburguesa del mar, ahora en tierra firme</p>
+      </div>
+
+      <div class="footer__info">
+        <h4 class="footer__heading">Dónde encontrarnos</h4>
+        <address class="footer__address">
+          Av. Arrecife 1234, Puerto Coral<br />
+          Buenos Aires, Argentina<br />
+          <a href="tel:+5491112345678" class="footer__link">+54 9 11 1234-5678</a><br />
+          <a href="mailto:hola@crustycrab.com.ar" class="footer__link">hola@crustycrab.com.ar</a>
+        </address>
+      </div>
+
+      <div class="footer__horarios">
+        <h4 class="footer__heading">Horarios</h4>
+        <p>Lun–Dom: 10:00 a 23:00</p>
+        <p>Cocina hasta las 22:30</p>
+      </div>
+
+      <div class="footer__nav">
+        <h4 class="footer__heading">Navegación</h4>
+        <ul class="footer__list">
+          <li><a href="#menu"      class="footer__link">Menú</a></li>
+          <li><a href="#resenas"   class="footer__link">Reseñas</a></li>
+          <li><a href="#servicios" class="footer__link">Servicios</a></li>
+          <li><a href="#contacto"  class="footer__link">Contacto</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer__bottom">
+      <p>© 2025 Crusty Crab — Todos los derechos reservados 🦀</p>
+    </div>
+  </footer>
+
+
+  <script>
+    // Hamburger menu toggle
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navMenu = document.getElementById('nav-menu');
+
+    hamburgerBtn.addEventListener('click', () => {
+      const isOpen = navMenu.classList.toggle('navbar__nav--open');
+      hamburgerBtn.classList.toggle('navbar__hamburger--open', isOpen);
+      hamburgerBtn.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    // Close nav when a link is clicked (mobile UX)
+    navMenu.querySelectorAll('.navbar__link, .btn').forEach(link => {
+      link.addEventListener('click', () => {
+        navMenu.classList.remove('navbar__nav--open');
+        hamburgerBtn.classList.remove('navbar__hamburger--open');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Navbar scroll effect
+    const navbar = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('navbar--scrolled', window.scrollY > 40);
+    });
+  </script>
+
+</body>
+</html>
