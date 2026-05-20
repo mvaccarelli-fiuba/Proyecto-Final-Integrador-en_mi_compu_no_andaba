@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 import mysql.connector
 
+from src.auth.decorators import require_admin
 from src.platos import service
 from src.utils import error
 
@@ -52,6 +53,7 @@ def get_platos_con_restriccion(restriccion):
 
 
 @platos_bp.route("/platos", methods=["POST"])
+@require_admin
 def create_plato():
     try:
         plato = service.create_plato(request.json)
@@ -65,6 +67,7 @@ def create_plato():
 
 
 @platos_bp.route("/platos/<int:id>", methods=["PUT"])
+@require_admin
 def update_plato(id):
     try:
         plato = service.update_plato(id, request.json)
@@ -78,6 +81,7 @@ def update_plato(id):
 
 
 @platos_bp.route("/platos/<int:id>", methods=["DELETE"])
+@require_admin
 def delete_plato(id):
     try:
         service.delete_plato(id)
@@ -88,3 +92,23 @@ def delete_plato(id):
         return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
     except Exception as err:
         return error("500", "Internal Server Error", f"Ocurrió un error al eliminar el plato: {err}", 500)
+
+
+@platos_bp.route("/admin/platos/<int:id>/imagen", methods=["POST"])
+@require_admin
+def upload_plato_imagen(id):
+    if "imagen" not in request.files:
+        return error("400", "Bad Request", "Campo 'imagen' requerido (multipart)", 400)
+
+    try:
+        plato = service.upload_plato_imagen(id, request.files["imagen"])
+        return jsonify({"message": "Imagen subida correctamente", "data": plato}), 200
+    except ValueError as err:
+        message = str(err) or "Plato no encontrado"
+        if "no encontrado" in message.lower():
+            return error("404", "Not Found", message, 404)
+        return error("400", "Bad Request", message, 400)
+    except mysql.connector.Error as err:
+        return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
+    except Exception as err:
+        return error("500", "Internal Server Error", f"Ocurrió un error al subir la imagen: {err}", 500)

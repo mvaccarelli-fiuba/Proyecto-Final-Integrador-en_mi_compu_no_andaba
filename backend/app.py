@@ -1,4 +1,5 @@
 from flask import Flask
+import config
 from src.auth.routes import auth_bp
 from src.platos.routes import platos_bp
 
@@ -10,6 +11,7 @@ from src.platos.routes import platos_bp
 # from src.dashboard.routes import dashboard_bp
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = config.SECRET_KEY
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(platos_bp)
