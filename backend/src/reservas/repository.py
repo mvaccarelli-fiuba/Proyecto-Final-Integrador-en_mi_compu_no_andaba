@@ -45,7 +45,7 @@ def get_disponibilidad(cantidad_personas):
         if conn.is_connected():
             conn.close()
 
-def create_reserva():
+def create_reserva(reserva_data):
     conn = get_connection()
     try:
         cursor = conn.cursor(dictionary=True)
@@ -79,16 +79,16 @@ def create_reserva():
             VALUES (%s, %s, %s, %s, %s, %s, %s)
             """,
             (   
-                token,
-                cliente_nombre,
-                cliente_email,
-                cantidad_personas,
-                fecha,
-                hora_inicio,
-            )   mesa["id"]
-
+                reserva_data["token"],
+                reserva_data["cliente_nombre"],
+                reserva_data["cliente_email"],
+                reserva_data["cantidad_personas"],
+                reserva_data["fecha"],
+                reserva_data["hora_inicio"],
+                mesa["id"]
+            )
         )
-        conn.commit
+        conn.commit()
         nueva_reserva_id = cursor.lastrowid
         cursor.close()
         return nueva_reserva_id
