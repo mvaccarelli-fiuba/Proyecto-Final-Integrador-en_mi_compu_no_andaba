@@ -42,7 +42,7 @@ def create_reserva():
       ]
     for campo in campos_obligatorios:
         if campo not in reserva_data:
-            return error("400","Bad Request",f"El campo {field} es obligatorio", 400)
+            return error("400","Bad Request",f"El campo {campo} es obligatorio", 400)
 
     try:
         reserva = service.create_reserva(reserva_data)
