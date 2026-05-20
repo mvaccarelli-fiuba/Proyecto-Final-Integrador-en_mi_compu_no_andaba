@@ -119,13 +119,44 @@ def get_reserva(token):
         if not reserva:
             raise ValueError("Reserva no encontrada")
 
-       return convert_row_to_dict(reserva)
+        return convert_row_to_dict(reserva)
     
      except mysql.connector.Error:
         raise
      finally:
          if conn.is_connected():
              conn.close()
-        
+
+
+def cancelar_reserva(token):
+    conn = get_connection()
+
+    try:
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            UPDATE RESERVAS
+            SET estado = "cancelada"
+            WHERE token = %s
+            AND estado = "confirmada"
+            """,
+            (token,)
+        )
+
+        conn.commit()
+        if cursor.rowcount == 0:
+            raise ValueError("Reserva no encontrada o ya cancelada")
+
+        cursor.close()
+        return True
+
+     except mysql.connector.Error:
+         raise
+     finally:
+         if conn.is_connected():
+             conn.close()   
+
+            
 
 
