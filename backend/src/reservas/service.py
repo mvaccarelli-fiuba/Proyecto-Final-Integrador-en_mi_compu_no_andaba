@@ -15,3 +15,7 @@ def create_reserva(reserva_data):
         "id": nueva_reserva,
         "token": token
     }
+
+
+def get_reserva(token):
+    return repository.get_reserva(token)
