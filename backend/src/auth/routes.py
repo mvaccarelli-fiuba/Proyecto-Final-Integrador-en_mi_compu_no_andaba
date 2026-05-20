@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from src.auth import service
 from src.utils import error
 
@@ -22,5 +22,7 @@ def login():
 
     if admin is None:
         return error("401", "Unauthorized", "Credenciales inválidas", 401)
+
+    session["admin_id"] = admin["id"]
 
     return jsonify({"admin": admin}), 200
