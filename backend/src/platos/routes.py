@@ -88,3 +88,27 @@ def delete_plato(id):
         return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
     except Exception as err:
         return error("500", "Internal Server Error", f"Ocurrió un error al eliminar el plato: {err}", 500)
+
+
+@platos_bp.route("/admin/platos/<int:id>/imagen", methods=["POST"])
+def set_plato_imagen(id):
+    data = request.get_json()
+    if not data:
+        return error("400", "Bad Request", "No se enviaron datos", 400)
+
+    url = data.get("url")
+    if not url:
+        return error("400", "Bad Request", "El campo 'url' es requerido", 400)
+
+    try:
+        plato = service.set_plato_imagen_url(id, url)
+        return jsonify({"message": "Url de imagen guardada correctamente", "data": plato}), 200
+    except ValueError as err:
+        message = str(err) or "Plato no encontrado"
+        if "no encontrado" in message.lower():
+            return error("404", "Not Found", message, 404)
+        return error("400", "Bad Request", message, 400)
+    except mysql.connector.Error as err:
+        return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
+    except Exception as err:
+        return error("500", "Internal Server Error", f"Ocurrió un error al guardar la url: {err}", 500)

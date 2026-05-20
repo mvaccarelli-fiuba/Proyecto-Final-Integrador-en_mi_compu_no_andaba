@@ -143,6 +143,29 @@ def update_plato(id, plato_data):
     finally:
         conn.close()   
 
+def update_plato_imagen_url(id, imagen_url):
+    conn = get_connection()
+    try:
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            UPDATE plato
+            SET imagen_url = %s
+            WHERE id = %s
+            """,
+            (imagen_url, id),
+        )
+        conn.commit()
+        if cursor.rowcount == 0:
+            raise ValueError("Plato no encontrado")
+        cursor.close()
+        return get_plato(id)
+    except mysql.connector.Error:
+        raise
+    finally:
+        conn.close()
+
+
 def delete_plato(id):
     conn = get_connection()
     try:
