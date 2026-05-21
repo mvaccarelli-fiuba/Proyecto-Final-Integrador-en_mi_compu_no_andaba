@@ -189,7 +189,7 @@ def consumir_reserva(token):
          if conn.is_connected():
              conn.close()
 
-def get_reservas(estado=none, fecha=none)
+def get_reservas(estado=none, fecha=none):
     conn = get_connection()
 
     try:
