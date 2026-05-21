@@ -244,7 +244,7 @@ def get_reservas(estado=none, fecha=none)
         raise
     finally:
         if conn.is_connected():
-            conn.close
+            conn.close   
 
 
             
