@@ -71,6 +71,19 @@ def get_reserva(token):
         return error("500", "Internal Server Error", f"Ocurrio un error al obtener la reserva: {err}", 500)
 
 
+@reservas_bp.route("/reservas/<string:token>/cancelar", methods=["PUT"])
+def cancelar_reserva(token):
+    try:
+        service.cancelar_reserva(token)
+        return jsonify({"message": "Reserva cancelada correctamente"}), 200
+    except ValueError as err:
+        return error("404", f"Reserva no encontrada o ya cancelada: {err}", 404)
+    except mysql.connector.Error as err:
+        return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
+    except Exception as err:
+        return error("500", "Internal Server Error", f"Ocurrio un error al cancelar la reserva: {err}", 500)
+      
+        
 
         
    
