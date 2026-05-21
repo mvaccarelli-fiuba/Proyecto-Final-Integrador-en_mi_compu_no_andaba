@@ -137,7 +137,8 @@ def cancelar_reserva(token):
         cursor.execute(
             """
             UPDATE RESERVAS
-            SET estado = "cancelada"
+            SET estado = "cancelada",
+            cancelado_en = NOW()
             WHERE token = %s
             AND estado = "confirmada"
             """,
