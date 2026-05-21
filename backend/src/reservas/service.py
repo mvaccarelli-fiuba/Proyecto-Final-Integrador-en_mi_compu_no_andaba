@@ -26,3 +26,7 @@ def cancelar_reserva(token):
 
 def consumir_reserva(token):
     return repository.consumir_reserva(token)
+
+
+def get_reservas(estado=None, fecha=None):
+    return repository.get_reservas(estado, fecha)
