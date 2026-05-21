@@ -102,6 +102,22 @@ def consumir_reserva():
     except Exception as err:
         return error("500", "Internal Server Error", f"Ocurrio un error al consumir la reserva: {err}", 500) 
 
+
+@reservas_bp.route("/admin/reservas", methods=["GET"])
+@require_admin
+def get_reservas():
+
+    estado = request.args.get("estado")
+    fecha  = request.args.get("fecha")
+
+    try:
+        reservas = service.get_reservas(estado, fecha)
+
+        return jsonify(reservas), 200
+    except mysql.connector.Error as err:
+        return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)    
+    except Exception as err:
+        return error("500", "Internal Server Error", f"Ocurrio un error al obtener las reservas:{err}", 500)
     
 
         
