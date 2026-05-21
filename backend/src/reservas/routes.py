@@ -77,13 +77,32 @@ def cancelar_reserva(token):
         service.cancelar_reserva(token)
         return jsonify({"message": "Reserva cancelada correctamente"}), 200
     except ValueError as err:
-        return error("404", f"Reserva no encontrada o ya cancelada: {err}", 404)
+        return error("404","Not Found", f"Reserva no encontrada o ya cancelada: {err}", 404)
     except mysql.connector.Error as err:
         return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
     except Exception as err:
         return error("500", "Internal Server Error", f"Ocurrio un error al cancelar la reserva: {err}", 500)
       
-        
+
+@reservas_bp.route("/admin/reservas/consumir", methods=["POST"])
+@require_admin
+def consumir_reserva():
+    data = request.json
+
+    if not data or token not in data:
+        return error("400", "Bad request", "El token es obligatorio",400)
+
+    try:
+        service.consumir_reserva(data["token"])
+        return jsonify({"message": "Reserva consumida correctamente"}), 200
+    except ValueError as err:
+        return error("404", "Not Found", f"Reserva no encontrada o invalida: {err}", 404)
+    except mysql.connector.Error as err:
+        return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
+    except Exception as err:
+        return error("500", "Internal Server Error", f"Ocurrio un error al consumir la reserva: {err}", 500) 
+
+    
 
         
    
