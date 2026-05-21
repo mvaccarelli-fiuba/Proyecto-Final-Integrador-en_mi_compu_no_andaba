@@ -158,6 +158,37 @@ def cancelar_reserva(token):
          if conn.is_connected():
              conn.close()   
 
+
+def consumir_reserva(token):
+    conn = get_connection()
+
+try:
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        UPDATE reserva
+        SET estado = "consumida", 
+        consumida_en = NOW()
+        WHERE token = %s
+        AND estado = "confirmada"
+        """
+        (token,)
+    )
+
+    conn.commit()
+    if cursor.rowcount == 0:
+        raise ValueError("Reserva no encontrada o invalida)
+
+    cursor.close()
+    return True
+
+except mysql.connector.Error:
+    raise
+finally:
+    if conn.is_connected():
+        conn.close()
+
             
 
 
