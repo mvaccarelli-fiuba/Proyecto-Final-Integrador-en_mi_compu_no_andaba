@@ -162,32 +162,90 @@ def cancelar_reserva(token):
 def consumir_reserva(token):
     conn = get_connection()
 
-try:
-    cursor = conn.cursor()
+    try:
+        cursor = conn.cursor()
 
-    cursor.execute(
-        """
-        UPDATE reserva
-        SET estado = "consumida", 
-        consumida_en = NOW()
-        WHERE token = %s
-        AND estado = "confirmada"
-        """
-        (token,)
-    )
+        cursor.execute(
+           """
+           UPDATE reserva
+           SET estado = "consumida", 
+           consumida_en = NOW()
+           WHERE token = %s
+           AND estado = "confirmada"
+           """
+           (token,)
+        )
 
-    conn.commit()
-    if cursor.rowcount == 0:
-        raise ValueError("Reserva no encontrada o invalida)
+        conn.commit()
+        if cursor.rowcount == 0:
+            raise ValueError("Reserva no encontrada o invalida")
 
-    cursor.close()
-    return True
+        cursor.close()
+        return True
 
-except mysql.connector.Error:
-    raise
-finally:
-    if conn.is_connected():
-        conn.close()
+    except mysql.connector.Error:
+            raise
+    finally:
+         if conn.is_connected():
+             conn.close()
+
+def get_reservas(estado=none, fecha=none)
+    conn = get_connection()
+
+    try:
+        cursor = conn.cursor()
+
+        if estado and fecha:
+            cursor.execute(
+               """
+               SELECT * 
+               FROM reserva
+               WHERE estado = %s
+               AND fecha = %s
+               """,
+               (estado, fecha)
+            )
+
+        elif estado:
+            cursor.execute(
+                """
+                SELECT * 
+                FROM reserva 
+                WHERE estado = %s
+                """,
+                (estado,)
+            )    
+        
+        elif fecha:
+            cursor.execute(
+                """
+                SELECT * 
+                FROM reserva
+                WHERE fecha = %s
+                """,
+                (fecha,)
+            )
+        else:
+            cursor.execute(
+                """
+                SELECT *
+                FROM reserva
+                """
+            )    
+
+        reservas = cursor.fetchall()
+
+        cursor.close()
+
+        return reservas
+
+
+    except mysql.connector.Error:
+        raise
+    finally:
+        if conn.is_connected():
+            conn.close
+
 
             
 
