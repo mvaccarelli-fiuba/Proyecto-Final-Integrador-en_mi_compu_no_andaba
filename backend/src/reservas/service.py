@@ -23,3 +23,6 @@ def get_reserva(token):
 
 def cancelar_reserva(token):
     return repository.cancelar_reserva(token)
+
+def consumir_reserva(token):
+    return repository.consumir_reserva(token)
