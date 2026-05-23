@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Krusty Krab{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block css_extra %}{% endblock %}
+</head>
+<body>
+        <!-- NAVBAR -->
+    <nav id="navbar">
+        <div id="nav-izq">
+            <img src="{{ url_for('static', filename='images/krusty_krab_logo.webp') }}" alt="Logo Krusty Krab" id="nav-logo">
+            <span id="nav-nombre">Krusty Krab</span>
+        </div>
+        <ul id="nav-links">
+            <li><a href="#menu">Menú</a></li>
+            <li><a href="#resenas">Reseñas</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+        <div id="nav-der">
+            <button class="btn-outline">Ingresar</button>
+            <button class="btn-amarillo">Reservar</button>
+        </div>
+    </nav>
+
+    {% block contenido %} {% endblock %}
+
+        <!-- FOOTER -->
+    <footer id="footer">
+        <div id="footer-izq">
+            <p id="footer-logo">⚓ Krusty Crab</p>
+            <p id="footer-slogan">La mejor hamburguesería del mar,<br>ahora en tierra firme</p>
+        </div>
+        <div class="footer-col">
+            <p class="footer-titulo">Dónde encontrarnos</p>
+            <p>Av. Arrecife 1239, Puerto Coral</p>
+            <p>Buenos Aires, Argentina</p>
+            <p>+54 9 11291-5579</p>
+            <p>doncangrejo@krustycrab.com.ar</p>
+        </div>
+        <div class="footer-col">
+            <p class="footer-titulo">Horarios</p>
+            <p>Lun-Dom: 10:00 a 23:00</p>
+            <p>Cocina hasta las 22:30</p>
+        </div>
+        <div class="footer-col">
+            <p class="footer-titulo">Navegación</p>
+            <a href="#menu">Inicio</a>
+            <a href="#resenas">Nosotros</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#contacto">Contacto</a>
+        </div>
+        <div id="footer-bottom">
+            <p>© 2026 Krusty Crab — Todos los derechos reservados 🦀</p>
+        </div>
+    </footer>
+</body>
+</html>
