@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krusty Krab</title>
+    <link rel="stylesheet" href="/frontend/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <div id="nav-izq">
+            <img src="/frontend/static/images/logo_krusty_krab.png" alt="Logo Krusty Krab" id="nav-logo">
+            <span id="nav-nombre">Krusty Krab</span>
+        </div>
+        <ul id="nav-links">
+            <li><a href="#menu">Menú</a></li>
+            <li><a href="#resenas">Reseñas</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+        <div id="nav-der">
+            <button class="btn-outline">Ingresar</button>
+            <button class="btn-amarillo">Reservar</button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div id="hero">
+        <p id="hero-tag">LO MEJOR DE FONDO DE BIKINI</p>
+        <h1 id="hero-titulo">Krusty Krab</h1>
+        <p id="hero-sub">La fórmula secreta que todos quieren tener</p>
+        <button class="btn-amarillo btn-grande">🦀 Reservar una mesa</button>
+    </div>
+
+    <!-- MENÚ -->
+    <section id="menu">
+        <h2 class="seccion-titulo">Nuestro Menú</h2>
+        <div class="titulo-linea"></div>
+        <p class="seccion-sub">Burguers craftеadas con los mejores ingredientes del océano</p>
+
+        <div id="cards-menu">
+
+            <div class="card-plato card-celeste">
+                <span class="card-badge badge-amarillo">LA FAVORITA</span>
+                <div class="card-img">?</div>
+                <div class="card-info">
+                    <h3 class="card-nombre">Cangreburger Clásica</h3>
+                    <p class="card-desc">Medallón de angus, lechuga crispa, tomate fresco, cebolla caramelizada y nuestra salsa secreta del mar.</p>
+                    <p class="card-precio">$5.500</p>
+                </div>
+            </div>
+
+            <div class="card-plato card-roja">
+                <span class="card-badge badge-rojo">🌶 PICANTE</span>
+                <div class="card-img">?</div>
+                <div class="card-info">
+                    <h3 class="card-nombre">Cangreburger Extrema</h3>
+                    <p class="card-desc">Doble medallón, jalapeños, queso pepper jack, bacon crujiente y salsa sriracha de arrecife.</p>
+                    <p class="card-precio">$7.800</p>
+                </div>
+            </div>
+
+            <div class="card-plato card-verde">
+                <span class="card-badge badge-verde">VEGGIE</span>
+                <div class="card-img">?</div>
+                <div class="card-info">
+                    <h3 class="card-nombre">Cangreburger Veggie</h3>
+                    <p class="card-desc">Medallón de legumbres y algas marinas, aguacate, rúcula, tomates cherry y aderezo de limón.</p>
+                    <p class="card-precio">$5.200</p>
+                </div>
+            </div>
+
+        </div>
+
+        <a href="#" class="link-carta">Ver carta completa →</a>
+    </section>
+
+    <!-- RESEÑAS -->
+    <section id="resenas">
+        <h2 class="seccion-titulo">Lo que dicen nuestros clientes</h2>
+        <div class="titulo-linea linea-roja"></div>
+
+        <div id="cards-resenas">
+
+            <div class="card-resena">
+                <div class="resena-header">
+                    <div class="avatar avatar-verde">MG</div>
+                    <div>
+                        <p class="resena-nombre">Marina González</p>
+                        <p class="resena-estrellas">★★★★★</p>
+                    </div>
+                </div>
+                <p class="resena-texto">"Juro que pensé pasar, pero una burger me hará sentir como sirena. La Clásica es un crimen delicioso, ya voy cuatro veces este mes 🍔"</p>
+            </div>
+
+            <div class="card-resena">
+                <div class="resena-header">
+                    <div class="avatar avatar-naranja">TD</div>
+                    <div>
+                        <p class="resena-nombre">Tomás Parayra</p>
+                        <p class="resena-estrellas">★★★★★</p>
+                    </div>
+                </div>
+                <p class="resena-texto">"Me avisaron la Extrema picaba pero fui a aguantar el picante… spoiler: no. Para volvé al día siguiente por más 🌶"</p>
+            </div>
+
+            <div class="card-resena">
+                <div class="resena-header">
+                    <div class="avatar avatar-celeste">LR</div>
+                    <div>
+                        <p class="resena-nombre">Luna Ramos</p>
+                        <p class="resena-estrellas">★★★★★</p>
+                    </div>
+                </div>
+                <p class="resena-texto">"Soy vegetariana y siempre termino mirando el menú ajena… hasta que probé la Veggie. Me hicieron creer en el mar 🌊"</p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- SERVICIOS -->
+    <section id="servicios">
+        <h2 class="seccion-titulo">Nuestros servicios</h2>
+        <div class="titulo-linea linea-amarilla"></div>
+        <p class="seccion-sub">Todo lo que necesitás para una experiencia sin olas</p>
+
+        <div id="cards-servicios">
+
+            <div class="card-servicio">
+                <div class="servicio-icono">🅿️</div>
+                <h3 class="servicio-nombre">Estacionamiento</h3>
+                <p class="servicio-desc">Playa de estacionamiento gratuita para todos nuestros clientes</p>
+            </div>
+
+            <div class="card-servicio">
+                <div class="servicio-icono">📶</div>
+                <h3 class="servicio-nombre">Wifi gratis</h3>
+                <p class="servicio-desc">Conectividad de alta velocidad para que no dejes de compartir tu burger</p>
+            </div>
+
+            <div class="card-servicio">
+                <div class="servicio-icono">♿</div>
+                <h3 class="servicio-nombre">Accesibilidad</h3>
+                <p class="servicio-desc">Instalaciones completamente accesibles y personal entrenado</p>
+            </div>
+
+            <div class="card-servicio">
+                <div class="servicio-icono">🛵</div>
+                <h3 class="servicio-nombre">Delivery</h3>
+                <p class="servicio-desc">Llevamos el sabor del mar directo a tu puerta, rápido y fresquito</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="footer">
+        <div id="footer-izq">
+            <p id="footer-logo">⚓ Krusty Crab</p>
+            <p id="footer-slogan">La mejor hamburguesería del mar,<br>ahora en tierra firme</p>
+        </div>
+        <div class="footer-col">
+            <p class="footer-titulo">Dónde encontrarnos</p>
+            <p>Av. Arrecife 1239, Puerto Coral</p>
+            <p>Buenos Aires, Argentina</p>
+            <p>+54 9 11291-5579</p>
+            <p>hola@krustycrab.com.ar</p>
+        </div>
+        <div class="footer-col">
+            <p class="footer-titulo">Horarios</p>
+            <p>Lun-Dom: 10:00 a 23:00</p>
+            <p>Cocina hasta las 22:30</p>
+        </div>
+        <div class="footer-col">
+            <p class="footer-titulo">Navegación</p>
+            <a href="#menu">Inicio</a>
+            <a href="#resenas">Nosotros</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#contacto">Contacto</a>
+        </div>
+        <div id="footer-bottom">
+            <p>© 2025 Krusty Crab — Todos los derechos reservados 🦀</p>
+        </div>
+    </footer>
+
+</body>
+</html>

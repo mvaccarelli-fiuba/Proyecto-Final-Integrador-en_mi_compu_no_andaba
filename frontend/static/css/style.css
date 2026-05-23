@@ -1,0 +1,446 @@
+
+@font-face {
+  font-family: "Krusty Krab";
+  src: url(/frontend/static/css/fonts/Spongeboy\ Me\ Bob.ttf);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ── Variables de colores ── */
+:root {
+    --azul-oscuro: #0d2b45;
+    --azul-medio: #1a4a6e;
+    --celeste: #1ab3c8;
+    --celeste-claro: #d6f5f8;
+    --amarillo: #f5c842;
+    --rojo: #e05555;
+    --verde: #4caf72;
+    --blanco: #ffffff;
+    --gris-claro: #f4f8fb;
+    --texto-oscuro: #0d2b45;
+    --texto-gris: #555;
+}
+
+/* ── Fuentes ── */
+body {
+    font-family: 'Krusty Krab', sans-serif;
+    color: var(--texto-oscuro);
+    background: var(--blanco);
+}
+
+h1, h2, h3, nav, .btn-amarillo, .btn-outline, #footer-logo {
+    font-family: 'Krusty Krab', sans-serif;
+}
+
+/* ── Botones ── */
+.btn-amarillo {
+    background: var(--amarillo);
+    color: var(--azul-oscuro);
+    border: none;
+    border-radius: 30px;
+    padding: 8px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.btn-amarillo:hover {
+    opacity: 0.9;
+}
+
+.btn-grande {
+    padding: 14px 32px;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--azul-oscuro);
+    border: 2px solid var(--azul-oscuro);
+    border-radius: 30px;
+    padding: 8px 22px;
+    font-size: 15px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.btn-outline:hover {
+    background: #eee;
+}
+
+/* ── NAVBAR ── */
+#navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--blanco);
+    padding: 10px 48px;
+    border-bottom: 1px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+#nav-izq {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#nav-logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+#nav-nombre {
+    font-family: 'Boogaloo', cursive;
+    font-size: 22px;
+    color: var(--azul-oscuro);
+}
+
+#nav-links {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+}
+
+#nav-links a {
+    text-decoration: none;
+    color: var(--azul-oscuro);
+    font-weight: 600;
+    font-size: 15px;
+}
+
+#nav-links a:hover {
+    color: var(--celeste);
+}
+
+#nav-der {
+    display: flex;
+    gap: 10px;
+}
+
+/* ── HERO ── */
+#hero {
+    background: linear-gradient(180deg, #0d2b45 0%, #1a6e7e 60%, #1ab3c8 100%);
+    text-align: center;
+    padding: 80px 40px 100px;
+}
+
+#hero-tag {
+    display: inline-block;
+    background: var(--amarillo);
+    color: var(--azul-oscuro);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 16px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+#hero-titulo {
+    font-size: 72px;
+    color: var(--blanco);
+    margin-bottom: 12px;
+}
+
+#hero-sub {
+    color: #b8e8f0;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+/* ── SECCIONES GENERALES ── */
+section {
+    padding: 56px 80px;
+}
+
+.seccion-titulo {
+    font-size: 42px;
+    text-align: center;
+    color: var(--azul-oscuro);
+    margin-bottom: 8px;
+}
+
+.titulo-linea {
+    width: 60px;
+    height: 4px;
+    background: var(--celeste);
+    border-radius: 4px;
+    margin: 0 auto 12px;
+}
+
+.linea-roja { background: var(--rojo); }
+.linea-amarilla { background: var(--amarillo); }
+
+.seccion-sub {
+    text-align: center;
+    color: var(--texto-gris);
+    font-size: 15px;
+    margin-bottom: 36px;
+}
+
+/* ── MENÚ ── */
+#menu {
+    background: var(--blanco);
+}
+
+#cards-menu {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.card-plato {
+    border-radius: 16px;
+    width: 280px;
+    overflow: hidden;
+    border: 2px solid var(--azul-oscuro);
+    position: relative;
+}
+
+.card-celeste { background: var(--celeste); }
+.card-roja    { background: #e87070; }
+.card-verde   { background: var(--verde); }
+
+.card-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+.badge-amarillo { background: var(--amarillo); color: var(--azul-oscuro); }
+.badge-rojo     { background: #c0392b; color: white; }
+.badge-verde    { background: #27ae60; color: white; }
+
+.card-img {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    color: rgba(255,255,255,0.5);
+    border: 3px dashed rgba(255,255,255,0.4);
+    margin: 16px;
+    border-radius: 10px;
+}
+
+.card-info {
+    background: var(--blanco);
+    padding: 16px;
+}
+
+.card-nombre {
+    font-size: 18px;
+    font-family: 'Boogaloo', cursive;
+    color: var(--azul-oscuro);
+    margin-bottom: 6px;
+}
+
+.card-desc {
+    font-size: 13px;
+    color: var(--texto-gris);
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.card-precio {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--celeste);
+}
+
+.link-carta {
+    display: block;
+    text-align: center;
+    color: var(--celeste);
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    margin-top: 8px;
+}
+
+.link-carta:hover {
+    text-decoration: underline;
+}
+
+/* ── RESEÑAS ── */
+#resenas {
+    background: var(--celeste-claro);
+    padding-bottom: 0;
+}
+
+#cards-resenas {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+    padding-bottom: 48px;
+}
+
+.card-resena {
+    background: var(--blanco);
+    border-radius: 14px;
+    padding: 20px;
+    width: 280px;
+    border: 1px solid #cce8ee;
+}
+
+.resena-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.avatar-verde   { background: var(--verde); }
+.avatar-naranja { background: #e07b3a; }
+.avatar-celeste { background: var(--celeste); }
+
+.resena-nombre {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--azul-oscuro);
+}
+
+.resena-estrellas {
+    color: var(--amarillo);
+    font-size: 14px;
+}
+
+.resena-texto {
+    font-size: 13px;
+    color: var(--texto-gris);
+    line-height: 1.6;
+    font-style: italic;
+}
+
+
+/* ── SERVICIOS ── */
+#servicios {
+    background: var(--blanco);
+}
+
+#cards-servicios {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.card-servicio {
+    background: var(--blanco);
+    border: 2px solid var(--azul-oscuro);
+    border-radius: 16px;
+    padding: 28px 24px;
+    width: 220px;
+    text-align: center;
+}
+
+.servicio-icono {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.servicio-nombre {
+    font-family: 'Boogaloo', cursive;
+    font-size: 20px;
+    color: var(--azul-oscuro);
+    margin-bottom: 8px;
+}
+
+.servicio-desc {
+    font-size: 13px;
+    color: var(--texto-gris);
+    line-height: 1.5;
+}
+
+/* ── FOOTER ── */
+#footer {
+    background: var(--azul-oscuro);
+    color: var(--blanco);
+    padding: 48px 80px 24px;
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+#footer-izq {
+    flex: 1;
+    min-width: 180px;
+}
+
+#footer-logo {
+    font-size: 28px;
+    color: var(--blanco);
+    margin-bottom: 8px;
+}
+
+#footer-slogan {
+    font-size: 13px;
+    color: #8ab0c8;
+    line-height: 1.6;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 140px;
+}
+
+.footer-titulo {
+    font-family: 'Boogaloo', cursive;
+    font-size: 18px;
+    color: var(--amarillo);
+    margin-bottom: 4px;
+}
+
+.footer-col p, .footer-col a {
+    font-size: 13px;
+    color: #8ab0c8;
+    text-decoration: none;
+}
+
+.footer-col a:hover {
+    color: var(--blanco);
+}
+
+#footer-bottom {
+    width: 100%;
+    text-align: center;
+    border-top: 1px solid #1a4a6e;
+    padding-top: 16px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #8ab0c8;
+}
