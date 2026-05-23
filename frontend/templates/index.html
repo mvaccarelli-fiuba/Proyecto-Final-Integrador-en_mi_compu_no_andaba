@@ -1,32 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Krusty Krab</title>
-    <link rel="stylesheet" href="/frontend/static/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
+{% extends "base.html" %}
+{% block titulo %}Krusty Krab - Inicio{% endblock %}
 
-    <!-- NAVBAR -->
-    <nav id="navbar">
-        <div id="nav-izq">
-            <img src="/frontend/static/images/logo_krusty_krab.png" alt="Logo Krusty Krab" id="nav-logo">
-            <span id="nav-nombre">Krusty Krab</span>
-        </div>
-        <ul id="nav-links">
-            <li><a href="#menu">Menú</a></li>
-            <li><a href="#resenas">Reseñas</a></li>
-            <li><a href="#servicios">Servicios</a></li>
-            <li><a href="#contacto">Contacto</a></li>
-        </ul>
-        <div id="nav-der">
-            <button class="btn-outline">Ingresar</button>
-            <button class="btn-amarillo">Reservar</button>
-        </div>
-    </nav>
-
+{% block contenido %}
     <!-- HERO -->
     <div id="hero">
         <p id="hero-tag">LO MEJOR DE FONDO DE BIKINI</p>
@@ -39,13 +14,14 @@
     <section id="menu">
         <h2 class="seccion-titulo">Nuestro Menú</h2>
         <div class="titulo-linea"></div>
-        <p class="seccion-sub">Burguers craftеadas con los mejores ingredientes del océano</p>
+        <p class="seccion-sub">Burguers diseñadas con los mejores ingredientes del océano</p>
 
         <div id="cards-menu">
 
             <div class="card-plato card-celeste">
                 <span class="card-badge badge-amarillo">LA FAVORITA</span>
-                <div class="card-img">?</div>
+                <div class="card-img">
+                    <img src="{{ url_for('static', filename='images/hamburguesa_simple.png')}}" alt="imagen_cangreburguer_simple"></div>
                 <div class="card-info">
                     <h3 class="card-nombre">Cangreburger Clásica</h3>
                     <p class="card-desc">Medallón de angus, lechuga crispa, tomate fresco, cebolla caramelizada y nuestra salsa secreta del mar.</p>
@@ -55,7 +31,7 @@
 
             <div class="card-plato card-roja">
                 <span class="card-badge badge-rojo">🌶 PICANTE</span>
-                <div class="card-img">?</div>
+                <div class="card-img"><img src="{{url_for('static', filename='images/hamburguesa_picante.webp')}}" alt="imagen_cangreburguer_picante"></div>
                 <div class="card-info">
                     <h3 class="card-nombre">Cangreburger Extrema</h3>
                     <p class="card-desc">Doble medallón, jalapeños, queso pepper jack, bacon crujiente y salsa sriracha de arrecife.</p>
@@ -65,7 +41,7 @@
 
             <div class="card-plato card-verde">
                 <span class="card-badge badge-verde">VEGGIE</span>
-                <div class="card-img">?</div>
+                <div class="card-img"><img src="{{ url_for('static', filename='images/hamburguesa_vegana.png')}}" alt="imagen_cangreburguer_vegana"></div>
                 <div class="card-info">
                     <h3 class="card-nombre">Cangreburger Veggie</h3>
                     <p class="card-desc">Medallón de legumbres y algas marinas, aguacate, rúcula, tomates cherry y aderezo de limón.</p>
@@ -157,35 +133,4 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer id="footer">
-        <div id="footer-izq">
-            <p id="footer-logo">⚓ Krusty Crab</p>
-            <p id="footer-slogan">La mejor hamburguesería del mar,<br>ahora en tierra firme</p>
-        </div>
-        <div class="footer-col">
-            <p class="footer-titulo">Dónde encontrarnos</p>
-            <p>Av. Arrecife 1239, Puerto Coral</p>
-            <p>Buenos Aires, Argentina</p>
-            <p>+54 9 11291-5579</p>
-            <p>hola@krustycrab.com.ar</p>
-        </div>
-        <div class="footer-col">
-            <p class="footer-titulo">Horarios</p>
-            <p>Lun-Dom: 10:00 a 23:00</p>
-            <p>Cocina hasta las 22:30</p>
-        </div>
-        <div class="footer-col">
-            <p class="footer-titulo">Navegación</p>
-            <a href="#menu">Inicio</a>
-            <a href="#resenas">Nosotros</a>
-            <a href="#servicios">Servicios</a>
-            <a href="#contacto">Contacto</a>
-        </div>
-        <div id="footer-bottom">
-            <p>© 2025 Krusty Crab — Todos los derechos reservados 🦀</p>
-        </div>
-    </footer>
-
-</body>
-</html>
+{% endblock %}

@@ -1,7 +1,7 @@
 
 @font-face {
   font-family: "Krusty Krab";
-  src: url(/frontend/static/css/fonts/Spongeboy\ Me\ Bob.ttf);
+  src: url(/static/css/fonts/Spongeboy\ Me\ Bob.ttf);
 }
 
 * {
@@ -99,7 +99,7 @@ h1, h2, h3, nav, .btn-amarillo, .btn-outline, #footer-logo {
 }
 
 #nav-nombre {
-    font-family: 'Boogaloo', cursive;
+    font-family: 'Krusty Krab', cursive;
     font-size: 22px;
     color: var(--azul-oscuro);
 }
@@ -225,18 +225,24 @@ section {
 
 .badge-amarillo { background: var(--amarillo); color: var(--azul-oscuro); }
 .badge-rojo     { background: #c0392b; color: white; }
-.badge-verde    { background: #27ae60; color: white; }
+.badge-verde    { background: #067c37; color: white; }
 
 .card-img {
-    height: 140px;
+    height: 240px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 64px;
     color: rgba(255,255,255,0.5);
-    border: 3px dashed rgba(255,255,255,0.4);
-    margin: 16px;
-    border-radius: 10px;
+    margin: 0;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .card-info {
@@ -246,7 +252,7 @@ section {
 
 .card-nombre {
     font-size: 18px;
-    font-family: 'Boogaloo', cursive;
+    font-family: 'Krusty Krab', cursive;
     color: var(--azul-oscuro);
     margin-bottom: 6px;
 }
@@ -371,7 +377,7 @@ section {
 }
 
 .servicio-nombre {
-    font-family: 'Boogaloo', cursive;
+    font-family: 'Krusty Krab', cursive;
     font-size: 20px;
     color: var(--azul-oscuro);
     margin-bottom: 8px;
@@ -419,14 +425,14 @@ section {
 }
 
 .footer-titulo {
-    font-family: 'Boogaloo', cursive;
+    font-family: 'Krusty Krab', cursive;
     font-size: 18px;
     color: var(--amarillo);
     margin-bottom: 4px;
 }
 
 .footer-col p, .footer-col a {
-    font-size: 13px;
+    font-size: 18px;
     color: #8ab0c8;
     text-decoration: none;
 }
