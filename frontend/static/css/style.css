@@ -207,6 +207,8 @@ section {
     overflow: hidden;
     border: 2px solid var(--azul-oscuro);
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .card-celeste { background: var(--celeste); }
@@ -248,6 +250,7 @@ section {
 .card-info {
     background: var(--blanco);
     padding: 16px;
+    flex: 1;
 }
 
 .card-nombre {

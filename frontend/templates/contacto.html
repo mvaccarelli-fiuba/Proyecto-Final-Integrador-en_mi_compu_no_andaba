@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+ 
+{% block titulo %}Krusty Krab — Contacto{% endblock %}
+ 
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contacto.css') }}">
+{% endblock %}
+ 
+{% block contenido %}
+ 
+<div id="pagina-contacto">
+ 
+    <div id="contacto-breadcrumb">
+        <a href="/">Inicio</a> / <span>Contacto</span>
+    </div>
+ 
+    <div id="contacto-wrap">
+ 
+        <div id="contacto-info">
+            <p id="contacto-aviso">Para realizar una reserva podés hacerlo desde nuestra web o contactarnos directamente por cualquiera de estos medios.</p>
+ 
+            <div class="contacto-item">
+                <span class="contacto-icono">📞</span>
+                <p>+54 9 11291-5579</p>
+            </div>
+            <div class="contacto-item">
+                <span class="contacto-icono">📧</span>
+                <p>doncangrejo@krustycrab.com.ar</p>
+            </div>
+            <div class="contacto-item">
+                <span class="contacto-icono">📍</span>
+                <p>Av. Arrecife 1239, Puerto Coral, Buenos Aires</p>
+            </div>
+            <div class="contacto-item">
+                <span class="contacto-icono">🕐</span>
+                <p>Lun-Dom: 10:00 a 23:00 hs</p>
+            </div>
+ 
+            <div id="contacto-redes">
+                <a href="#" class="red-social">📸 Seguinos en Instagram</a>
+                <a href="#" class="red-social">📘 Seguinos en Facebook</a>
+            </div>
+        </div>
+ 
+
+        <div id="contacto-form-wrap">
+            <form id="form-contacto" action="/contacto" method="POST">
+ 
+                <div class="form-grupo">
+                    <label for="nombre">NOMBRE</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+ 
+                <div class="form-grupo">
+                    <label for="email">EMAIL</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+ 
+                <div class="form-grupo">
+                    <label for="telefono">TELÉFONO <span class="opcional">(OPCIONAL)</span></label>
+                    <input type="tel" id="telefono" name="telefono">
+                </div>
+ 
+                <div class="form-grupo">
+                    <label for="mensaje">MENSAJE</label>
+                    <textarea id="mensaje" name="mensaje" rows="5"></textarea>
+                </div>
+ 
+ 
+                <button type="submit" class="btn-enviar">ENVIAR</button>
+ 
+            </form>
+        </div>
+ 
+    </div>
+</div>
+ 
+{% endblock %}
