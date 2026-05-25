@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% block css_extra %}{% endblock %}
 </head>
+
 <body>
-        <!-- NAVBAR -->
+    <!-- NAVBAR -->
     <nav id="navbar">
         <div id="nav-izq">
-            <img src="{{ url_for('static', filename='images/krusty_krab_logo.webp') }}" alt="Logo Krusty Krab" id="nav-logo">
+            <img src="{{ url_for('static', filename='images/krusty_krab_logo.webp') }}" alt="Logo Krusty Krab"
+                id="nav-logo">
             <span id="nav-nombre">Krusty Krab</span>
         </div>
         <ul id="nav-links">
@@ -28,7 +31,7 @@
 
     {% block contenido %} {% endblock %}
 
-        <!-- FOOTER -->
+    <!-- FOOTER -->
     <footer id="footer">
         <div id="footer-izq">
             <p id="footer-logo">⚓ Krusty Crab</p>
@@ -58,4 +61,5 @@
         </div>
     </footer>
 </body>
+
 </html>

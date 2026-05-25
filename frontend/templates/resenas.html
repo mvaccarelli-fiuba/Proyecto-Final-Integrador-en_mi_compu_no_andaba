@@ -1,0 +1,117 @@
+<!--RESENAS HARDCODEADAS, RECONFIGURAR CON EL BACKEND-->
+
+{% extends "base.html" %}
+
+{% block titulo %}Reseñas - Krusty Krab{% endblock %}
+
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/resenas.css') }}">
+{% endblock %}
+
+{% block contenido %}
+
+<!-- HERO -->
+<div id="resenas-hero">
+    <p id="hero-tag">LO QUE DICEN DE NOSOTROS</p>
+    <h1 id="resenas-titulo">Reseñas de clientes</h1>
+    <p id="resenas-sub">Cada estrella la ganamos en la cocina</p>
+</div>
+
+<!-- ORDEN -->
+<section id="resenas-orden">
+    <div class="filtros-container">
+        <a href="?orden=recientes" class="filtro {% if orden == 'recientes' %}filtro-activo{% endif %}">
+            🕒 Más recientes
+        </a>
+        <a href="?orden=mejor_puntaje" class="filtro {% if orden == 'mejor_puntaje' %}filtro-activo{% endif %}">
+            ⭐ Mejor puntaje
+        </a>
+    </div>
+</section>
+
+<!-- LISTADO -->
+<section id="resenas-listado">
+    <div class="cards-resenas-full">
+
+        <div class="card-resena">
+            <div class="resena-header">
+                <div class="avatar avatar-verde">MG</div>
+                <div>
+                    <p class="resena-nombre">Marina González</p>
+                    <p class="resena-estrellas">★★★★★</p>
+                    <p class="resena-fecha">Hace 2 días</p>
+                </div>
+            </div>
+            <p class="resena-texto">"Juro que pensé pasar, pero una burger me hará sentir como sirena. La Clásica es un
+                crimen delicioso, ya voy cuatro veces este mes 🍔"</p>
+        </div>
+
+        <div class="card-resena">
+            <div class="resena-header">
+                <div class="avatar avatar-naranja">TP</div>
+                <div>
+                    <p class="resena-nombre">Tomás Parayra</p>
+                    <p class="resena-estrellas">★★★★★</p>
+                    <p class="resena-fecha">Hace 5 días</p>
+                </div>
+            </div>
+            <p class="resena-texto">"Me avisaron la Extrema picaba pero fui a aguantar el picante… spoiler: no. Para
+                volvé al día siguiente por más 🌶"</p>
+        </div>
+
+        <div class="card-resena">
+            <div class="resena-header">
+                <div class="avatar avatar-celeste">LR</div>
+                <div>
+                    <p class="resena-nombre">Luna Ramos</p>
+                    <p class="resena-estrellas">★★★★★</p>
+                    <p class="resena-fecha">Hace 1 semana</p>
+                </div>
+            </div>
+            <p class="resena-texto">"Soy vegetariana y siempre termino mirando el menú ajena… hasta que probé la Veggie.
+                Me hicieron creer en el mar 🌊"</p>
+        </div>
+
+        <div class="card-resena">
+            <div class="resena-header">
+                <div class="avatar avatar-verde">FM</div>
+                <div>
+                    <p class="resena-nombre">Federico Marín</p>
+                    <p class="resena-estrellas">★★★★☆</p>
+                    <p class="resena-fecha">Hace 2 semanas</p>
+                </div>
+            </div>
+            <p class="resena-texto">"Las papas Bikini son adictivas. Pedí una porción individual y terminé pidiendo
+                otra. La atención excelente."</p>
+        </div>
+
+        <div class="card-resena">
+            <div class="resena-header">
+                <div class="avatar avatar-naranja">SA</div>
+                <div>
+                    <p class="resena-nombre">Sofía Aguirre</p>
+                    <p class="resena-estrellas">★★★★★</p>
+                    <p class="resena-fecha">Hace 3 semanas</p>
+                </div>
+            </div>
+            <p class="resena-texto">"Fui con mi familia un domingo, esperábamos algo común y nos sorprendieron. Mis
+                hijos felices, el Pie de Coral los volvió locos."</p>
+        </div>
+
+        <div class="card-resena">
+            <div class="resena-header">
+                <div class="avatar avatar-celeste">DP</div>
+                <div>
+                    <p class="resena-nombre">Diego Pérez</p>
+                    <p class="resena-estrellas">★★★★★</p>
+                    <p class="resena-fecha">Hace 1 mes</p>
+                </div>
+            </div>
+            <p class="resena-texto">"El Kelp Shake me dio miedo al principio pero es la mejor bebida que probé en mi
+                vida. Volveré."</p>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

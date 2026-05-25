@@ -1,27 +1,26 @@
 /* ========================================
-   MENÚ
+   RESEÑAS
    ======================================== */
 
-#menu-hero {
+#resenas-hero {
     background: linear-gradient(180deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
     text-align: center;
     padding: 60px 40px 80px;
     color: var(--blanco);
 }
 
-#menu-titulo {
+#resenas-titulo {
     font-size: 56px;
     color: var(--blanco);
     margin: 12px 0;
 }
 
-#menu-sub {
+#resenas-sub {
     color: var(--celeste-claro);
     font-size: 18px;
 }
 
-/* Filtros */
-#menu-filtros {
+#resenas-orden {
     background: var(--gris-claro);
     padding: 24px 80px;
     border-bottom: 1px solid #e0e0e0;
@@ -57,53 +56,20 @@
     border-color: var(--azul-oscuro);
 }
 
-.filtro-activo:hover {
-    color: var(--blanco);
-}
-
-/* Sección de categoría */
-.categoria-section {
+#resenas-listado {
     padding: 56px 80px;
 }
 
-.categoria-section:nth-child(even) {
-    background: var(--gris-claro);
-}
-
-.cards-categoria {
-    display: flex;
+.cards-resenas-full {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 24px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* Restricciones */
-.card-restricciones {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin: 12px 0;
-}
-
-.resto-badge {
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-weight: 600;
-}
-
-.resto-vegetariano {
-    background: #dff5e3;
-    color: var(--verde);
-}
-
-.resto-vegano {
-    background: #d4f5e1;
-    color: var(--verde);
-}
-
-.resto-sin-gluten {
-    background: #fff4d6;
-    color: #8b6914;
+.resena-fecha {
+    color: var(--texto-gris);
+    font-size: 12px;
+    margin-top: 2px;
 }

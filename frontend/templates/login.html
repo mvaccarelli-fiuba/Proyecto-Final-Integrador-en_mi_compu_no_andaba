@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block titulo %}Ingresar - Krusty Krab{% endblock %}
+
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block contenido %}
+
+<section id="login-section">
+    <div class="login-card">
+        <div class="login-header">
+            <img src="{{ url_for('static', filename='images/krusty_krab_logo.webp') }}" alt="Logo Krusty Krab"
+                class="login-logo">
+            <h2 class="login-titulo">Bienvenido de vuelta</h2>
+            <div class="titulo-linea linea-amarilla"></div>
+            <p class="login-sub">Ingresá para administrar el local</p>
+        </div>
+
+        {% if error %}
+        <div class="login-error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" action="/login" class="login-form">
+            <div class="campo">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="admin@krustycrab.com" required>
+            </div>
+
+            <div class="campo">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-amarillo btn-grande btn-full">
+                🦀 Ingresar
+            </button>
+        </form>
+
+        <p class="login-pie">
+            ¿Sos cliente? <a href="/">Volver al inicio</a>
+        </p>
+    </div>
+</section>
+
+{% endblock %}

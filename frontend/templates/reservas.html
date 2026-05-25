@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block titulo %}Reservas - Krusty Krab{% endblock %}
+
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reservas.css') }}">
+{% endblock %}
+
+{% block contenido %}
+
+<!-- HERO de reservas -->
+<div id="reservas-hero">
+    <p id="hero-tag">RESERVÁ TU MESA</p>
+    <h1 id="reservas-titulo">Asegurate tu lugar</h1>
+    <p id="reservas-sub">Te enviamos un QR por mail con todos los datos</p>
+</div>
+
+<!-- FORM DE RESERVA -->
+<section id="reservas-section">
+    <h2 class="seccion-titulo">Hacé tu reserva</h2>
+    <div class="titulo-linea linea-amarilla"></div>
+    <p class="seccion-sub">Completá el formulario y te confirmamos al instante</p>
+
+    {% if mensaje_exito %}
+    <div class="alert alert-exito">{{ mensaje_exito }}</div>
+    {% endif %}
+
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/reservas" class="reservas-form">
+
+        <!-- Datos del cliente -->
+        <div class="form-bloque">
+            <h3 class="form-bloque-titulo">Tus datos</h3>
+
+            <div class="form-fila">
+                <div class="campo">
+                    <label for="nombre">Nombre y apellido</label>
+                    <input type="text" id="nombre" name="cliente_nombre" placeholder="Ej: Bob Esponja" required>
+                </div>
+
+                <div class="campo">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="cliente_email" placeholder="bob@fondodebikini.com" required>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalles de la reserva -->
+        <div class="form-bloque">
+            <h3 class="form-bloque-titulo">Detalles de la reserva</h3>
+
+            <div class="form-fila">
+                <div class="campo">
+                    <label for="fecha">Fecha</label>
+                    <input type="date" id="fecha" name="fecha" required>
+                </div>
+
+                <div class="campo">
+                    <label for="hora">Hora</label>
+                    <select id="hora" name="hora_inicio" required>
+                        <option value="">Elegí un horario</option>
+                        <option value="20:00">20:00</option>
+                        <option value="21:00">21:00</option>
+                        <option value="22:00">22:00</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label for="personas">Comensales</label>
+                    <select id="personas" name="cantidad_personas" required>
+                        <option value="">¿Cuántos?</option>
+                        <option value="1">1 persona</option>
+                        <option value="2">2 personas</option>
+                        <option value="3">3 personas</option>
+                        <option value="4">4 personas</option>
+                        <option value="5">5 personas</option>
+                        <option value="6">6 personas</option>
+                        <option value="7">7 personas</option>
+                        <option value="8">8 personas</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-amarillo btn-grande">
+            🦀 Confirmar reserva
+        </button>
+    </form>
+</section>
+
+<!-- INFO ADICIONAL -->
+<section id="reservas-info">
+    <h2 class="seccion-titulo">¿Cómo funciona?</h2>
+    <div class="titulo-linea linea-roja"></div>
+
+    <div id="info-cards">
+        <div class="info-card">
+            <div class="info-numero">1</div>
+            <h3>Completá el formulario</h3>
+            <p>Elegí fecha, hora y cantidad de comensales.</p>
+        </div>
+
+        <div class="info-card">
+            <div class="info-numero">2</div>
+            <h3>Recibí tu QR por email</h3>
+            <p>Te llega al instante con todos los datos de tu reserva.</p>
+        </div>
+
+        <div class="info-card">
+            <div class="info-numero">3</div>
+            <h3>Mostralo al llegar</h3>
+            <p>Lo escaneamos en el local y listo, ¡a disfrutar!</p>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
