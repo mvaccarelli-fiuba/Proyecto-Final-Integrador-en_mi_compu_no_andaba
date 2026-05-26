@@ -102,7 +102,7 @@ def get_reserva(token):
     conn = get_connection()
 
     try: 
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
 
         cursor.execute(
             """
@@ -121,9 +121,9 @@ def get_reserva(token):
 
         return convert_row_to_dict(reserva)
     
-     except mysql.connector.Error:
+    except mysql.connector.Error:
         raise
-     finally:
+    finally:
          if conn.is_connected():
              conn.close()
 
@@ -136,7 +136,7 @@ def cancelar_reserva(token):
 
         cursor.execute(
             """
-            UPDATE RESERVAS
+            UPDATE reserva
             SET estado = "cancelada",
             cancelado_en = NOW()
             WHERE token = %s
@@ -152,9 +152,9 @@ def cancelar_reserva(token):
         cursor.close()
         return True
 
-     except mysql.connector.Error:
-         raise
-     finally:
+    except mysql.connector.Error:
+        raise
+    finally:
          if conn.is_connected():
              conn.close()   
 
@@ -169,10 +169,10 @@ def consumir_reserva(token):
            """
            UPDATE reserva
            SET estado = "consumida", 
-           consumida_en = NOW()
+           consumido_en = NOW()
            WHERE token = %s
            AND estado = "confirmada"
-           """
+           """,
            (token,)
         )
 
@@ -189,7 +189,7 @@ def consumir_reserva(token):
          if conn.is_connected():
              conn.close()
 
-def get_reservas(estado=none, fecha=none):
+def get_reservas(estado=None, fecha=None):
     conn = get_connection()
 
     try:
@@ -244,7 +244,7 @@ def get_reservas(estado=none, fecha=none):
         raise
     finally:
         if conn.is_connected():
-            conn.close   
+            conn.close()   
 
 
             
