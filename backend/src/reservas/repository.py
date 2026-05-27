@@ -57,7 +57,7 @@ def create_reserva(reserva_data):
             AND activa = TRUE
             LIMIT 1
             """,
-            (cantidad_personas,)
+            (reserva_data["cantidad_personas"],)
         )
         mesa = cursor.fetchone()
         
@@ -95,7 +95,8 @@ def create_reserva(reserva_data):
     except mysql.connector.Error:
         raise
     finally:
-        conn.close()
+        if conn.is_connected():
+              conn.close()
 
 
 def get_reserva(token):
@@ -193,7 +194,7 @@ def get_reservas(estado=None, fecha=None):
     conn = get_connection()
 
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
 
         if estado and fecha:
             cursor.execute(
@@ -237,7 +238,7 @@ def get_reservas(estado=None, fecha=None):
 
         cursor.close()
 
-        return reservas
+        return [convert_row_to_dict(row) for row in reservas]
 
 
     except mysql.connector.Error:
