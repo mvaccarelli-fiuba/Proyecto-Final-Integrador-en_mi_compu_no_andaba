@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+ 
+{% block titulo %}Krusty Krab — Página no encontrada{% endblock %}
+ 
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pagina_error_404.css') }}">
+{% endblock %}
+ 
+{% block contenido %}
+ 
+<div id="pagina-error">
+    <img src="{{ url_for('static', filename='images/imagen_error.jpg') }}" alt="Error" id="error-img">
+    <h2 id="error-titulo">¡Ups! Página no encontrada</h2>
+    <p id="error-texto">Parece que esta página se perdió en el fondo del mar.</p>
+    <a href="/" style="text-decoration: none;">
+        <button class="btn-amarillo btn-grande">🦀 Volver al inicio</button>
+    </a>
+</div>
+ 
+{% endblock %}
+ 

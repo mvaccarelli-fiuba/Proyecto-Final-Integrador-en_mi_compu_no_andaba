@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+ 
+{% block titulo %}Krusty Krab — Nosotros{% endblock %}
+ 
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/nosotros.css') }}">
+{% endblock %}
+ 
+{% block contenido %}
+ 
+<div id="pagina-nosotros">
+ 
+    <div id="nosotros-descripcion">
+        <h2 id="nosotros-titulo">Nuestra historia</h2>
+        <div class="titulo-linea"></div>
+        <p id="nosotros-texto">
+            El Krusty Krab nació en las profundidades de Bikini Bottom con un sueño simple: llevar la mejor hamburguesa del océano a tierra firme. 
+            Fundado por el Sr. Cangrejo, cada plato lleva consigo décadas de tradición, secretos culinarios y mucho amor marino. 
+            Desde nuestros humildes comienzos hasta convertirnos en la hamburguesería de referencia de Buenos Aires, 
+            siempre mantuvimos el mismo compromiso: ingredientes frescos, recetas únicas y una experiencia que te hace sentir 
+            en el fondo del mar. Bienvenido al Krusty Krab, donde cada mordida esconde la fórmula secreta.
+        </p>
+    </div>
+ 
+    <div id="nosotros-galeria-wrap">
+        <h3 class="nosotros-subtitulo">Nuestro local</h3>
+        <div id="galeria-local">
+            <img src="{{ url_for('static', filename='images/imagenes_local/krusty_krab.png') }}" alt="Local 1" class="galeria-img">
+            <img src="{{ url_for('static', filename='images/imagenes_local/krusty_krab_interior_1.jpg') }}" alt="Local 2" class="galeria-img">
+            <img src="{{ url_for('static', filename='images/imagenes_local/krusty_krab_cocina.jpg') }}" alt="Local 3" class="galeria-img">
+            <img src="{{ url_for('static', filename='images/imagenes_local/krusty_krab_interior_2.jpg') }}" alt="Local 4" class="galeria-img">
+        </div>
+    </div>
+
+    <div id="nosotros-equipo-wrap">
+        <h3 class="nosotros-subtitulo">Nuestro equipo</h3>
+        <p class="nosotros-equipo-sub">Las almas detrás de cada Krabby Patty</p>
+        <div id="cards-equipo">
+ 
+            <div class="card-chef">
+                <img src="{{ url_for('static', filename='images/imagenes_personal/bob_esponja.webp') }}" alt="Chef 1" class="chef-foto">
+                <h4 class="chef-nombre">Bob Esponja</h4>
+                <p class="chef-rol">Chef Principal</p>
+                <p class="chef-desc">El cocinero más entusiasta del océano. Lleva 10 años perfeccionando la fórmula secreta.</p>
+            </div>
+ 
+            <div class="card-chef">
+                <img src="{{ url_for('static', filename='images/imagenes_personal/don_cangrejo.jpg') }}" alt="Chef 2" class="chef-foto">
+                <h4 class="chef-nombre">Sr. Cangrejo</h4>
+                <p class="chef-rol">Fundador & Director</p>
+                <p class="chef-desc">El visionario detrás del Krusty Krab. Su pasión por las burgers es legendaria en Bikini Bottom.</p>
+            </div>
+ 
+            <div class="card-chef">
+                <img src="{{ url_for('static', filename='images/imagenes_personal/sandy_mejillas.webp') }}" alt="Chef 3" class="chef-foto">
+                <h4 class="chef-nombre">Sandy Mejillas</h4>
+                <p class="chef-rol">Chef de Pastelería</p>
+                <p class="chef-desc">Trae la ciencia a la cocina. Sus postres son experimentos deliciosos que desafían la física.</p>
+            </div>
+
+            <div class="card-chef">
+                <img src="{{ url_for('static', filename='images/imagenes_personal/calamardo_tentaculos.jpg') }}" alt="Chef 4" class="chef-foto">
+                <h4 class="chef-nombre">Calamardo</h4>
+                <p class="chef-rol">Cajero</p>
+                <p class="chef-desc">El cajero mas querido de todo Fondo de Bikini.</p>
+            </div>
+           
+            <div class="card-chef">
+                <img src="{{ url_for('static', filename='images/imagenes_personal/perlita_cangrejo.webp') }}" alt="Chef 5" class="chef-foto">
+                <h4 class="chef-nombre">Perlita cangrejo</h4>
+                <p class="chef-rol">Cocinera Pasante</p>
+                <p class="chef-desc">Es cocinera por tiempo limitado, pero aprendio todo de su padre Don Cangrejo.</p>
+            </div>
+ 
+ 
+        </div>
+    </div>
+ 
+    <div id="nosotros-cta">
+        <h3 id="cta-titulo">¿Te gustó lo que viste?</h3>
+        <p id="cta-texto">Vení a conocernos en persona y viví la experiencia del Krusty Krab</p>
+        <a href="/reservas" class="btn-amarillo btn-grande" style="text-decoration: none;">🦀 Reservar una mesa</a>
+    </div>
+ 
+</div>
+ 
+{% endblock %}

@@ -12,20 +12,22 @@
 <body>
     <!-- NAVBAR -->
     <nav id="navbar">
-        <div id="nav-izq">
-            <img src="{{ url_for('static', filename='images/krusty_krab_logo.webp') }}" alt="Logo Krusty Krab"
+        <div id="nav-izq"><a href="/"><img src="{{ url_for('static', filename='images/krusty_krab_logo.webp') }}" alt="Logo Krusty Krab"
                 id="nav-logo">
-            <span id="nav-nombre">Krusty Krab</span>
+            </a>
         </div>
         <ul id="nav-links">
-            <li><a href="#menu">Menú</a></li>
-            <li><a href="#resenas">Reseñas</a></li>
+            <li><a href="/menu">Menú</a></li>
+            <li><a href="/resenas">Reseñas</a></li>
             <li><a href="#servicios">Servicios</a></li>
             <li><a href="/contacto">Contacto</a></li>
+            <li><a href="/FAQ">FAQ</a></li>
+            <li><a href="/nosotros">Nosotros</a></li>
+            
         </ul>
         <div id="nav-der">
-            <button class="btn-outline">Ingresar</button>
-            <button class="btn-amarillo">Reservar</button>
+            <button class="btn-outline"><a href="/login" style="text-decoration: none;">Ingresar</a></button>
+            <button class="btn-amarillo"><a href="/reservas" style="text-decoration: none;">Reservar</a></button>
         </div>
     </nav>
 
@@ -51,10 +53,13 @@
         </div>
         <div class="footer-col">
             <p class="footer-titulo">Navegación</p>
-            <a href="#menu">Inicio</a>
-            <a href="#resenas">Nosotros</a>
+            <a href="/">Inicio</a>
+            <a href="/resenas">Resenas</a>
             <a href="#servicios">Servicios</a>
             <a href="/contacto">Contacto</a>
+            <a href="/nosotros">Nosotros</a>
+            <a href="/FAQ">FAQ</a>
+
         </div>
         <div id="footer-bottom">
             <p>© 2026 Krusty Crab — Todos los derechos reservados 🦀</p>
