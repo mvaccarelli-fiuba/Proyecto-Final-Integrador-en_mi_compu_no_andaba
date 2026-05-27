@@ -5,9 +5,12 @@ app.secret_key = "crusty-crab-secret-key"
 
 
 @app.route("/")
-def home():
+def inicio():
     return render_template("index.html")
 
+@app.route("/FAQ")
+def FAQ():
+    return render_template("FAQ.html")
 
 @app.route("/menu")
 def menu():
@@ -41,6 +44,13 @@ def resenas():
 def login():
     return render_template("login.html")
 
+@app.errorhandler(404)
+def pagina_no_encontrada():
+    return render_template("error.html"), 404
+
+@app.route("/reserva-confirmada")
+def reserva_confirmada():
+    return render_template("reserva_confirmada.html")
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5002, debug=True)

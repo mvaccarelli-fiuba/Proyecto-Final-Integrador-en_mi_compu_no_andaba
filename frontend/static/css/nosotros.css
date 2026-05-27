@@ -1,0 +1,135 @@
+#pagina-nosotros {
+    min-height: 80vh;
+}
+ 
+#nosotros-descripcion {
+    background: linear-gradient(180deg, #0d2b45 0%, #1a6e7e 100%);
+    padding: 56px 80px;
+    text-align: center;
+}
+ 
+#nosotros-titulo {
+    font-size: 42px;
+    color: var(--blanco);
+    margin-bottom: 8px;
+}
+ 
+#nosotros-descripcion .titulo-linea {
+    margin-bottom: 24px;
+}
+ 
+#nosotros-texto {
+    max-width: 720px;
+    margin: 0 auto;
+    font-size: 16px;
+    color: #b8e8f0;
+    line-height: 1.9;
+}
+ 
+.nosotros-subtitulo {
+    font-size: 32px;
+    color: var(--azul-oscuro);
+    text-align: center;
+    margin-bottom: 28px;
+}
+ 
+.nosotros-equipo-sub {
+    text-align: center;
+    font-size: 15px;
+    color: var(--texto-gris);
+    margin-top: -20px;
+    margin-bottom: 32px;
+}
+ 
+#nosotros-galeria-wrap {
+    padding: 56px 80px;
+    background: var(--blanco);
+}
+ 
+#galeria-local {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 860px;
+    margin: 0 auto;
+}
+ 
+.galeria-img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid var(--azul-oscuro);
+}
+ 
+#nosotros-equipo-wrap {
+    padding: 56px 80px;
+    background: var(--gris-claro);
+}
+ 
+#cards-equipo {
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+ 
+.card-chef {
+    background: var(--celeste-claro);
+    border: 2px solid var(--azul-oscuro);
+    border-radius: 16px;
+    padding: 24px 20px;
+    width: 240px;
+    text-align: center;
+}
+ 
+
+ 
+.chef-foto {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--celeste);
+    margin-bottom: 14px;
+    background-color: white;
+}
+ 
+.chef-nombre {
+    font-size: 20px;
+    color: var(--azul-oscuro);
+    margin-bottom: 4px;
+}
+ 
+.chef-rol {
+    font-size: 12px;
+    color: var(--celeste);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+ 
+.chef-desc {
+    font-size: 13px;
+    color: var(--texto-gris);
+    line-height: 1.6;
+}
+ 
+#nosotros-cta {
+    background: linear-gradient(135deg, #0d2b45 0%, #1a6e7e 100%);
+    padding: 56px 80px;
+    text-align: center;
+}
+ 
+#cta-titulo {
+    font-size: 36px;
+    color: var(--blanco);
+    margin-bottom: 12px;
+}
+ 
+#cta-texto {
+    font-size: 16px;
+    color: #b8e8f0;
+    margin-bottom: 28px;
+}
