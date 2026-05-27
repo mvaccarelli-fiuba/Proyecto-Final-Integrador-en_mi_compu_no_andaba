@@ -2,12 +2,13 @@ from flask import Blueprint, request, jsonify
 import mysql.connector
 
 from src.reservas import service
-from src.utils import error, require admin
+from src.utils import error, require_admin
 
 reservas_bp = Blueprint("reservas", __name__)
 
 
-@reservas_bp.route("/disponibilidad", methods=["GET"]
+
+@reservas_bp.route("/disponibilidad", methods=["GET"])
 def get_disponibilidad():
     cantidad_personas = request.args.get("cantidad_personas")
 
@@ -49,7 +50,7 @@ def create_reserva():
         reserva = service.create_reserva(reserva_data)
 
         return jsonify({
-            "message": "Reserva creada correctamente","data": reserva}), 201)
+            "message": "Reserva creada correctamente","data": reserva}), 201
     except ValueError as err:
         return error("404", "Not Found", str(err), 404)
     except mysql.connector.Error as err:
@@ -65,7 +66,7 @@ def get_reserva(token):
 
         return jsonify(reserva), 200
     except ValueError as err:
-        return error("404", "Not Found", f"Reserva no encontrada: {err}", 404
+        return error("404", "Not Found", f"Reserva no encontrada: {err}", 404)
     except mysql.connector.Error as err:
         return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500) 
     except Exception as err:
@@ -90,7 +91,7 @@ def cancelar_reserva(token):
 def consumir_reserva():
     data = request.json
 
-    if not data or token not in data:
+    if not data or "token" not in data:
         return error("400", "Bad request", "El token es obligatorio",400)
 
     try:
