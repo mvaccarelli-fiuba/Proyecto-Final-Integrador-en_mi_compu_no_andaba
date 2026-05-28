@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titulo %}Admin - Krusty Krab{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    {% block css_extra %}{% endblock %}
+</head>
+
+<body class="admin-body">
+
+    <!-- HEADER -->
+    <header id="admin-header">
+        <div id="admin-header-izq">
+            <span class="admin-badge">admin</span>
+            <h1 id="admin-titulo">Panel de administración</h1>
+        </div>
+        <div id="admin-header-der">
+            <span id="admin-email">admin@krustycrab.com</span>
+            <a href="/" class="admin-link-salir">← Volver al sitio</a>
+        </div>
+    </header>
+
+    <div id="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside id="admin-sidebar">
+            <nav id="admin-nav">
+                <a href="/admin/dashboard" class="admin-nav-link {% if seccion == 'dashboard' %}activo{% endif %}">
+                    📊 Dashboard
+                </a>
+                <a href="/admin/reservas" class="admin-nav-link {% if seccion == 'reservas' %}activo{% endif %}">
+                    📅 Reservas
+                </a>
+                <a href="/admin/menu" class="admin-nav-link {% if seccion == 'menu' %}activo{% endif %}">
+                    🍔 Menú
+                </a>
+                <a href="/admin/mesas" class="admin-nav-link {% if seccion == 'mesas' %}activo{% endif %}">
+                    🪑 Mesas
+                </a>
+                <a href="/admin/servicios" class="admin-nav-link {% if seccion == 'servicios' %}activo{% endif %}">
+                    ⚙️ Servicios
+                </a>
+                <a href="/admin/validar-qr" class="admin-nav-link {% if seccion == 'validar-qr' %}activo{% endif %}">
+                    📷 Validar QR
+                </a>
+            </nav>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main id="admin-main">
+            {% block contenido %}{% endblock %}
+        </main>
+
+    </div>
+
+</body>
+
+</html>

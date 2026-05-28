@@ -52,5 +52,10 @@ def pagina_no_encontrada():
 def reserva_confirmada():
     return render_template("reserva_confirmada.html")
 
+
+@app.route("/admin/dashboard")
+def admin_dashboard():
+    return render_template("admin/dashboard.html", seccion="dashboard")
+
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5002, debug=True)
