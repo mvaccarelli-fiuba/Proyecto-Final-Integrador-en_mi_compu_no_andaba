@@ -53,6 +53,7 @@ Listado consolidado de endpoints del backend.
 | POST   | `/admin/platos/<id>/imagen`   | 🔒   | Subir imagen del plato (multipart)         |
 
 **GET `/platos`** — query params opcionales:
+- `restriccion` (`vegano` | `vegetariano` | `gluten`): filtra platos por restricción alimentaria
 - `categoria_id` (int): filtra por categoría
 - `es_vegetariano` (true/false): filtra platos vegetarianos
 - `es_vegano` (true/false): filtra platos veganos

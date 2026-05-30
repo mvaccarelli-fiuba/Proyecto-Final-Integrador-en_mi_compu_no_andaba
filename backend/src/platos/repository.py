@@ -4,6 +4,11 @@ import mysql.connector
 
 from config import DB_CONFIG
 
+RESTRICCION_COLUMNS = {
+    "vegano": "es_vegano",
+    "vegetariano": "es_vegetariano",
+    "gluten": "sin_gluten",
+}
 
 def get_connection():
     return mysql.connector.connect(**DB_CONFIG)
@@ -20,15 +25,23 @@ def convert_value(value):
 def convert_row_to_dict(row):
     return {key: convert_value(value) for key, value in row.items()}
 
+
 def get_all_platos():
     conn = get_connection()
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(
-            """
-            SELECT id, nombre, descripcion, precio, vegano, vegetariano, gluten, imagen_url, activo, created_at
-            FROM platos
-            WHERE activo = TRUE
+            f"""
+            SELECT id, nombre, descripcion, precio,
+                es_vegano AS vegano,
+                es_vegetariano AS vegetariano,
+                sin_gluten AS gluten,
+                imagen_url,
+                disponible AS activo,
+                created_at,
+                categoria_id
+            FROM plato
+            WHERE disponible = TRUE
             ORDER BY id
             """
         )
@@ -36,47 +49,65 @@ def get_all_platos():
         cursor.close()
         return [convert_row_to_dict(row) for row in rows]
     except mysql.connector.Error:
-        raise 
+        raise
     finally:
         if conn.is_connected():
             conn.close()
 
+
 def get_plato(id):
     conn = get_connection()
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(
-            """
-            SELECT id, nombre, descripcion, precio, vegano, vegetariano, gluten, imagen_url, activo, created_at
-            FROM platos
+            f"""
+            SELECT id, nombre, descripcion, precio,
+                es_vegano AS vegano,
+                es_vegetariano AS vegetariano,
+                sin_gluten AS gluten,
+                imagen_url,
+                disponible AS activo,
+                created_at,
+                categoria_id
+            FROM plato
             WHERE id = %s
             """,
-            (id,)
+            (id,),
         )
         row = cursor.fetchone()
         cursor.close()
         if row:
             return convert_row_to_dict(row)
-        else:
-            raise ValueError
+        raise ValueError
     except mysql.connector.Error:
         raise
     finally:
         conn.close()
 
+
 def get_platos_con_restriccion(restriccion):
+    column = RESTRICCION_COLUMNS.get(restriccion)
+    if column is None:
+        raise ValueError(f"Restricción no válida: {restriccion}")
+
     conn = get_connection()
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(dictionary=True)
         cursor.execute(
-            """
-            SELECT id, nombre, descripcion, precio, vegano, vegetariano, gluten, imagen_url, activo, created_at
-            FROM platos
-            WHERE %s = TRUE AND activo = TRUE
+            f"""
+            SELECT id, nombre, descripcion, precio,
+                es_vegano AS vegano,
+                es_vegetariano AS vegetariano,
+                sin_gluten AS gluten,
+                imagen_url,
+                disponible AS activo,
+                created_at,
+                categoria_id
+            FROM plato
+            WHERE {column} = TRUE AND disponible = TRUE
             ORDER BY id
             LIMIT 10
-            """,
-            (restriccion,)
+            """
         )
         rows = cursor.fetchall()
         cursor.close()
@@ -85,6 +116,7 @@ def get_platos_con_restriccion(restriccion):
         raise
     finally:
         conn.close()
+
 
 def create_plato(plato_data):
     conn = get_connection()
@@ -92,18 +124,22 @@ def create_plato(plato_data):
         cursor = conn.cursor()
         cursor.execute(
             """
-            INSERT INTO platos (nombre, descripcion, precio, vegano, vegetariano, gluten, imagen_url)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO plato (
+                nombre, descripcion, precio, categoria_id,
+                es_vegano, es_vegetariano, sin_gluten, imagen_url
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
             """,
             (
                 plato_data["nombre"],
                 plato_data.get("descripcion", ""),
                 plato_data["precio"],
+                plato_data.get("categoria_id", 1),
                 plato_data.get("vegano", False),
                 plato_data.get("vegetariano", False),
                 plato_data.get("gluten", False),
-                plato_data.get("imagen_url", "")
-            )
+                plato_data.get("imagen_url", ""),
+            ),
         )
         conn.commit()
         new_id = cursor.lastrowid
@@ -113,15 +149,18 @@ def create_plato(plato_data):
         raise
     finally:
         conn.close()
-    
+
+
 def update_plato(id, plato_data):
     conn = get_connection()
     try:
         cursor = conn.cursor()
         cursor.execute(
             """
-            UPDATE platos
-            SET nombre = %s, descripcion = %s, precio = %s, vegano = %s, vegetariano = %s, gluten = %s, imagen_url = %s
+            UPDATE plato
+            SET nombre = %s, descripcion = %s, precio = %s,
+                es_vegano = %s, es_vegetariano = %s, sin_gluten = %s,
+                imagen_url = %s, categoria_id = %s
             WHERE id = %s
             """,
             (
@@ -132,8 +171,9 @@ def update_plato(id, plato_data):
                 plato_data.get("vegetariano", False),
                 plato_data.get("gluten", False),
                 plato_data.get("imagen_url", ""),
-                id
-            )
+                plato_data.get("categoria_id", 1),
+                id,
+            ),
         )
         conn.commit()
         cursor.close()
@@ -141,12 +181,13 @@ def update_plato(id, plato_data):
     except mysql.connector.Error:
         raise
     finally:
-        conn.close()   
+        conn.close()
+
 
 def update_plato_imagen_url(id, imagen_url):
     conn = get_connection()
     try:
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor()
         cursor.execute(
             """
             UPDATE plato
@@ -172,11 +213,11 @@ def delete_plato(id):
         cursor = conn.cursor()
         cursor.execute(
             """
-            UPDATE platos
-            SET activo = FALSE
+            UPDATE plato
+            SET disponible = FALSE
             WHERE id = %s
             """,
-            (id,)
+            (id,),
         )
         conn.commit()
         cursor.close()

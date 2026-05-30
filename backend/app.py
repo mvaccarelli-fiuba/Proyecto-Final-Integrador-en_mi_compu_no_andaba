@@ -21,7 +21,6 @@ app = Flask(__name__)
 app.register_blueprint(auth_bp)
 app.register_blueprint(platos_bp)
 app.register_blueprint(resenas_bp)
-
 app.register_blueprint(servicios_bp)
 
 # app.register_blueprint(mesas_bp)
@@ -32,4 +31,4 @@ app.register_blueprint(servicios_bp)
 # app.register_blueprint(dashboard_bp)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="127.0.0.1", port=5000, debug=True)

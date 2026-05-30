@@ -6,16 +6,35 @@ from src.utils import error, require_admin
 
 platos_bp = Blueprint("platos", __name__)
 
+RESTRICTION_TYPES = ("vegano", "vegetariano", "gluten")
+
 
 @platos_bp.route("/platos", methods=["GET"])
 def get_platos():
+    restriccion = request.args.get("restriccion")
+
+    if restriccion is not None:
+        if restriccion not in RESTRICTION_TYPES:
+            return error(
+                "400",
+                "Bad Request",
+                "Tipo de restricción debe ser vegano, vegetariano o gluten",
+                400,
+            )
+        err_msg = "Ocurrió un error al obtener los platos con la restricción"
+    else:
+        err_msg = "Ocurrió un error al obtener los platos"
+
     try:
-        platos = service.get_platos()
+        if restriccion is not None:
+            platos = service.get_platos_con_restriccion(restriccion)
+        else:
+            platos = service.get_platos()
         return jsonify(platos), 200
     except mysql.connector.Error as err:
         return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
     except Exception as err:
-        return error("500", "Internal Server Error", f"Ocurrió un error al obtener los platos: {err}", 500)
+        return error("500", "Internal Server Error", f"{err_msg}: {err}", 500)
 
 
 @platos_bp.route("/platos/<int:id>", methods=["GET"])
@@ -29,26 +48,6 @@ def get_plato(id):
         return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
     except Exception as err:
         return error("500", "Internal Server Error", f"Ocurrió un error al obtener el plato: {err}", 500)
-
-
-@platos_bp.route("/platos/<string:restriccion>", methods=["GET"])
-def get_platos_con_restriccion(restriccion):
-    restriction_types = ["vegano", "vegetariano", "gluten"]
-    if restriccion not in restriction_types:
-        return error(
-            "400",
-            "Bad Request",
-            "Tipo de restricción debe ser vegano, vegetariano o gluten",
-            400,
-        )
-
-    try:
-        platos = service.get_platos_con_restriccion(restriccion)
-        return jsonify(platos), 200
-    except mysql.connector.Error as err:
-        return error("500", "Internal Server Error", f"No se pudo conectar con la base de datos: {err}", 500)
-    except Exception as err:
-        return error("500", "Internal Server Error", f"Ocurrió un error al obtener los platos con la restricción: {err}", 500)
 
 
 @platos_bp.route("/platos", methods=["POST"])
