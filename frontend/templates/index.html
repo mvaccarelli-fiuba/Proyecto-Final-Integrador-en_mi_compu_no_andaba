@@ -2,135 +2,148 @@
 {% block titulo %}Krusty Krab - Inicio{% endblock %}
 
 {% block contenido %}
-    <!-- HERO -->
-    <div id="hero">
-        <p id="hero-tag">LO MEJOR DE FONDO DE BIKINI</p>
-        <h1 id="hero-titulo">Krusty Krab</h1>
-        <p id="hero-sub">La fórmula secreta que todos quieren tener</p>
-        <button class="btn-amarillo btn-grande"><a href="/reservas" style="text-decoration: none;">🦀 Reservar una mesa</a></button>
+<!-- HERO -->
+<div id="hero">
+    <p id="hero-tag">LO MEJOR DE FONDO DE BIKINI</p>
+    <h1 id="hero-titulo">Krusty Krab</h1>
+    <p id="hero-sub">La fórmula secreta que todos quieren tener</p>
+    <button class="btn-amarillo btn-grande"><a href="/reservas" style="text-decoration: none;">🦀 Reservar una
+            mesa</a></button>
+</div>
+
+<!-- MENÚ -->
+<section id="menu">
+    <h2 class="seccion-titulo">Nuestro Menú</h2>
+    <div class="titulo-linea"></div>
+    <p class="seccion-sub">Burguers diseñadas con los mejores ingredientes del océano</p>
+
+    <div id="cards-menu">
+
+        <div class="card-plato card-celeste">
+            <span class="card-badge badge-amarillo">LA FAVORITA</span>
+            <div class="card-img">
+                <img src="{{ url_for('static', filename='images/imagenes_menu/hamburguesa_simple.png')}}"
+                    alt="imagen_cangreburguer_simple">
+            </div>
+            <div class="card-info">
+                <h3 class="card-nombre">Cangreburger Clásica</h3>
+                <p class="card-desc">Medallón de angus, lechuga crispa, tomate fresco, cebolla caramelizada y nuestra
+                    salsa secreta del mar.</p>
+                <p class="card-precio">$5.500</p>
+            </div>
+        </div>
+
+        <div class="card-plato card-roja">
+            <span class="card-badge badge-rojo">🌶 PICANTE</span>
+            <div class="card-img"><img
+                    src="{{url_for('static', filename='images/imagenes_menu/hamburguesa_picante.png')}}"
+                    alt="imagen_cangreburguer_picante"></div>
+            <div class="card-info">
+                <h3 class="card-nombre">Cangreburger Extrema</h3>
+                <p class="card-desc">Doble medallón, jalapeños, queso pepper jack, bacon crujiente y salsa sriracha de
+                    arrecife.</p>
+                <p class="card-precio">$7.800</p>
+            </div>
+        </div>
+
+        <div class="card-plato card-verde">
+            <span class="card-badge badge-verde">VEGGIE</span>
+            <div class="card-img"><img
+                    src="{{ url_for('static', filename='images/imagenes_menu/hamburguesa_vegana.png')}}"
+                    alt="imagen_cangreburguer_vegana"></div>
+            <div class="card-info">
+                <h3 class="card-nombre">Cangreburger Veggie</h3>
+                <p class="card-desc">Medallón de legumbres y algas marinas, aguacate, rúcula, tomates cherry y aderezo
+                    de limón.</p>
+                <p class="card-precio">$5.200</p>
+            </div>
+        </div>
+
     </div>
 
-    <!-- MENÚ -->
-    <section id="menu">
-        <h2 class="seccion-titulo">Nuestro Menú</h2>
-        <div class="titulo-linea"></div>
-        <p class="seccion-sub">Burguers diseñadas con los mejores ingredientes del océano</p>
+    <a href="/menu" class="link-carta">Ver carta completa →</a>
+</section>
 
-        <div id="cards-menu">
+<!-- RESEÑAS -->
+<section id="resenas">
+    <h2 class="seccion-titulo">Lo que dicen nuestros clientes</h2>
+    <div class="titulo-linea linea-roja"></div>
 
-            <div class="card-plato card-celeste">
-                <span class="card-badge badge-amarillo">LA FAVORITA</span>
-                <div class="card-img">
-                    <img src="{{ url_for('static', filename='images/hamburguesa_simple.png')}}" alt="imagen_cangreburguer_simple"></div>
-                <div class="card-info">
-                    <h3 class="card-nombre">Cangreburger Clásica</h3>
-                    <p class="card-desc">Medallón de angus, lechuga crispa, tomate fresco, cebolla caramelizada y nuestra salsa secreta del mar.</p>
-                    <p class="card-precio">$5.500</p>
+    <div id="cards-resenas">
+
+        <div class="card-resena">
+            <div class="resena-header">
+                <div class="avatar avatar-verde">MG</div>
+                <div>
+                    <p class="resena-nombre">Marina González</p>
+                    <p class="resena-estrellas">★★★★★</p>
                 </div>
             </div>
-
-            <div class="card-plato card-roja">
-                <span class="card-badge badge-rojo">🌶 PICANTE</span>
-                <div class="card-img"><img src="{{url_for('static', filename='images/hamburguesa_picante.png')}}" alt="imagen_cangreburguer_picante"></div>
-                <div class="card-info">
-                    <h3 class="card-nombre">Cangreburger Extrema</h3>
-                    <p class="card-desc">Doble medallón, jalapeños, queso pepper jack, bacon crujiente y salsa sriracha de arrecife.</p>
-                    <p class="card-precio">$7.800</p>
-                </div>
-            </div>
-
-            <div class="card-plato card-verde">
-                <span class="card-badge badge-verde">VEGGIE</span>
-                <div class="card-img"><img src="{{ url_for('static', filename='images/hamburguesa_vegana.png')}}" alt="imagen_cangreburguer_vegana"></div>
-                <div class="card-info">
-                    <h3 class="card-nombre">Cangreburger Veggie</h3>
-                    <p class="card-desc">Medallón de legumbres y algas marinas, aguacate, rúcula, tomates cherry y aderezo de limón.</p>
-                    <p class="card-precio">$5.200</p>
-                </div>
-            </div>
-
+            <p class="resena-texto">"Juro que pensé pasar, pero una burger me hará sentir como sirena. La Clásica es un
+                crimen delicioso, ya voy cuatro veces este mes 🍔"</p>
         </div>
 
-        <a href="/menu" class="link-carta">Ver carta completa →</a>
-    </section>
-
-    <!-- RESEÑAS -->
-    <section id="resenas">
-        <h2 class="seccion-titulo">Lo que dicen nuestros clientes</h2>
-        <div class="titulo-linea linea-roja"></div>
-
-        <div id="cards-resenas">
-
-            <div class="card-resena">
-                <div class="resena-header">
-                    <div class="avatar avatar-verde">MG</div>
-                    <div>
-                        <p class="resena-nombre">Marina González</p>
-                        <p class="resena-estrellas">★★★★★</p>
-                    </div>
+        <div class="card-resena">
+            <div class="resena-header">
+                <div class="avatar avatar-naranja">TD</div>
+                <div>
+                    <p class="resena-nombre">Tomás Parayra</p>
+                    <p class="resena-estrellas">★★★★★</p>
                 </div>
-                <p class="resena-texto">"Juro que pensé pasar, pero una burger me hará sentir como sirena. La Clásica es un crimen delicioso, ya voy cuatro veces este mes 🍔"</p>
             </div>
-
-            <div class="card-resena">
-                <div class="resena-header">
-                    <div class="avatar avatar-naranja">TD</div>
-                    <div>
-                        <p class="resena-nombre">Tomás Parayra</p>
-                        <p class="resena-estrellas">★★★★★</p>
-                    </div>
-                </div>
-                <p class="resena-texto">"Me avisaron la Extrema picaba pero fui a aguantar el picante… spoiler: no. Para volvé al día siguiente por más 🌶"</p>
-            </div>
-
-            <div class="card-resena">
-                <div class="resena-header">
-                    <div class="avatar avatar-celeste">LR</div>
-                    <div>
-                        <p class="resena-nombre">Luna Ramos</p>
-                        <p class="resena-estrellas">★★★★★</p>
-                    </div>
-                </div>
-                <p class="resena-texto">"Soy vegetariana y siempre termino mirando el menú ajena… hasta que probé la Veggie. Me hicieron creer en el mar 🌊"</p>
-            </div>
-
+            <p class="resena-texto">"Me avisaron la Extrema picaba pero fui a aguantar el picante… spoiler: no. Para
+                volvé al día siguiente por más 🌶"</p>
         </div>
-    </section>
 
-
-    <!-- SERVICIOS -->
-    <section id="servicios">
-        <h2 class="seccion-titulo">Nuestros servicios</h2>
-        <div class="titulo-linea linea-amarilla"></div>
-        <p class="seccion-sub">Todo lo que necesitás para una experiencia sin olas</p>
-
-        <div id="cards-servicios">
-
-            <div class="card-servicio">
-                <div class="servicio-icono">🅿️</div>
-                <h3 class="servicio-nombre">Estacionamiento</h3>
-                <p class="servicio-desc">Playa de estacionamiento gratuita para todos nuestros clientes</p>
+        <div class="card-resena">
+            <div class="resena-header">
+                <div class="avatar avatar-celeste">LR</div>
+                <div>
+                    <p class="resena-nombre">Luna Ramos</p>
+                    <p class="resena-estrellas">★★★★★</p>
+                </div>
             </div>
-
-            <div class="card-servicio">
-                <div class="servicio-icono">📶</div>
-                <h3 class="servicio-nombre">Wifi gratis</h3>
-                <p class="servicio-desc">Conectividad de alta velocidad para que no dejes de compartir tu burger</p>
-            </div>
-
-            <div class="card-servicio">
-                <div class="servicio-icono">♿</div>
-                <h3 class="servicio-nombre">Accesibilidad</h3>
-                <p class="servicio-desc">Instalaciones completamente accesibles y personal entrenado</p>
-            </div>
-
-            <div class="card-servicio">
-                <div class="servicio-icono">🛵</div>
-                <h3 class="servicio-nombre">Delivery</h3>
-                <p class="servicio-desc">Llevamos el sabor del mar directo a tu puerta, rápido y fresquito</p>
-            </div>
-
+            <p class="resena-texto">"Soy vegetariana y siempre termino mirando el menú ajena… hasta que probé la Veggie.
+                Me hicieron creer en el mar 🌊"</p>
         </div>
-    </section>
+
+    </div>
+</section>
+
+
+<!-- SERVICIOS -->
+<section id="servicios">
+    <h2 class="seccion-titulo">Nuestros servicios</h2>
+    <div class="titulo-linea linea-amarilla"></div>
+    <p class="seccion-sub">Todo lo que necesitás para una experiencia sin olas</p>
+
+    <div id="cards-servicios">
+
+        <div class="card-servicio">
+            <div class="servicio-icono">🅿️</div>
+            <h3 class="servicio-nombre">Estacionamiento</h3>
+            <p class="servicio-desc">Playa de estacionamiento gratuita para todos nuestros clientes</p>
+        </div>
+
+        <div class="card-servicio">
+            <div class="servicio-icono">📶</div>
+            <h3 class="servicio-nombre">Wifi gratis</h3>
+            <p class="servicio-desc">Conectividad de alta velocidad para que no dejes de compartir tu burger</p>
+        </div>
+
+        <div class="card-servicio">
+            <div class="servicio-icono">♿</div>
+            <h3 class="servicio-nombre">Accesibilidad</h3>
+            <p class="servicio-desc">Instalaciones completamente accesibles y personal entrenado</p>
+        </div>
+
+        <div class="card-servicio">
+            <div class="servicio-icono">🛵</div>
+            <h3 class="servicio-nombre">Delivery</h3>
+            <p class="servicio-desc">Llevamos el sabor del mar directo a tu puerta, rápido y fresquito</p>
+        </div>
+
+    </div>
+</section>
 
 {% endblock %}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block titulo %}Admin - Krusty Krab{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    {% block css_extra %}{% endblock %}
+</head>
+
+<body class="admin-body">
+
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-logo">
+                <img src="{{ url_for('static', filename='images/krusty_krab_logo.webp') }}" alt="Krusty Krab">
+                <p class="sidebar-titulo">Admin</p>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="/admin/dashboard"
+                    class="sidebar-link {% if seccion == 'dashboard' %}sidebar-link-activo{% endif %}">
+                    Dashboard
+                </a>
+                <a href="/admin/reservas"
+                    class="sidebar-link {% if seccion == 'reservas' %}sidebar-link-activo{% endif %}">
+                    Reservas
+                </a>
+                <a href="/admin/menu" class="sidebar-link {% if seccion == 'menu' %}sidebar-link-activo{% endif %}">
+                    Menú
+                </a>
+                <a href="/admin/mesas" class="sidebar-link {% if seccion == 'mesas' %}sidebar-link-activo{% endif %}">
+                    Mesas
+                </a>
+                <a href="/admin/servicios"
+                    class="sidebar-link {% if seccion == 'servicios' %}sidebar-link-activo{% endif %}">
+                    Servicios
+                </a>
+                <a href="/admin/qr" class="sidebar-link {% if seccion == 'qr' %}sidebar-link-activo{% endif %}">
+                    Validar QR
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <p class="sidebar-email">{{ admin_email or 'admin@crustycrab.com' }}</p>
+                <a href="/admin/logout" class="sidebar-logout">Cerrar sesión</a>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1 class="admin-titulo">{% block admin_titulo %}Panel de administración{% endblock %}</h1>
+            </header>
+
+            <div class="admin-contenido">
+                {% block contenido %}{% endblock %}
+            </div>
+        </main>
+
+    </div>
+
+</body>
+
+</html>
