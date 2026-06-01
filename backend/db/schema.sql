@@ -134,13 +134,9 @@ CREATE TABLE log_actividad (
 -- =============================================================
 -- Datos de prueba (seed mínimo)
 -- =============================================================
--- Admin: password en claro 'admin1234' (en el backend va hasheado real)
+-- Admin de prueba. Password: admin1234 (texto plano, TODO: hashear)
 INSERT INTO admin (email, password_hash, nombre)
-VALUES (
-        'admin@crustycrab.com',
-        '$2b$12$PLACEHOLDER_REEMPLAZAR_EN_SEED_REAL',
-        'Mr. Krabs'
-    );
+VALUES ('admin@crustycrab.com', 'admin1234', 'Mr. Krabs');
 INSERT INTO categoria_plato (nombre)
 VALUES ('Hamburguesas'),
     ('Acompañamientos'),

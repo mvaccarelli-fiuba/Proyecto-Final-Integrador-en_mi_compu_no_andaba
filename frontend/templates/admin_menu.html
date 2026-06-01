@@ -1,0 +1,271 @@
+{% extends "admin_base.html" %}
+
+{% block titulo %}Gestión del menú - Admin{% endblock %}
+
+{% block admin_titulo %}Gestión del menú{% endblock %}
+
+{% block contenido %}
+
+<!-- BARRA DE ACCIONES -->
+<div class="admin-acciones">
+    <input type="text" id="buscador-platos" class="admin-buscador" placeholder="Buscar plato...">
+
+    <select id="filtro-restriccion" class="admin-select">
+        <option value="">Todas las restricciones</option>
+        <option value="vegetariano">Vegetariano</option>
+        <option value="vegano">Vegano</option>
+        <option value="gluten">Sin gluten</option>
+    </select>
+
+    <button type="button" class="btn-amarillo btn-grande" onclick="abrirModalNuevo()">
+        + Nuevo plato
+    </button>
+</div>
+
+<!-- TABLA -->
+<div class="admin-tabla-wrapper">
+    <table class="admin-tabla">
+        <thead>
+            <tr>
+                <th class="col-img"></th>
+                <th>Plato</th>
+                <th class="col-precio">Precio</th>
+                <th>Restricciones</th>
+                <th class="col-acciones">Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-platos">
+
+            <!-- Fila ejemplo 1 -->
+            <tr data-nombre="krabby patty" data-vegetariano="0" data-vegano="0" data-gluten="0">
+                <td>
+                    <div class="img-placeholder">img</div>
+                </td>
+                <td>
+                    <p class="plato-nombre">Krabby Patty</p>
+                    <p class="plato-desc">La hamburguesa secreta de la casa.</p>
+                </td>
+                <td class="col-precio">$5.500</td>
+                <td><span class="restriccion-vacia">—</span></td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(1)">✎</button>
+                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(1)">🗑</button>
+                </td>
+            </tr>
+
+            <!-- Fila ejemplo 2 -->
+            <tr data-nombre="double krabby" data-vegetariano="0" data-vegano="0" data-gluten="0">
+                <td>
+                    <div class="img-placeholder">img</div>
+                </td>
+                <td>
+                    <p class="plato-nombre">Double Krabby</p>
+                    <p class="plato-desc">Doble medallón, doble queso.</p>
+                </td>
+                <td class="col-precio">$7.800</td>
+                <td><span class="restriccion-vacia">—</span></td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(2)">✎</button>
+                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(2)">🗑</button>
+                </td>
+            </tr>
+
+            <!-- Fila ejemplo 3 -->
+            <tr data-nombre="veggie patty" data-vegetariano="1" data-vegano="0" data-gluten="0">
+                <td>
+                    <div class="img-placeholder">img</div>
+                </td>
+                <td>
+                    <p class="plato-nombre">Veggie Patty</p>
+                    <p class="plato-desc">Versión vegetariana con medallón de lentejas.</p>
+                </td>
+                <td class="col-precio">$5.200</td>
+                <td>
+                    <span class="resto-badge resto-vegetariano">🥬 Vegetariano</span>
+                </td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(3)">✎</button>
+                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(3)">🗑</button>
+                </td>
+            </tr>
+
+            <!-- Fila ejemplo 4 -->
+            <tr data-nombre="papas bikini" data-vegetariano="1" data-vegano="1" data-gluten="1">
+                <td>
+                    <div class="img-placeholder">img</div>
+                </td>
+                <td>
+                    <p class="plato-nombre">Papas Bikini</p>
+                    <p class="plato-desc">Papas fritas extra crocantes.</p>
+                </td>
+                <td class="col-precio">$2.800</td>
+                <td>
+                    <span class="resto-badge resto-vegano">🌱 Vegano</span>
+                    <span class="resto-badge resto-sin-gluten">🌾 Sin gluten</span>
+                </td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(4)">✎</button>
+                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(4)">🗑</button>
+                </td>
+            </tr>
+
+            <!-- Fila ejemplo 5 -->
+            <tr data-nombre="kelp shake" data-vegetariano="1" data-vegano="1" data-gluten="1">
+                <td>
+                    <div class="img-placeholder">img</div>
+                </td>
+                <td>
+                    <p class="plato-nombre">Kelp Shake</p>
+                    <p class="plato-desc">Malteada de algas.</p>
+                </td>
+                <td class="col-precio">$3.200</td>
+                <td>
+                    <span class="resto-badge resto-vegano">🌱 Vegano</span>
+                    <span class="resto-badge resto-sin-gluten">🌾 Sin gluten</span>
+                </td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(5)">✎</button>
+                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(5)">🗑</button>
+                </td>
+            </tr>
+
+            <!-- Fila ejemplo 6 -->
+            <tr data-nombre="pie de coral" data-vegetariano="1" data-vegano="0" data-gluten="0">
+                <td>
+                    <div class="img-placeholder">img</div>
+                </td>
+                <td>
+                    <p class="plato-nombre">Pie de Coral</p>
+                    <p class="plato-desc">Postre estrella del Krusty Krab.</p>
+                </td>
+                <td class="col-precio">$3.600</td>
+                <td>
+                    <span class="resto-badge resto-vegetariano">🥬 Vegetariano</span>
+                </td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(6)">✎</button>
+                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(6)">🗑</button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p id="sin-resultados" class="sin-resultados" style="display:none;">
+        No hay platos que coincidan con la búsqueda.
+    </p>
+</div>
+
+<!-- MODAL nuevo/editar -->
+<div id="modal-plato" class="modal" style="display:none;">
+    <div class="modal-contenido">
+        <h2 id="modal-titulo">Nuevo plato</h2>
+
+        <form id="form-plato">
+            <div class="campo">
+                <label>Nombre</label>
+                <input type="text" name="nombre" required>
+            </div>
+
+            <div class="campo">
+                <label>Descripción</label>
+                <textarea name="descripcion" rows="3"></textarea>
+            </div>
+
+            <div class="form-fila">
+                <div class="campo">
+                    <label>Precio</label>
+                    <input type="number" name="precio" step="0.01" min="0" required>
+                </div>
+
+                <div class="campo">
+                    <label>URL de imagen</label>
+                    <input type="url" name="imagen_url" placeholder="https://...">
+                </div>
+            </div>
+
+            <div class="campo">
+                <label>Restricciones</label>
+                <div class="checks-restricciones">
+                    <label class="check-label">
+                        <input type="checkbox" name="vegetariano"> Vegetariano
+                    </label>
+                    <label class="check-label">
+                        <input type="checkbox" name="vegano"> Vegano
+                    </label>
+                    <label class="check-label">
+                        <input type="checkbox" name="gluten"> Sin gluten
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-acciones">
+                <button type="button" class="btn-outline" onclick="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-amarillo">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block css_extra %}
+<script>
+    // === Búsqueda y filtros (client-side, sin pegarle al backend) ===
+    const buscador = document.getElementById('buscador-platos');
+    const filtro = document.getElementById('filtro-restriccion');
+    const filas = document.querySelectorAll('#tabla-platos tr');
+    const sinResultados = document.getElementById('sin-resultados');
+
+    function filtrarPlatos() {
+        const texto = buscador.value.toLowerCase();
+        const restriccion = filtro.value;
+        let visibles = 0;
+
+        filas.forEach(fila => {
+            const nombre = fila.dataset.nombre || '';
+            const cumpleTexto = nombre.includes(texto);
+            const cumpleRestriccion = !restriccion || fila.dataset[restriccion] === '1';
+            const visible = cumpleTexto && cumpleRestriccion;
+            fila.style.display = visible ? '' : 'none';
+            if (visible) visibles++;
+        });
+
+        sinResultados.style.display = visibles === 0 ? 'block' : 'none';
+    }
+
+    buscador.addEventListener('input', filtrarPlatos);
+    filtro.addEventListener('change', filtrarPlatos);
+
+    // === Modal ===
+    function abrirModalNuevo() {
+        document.getElementById('modal-titulo').textContent = 'Nuevo plato';
+        document.getElementById('form-plato').reset();
+        document.getElementById('modal-plato').style.display = 'flex';
+    }
+
+    function abrirModalEdicion(id) {
+        // TODO: cuando este integrado al backend, hacer fetch GET /platos/<id> y rellenar.
+        document.getElementById('modal-titulo').textContent = 'Editar plato #' + id;
+        document.getElementById('modal-plato').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        document.getElementById('modal-plato').style.display = 'none';
+    }
+
+    function eliminarPlato(id) {
+        if (!confirm('¿Eliminar este plato?')) return;
+        // TODO: cuando este integrado al backend, hacer fetch DELETE /platos/<id>.
+        alert('Eliminado (mock). Cuando integremos al backend, se hace DELETE /platos/' + id);
+    }
+
+    // Submit del form
+    document.getElementById('form-plato').addEventListener('submit', function (e) {
+        e.preventDefault();
+        // TODO: cuando este integrado al backend, hacer fetch POST/PUT /platos.
+        alert('Guardado (mock). Cuando integremos al backend, se hace POST o PUT /platos');
+        cerrarModal();
+    });
+</script>
+{% endblock %}
