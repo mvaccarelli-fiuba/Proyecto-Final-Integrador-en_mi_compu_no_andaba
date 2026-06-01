@@ -2,6 +2,17 @@
    RESEÑAS
    ======================================== */
 
+
+.estado-error {
+    background: #ffe5e5;
+    color: var(--rojo);
+    padding: 40px;
+    text-align: center;
+    margin: 24px 40px;
+    border-radius: 12px;
+    border-left: 4px solid var(--rojo);
+}
+
 #resenas-hero {
     background: linear-gradient(180deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
     text-align: center;

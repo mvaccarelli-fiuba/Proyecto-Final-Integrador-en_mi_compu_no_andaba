@@ -230,3 +230,64 @@ VALUES (1, 2),
     (4, 4),
     (5, 6),
     (6, 8);
+--probamos la reseña con una reserva
+INSERT INTO reserva (
+        token,
+        cliente_nombre,
+        cliente_email,
+        cantidad_personas,
+        fecha,
+        hora_inicio,
+        mesa_id,
+        estado
+    )
+VALUES (
+        'test-token-1',
+        'Marina González',
+        'marina@test.com',
+        2,
+        '2026-05-15',
+        '20:00',
+        1,
+        'consumida'
+    ),
+    (
+        'test-token-2',
+        'Tomás Parayra',
+        'tomas@test.com',
+        4,
+        '2026-05-14',
+        '21:00',
+        3,
+        'consumida'
+    ),
+    (
+        'test-token-3',
+        'Luna Ramos',
+        'luna@test.com',
+        2,
+        '2026-05-13',
+        '22:00',
+        2,
+        'consumida'
+    );
+-- Ahora las reseñas:
+INSERT INTO resena (reserva_id, autor, puntaje, comentario)
+VALUES (
+        1,
+        'Marina González',
+        5,
+        'Juro que pensé pasar, pero una burger me hará sentir como sirena. La Clásica es un crimen delicioso, ya voy cuatro veces este mes.'
+    ),
+    (
+        2,
+        'Tomás Parayra',
+        5,
+        'Me avisaron que la Extrema picaba pero fui a aguantar. Spoiler: no aguanté, pero volvería igual.'
+    ),
+    (
+        3,
+        'Luna Ramos',
+        4,
+        'Soy vegetariana y siempre termino mirando el menú ajena, hasta que probé la Veggie. Excelente.'
+    );

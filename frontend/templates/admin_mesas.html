@@ -1,0 +1,208 @@
+{% extends "admin_base.html" %}
+
+{% block titulo %}Gestión de mesas - Admin{% endblock %}
+
+{% block admin_titulo %}Gestión de mesas{% endblock %}
+
+{% block contenido %}
+
+<div class="admin-acciones">
+    <input type="text" id="buscador-mesas" class="admin-buscador" placeholder="Buscar por número de mesa...">
+
+    <select id="filtro-capacidad" class="admin-select">
+        <option value="">Toda capacidad</option>
+        <option value="2">2 personas</option>
+        <option value="4">4 personas</option>
+        <option value="6">6 personas</option>
+        <option value="8">8 personas</option>
+    </select>
+
+    <button type="button" class="btn-amarillo btn-grande" onclick="abrirModalNuevo()">
+        + Nueva mesa
+    </button>
+</div>
+
+<div class="admin-tabla-wrapper">
+    <table class="admin-tabla">
+        <thead>
+            <tr>
+                <th class="col-numero">Mesa</th>
+                <th>Capacidad</th>
+                <th class="col-estado">Estado</th>
+                <th class="col-acciones">Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-mesas">
+
+            <tr data-numero="1" data-capacidad="2">
+                <td>
+                    <div class="mesa-numero">1</div>
+                </td>
+                <td>2 personas</td>
+                <td><span class="badge-estado badge-activo">Activa</span></td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(1)">✎</button>
+                    <button class="btn-icon btn-danger" title="Dar de baja" onclick="eliminarMesa(1)">🗑</button>
+                </td>
+            </tr>
+
+            <tr data-numero="2" data-capacidad="2">
+                <td>
+                    <div class="mesa-numero">2</div>
+                </td>
+                <td>2 personas</td>
+                <td><span class="badge-estado badge-activo">Activa</span></td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(2)">✎</button>
+                    <button class="btn-icon btn-danger" title="Dar de baja" onclick="eliminarMesa(2)">🗑</button>
+                </td>
+            </tr>
+
+            <tr data-numero="3" data-capacidad="4">
+                <td>
+                    <div class="mesa-numero">3</div>
+                </td>
+                <td>4 personas</td>
+                <td><span class="badge-estado badge-activo">Activa</span></td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(3)">✎</button>
+                    <button class="btn-icon btn-danger" title="Dar de baja" onclick="eliminarMesa(3)">🗑</button>
+                </td>
+            </tr>
+
+            <tr data-numero="4" data-capacidad="4">
+                <td>
+                    <div class="mesa-numero">4</div>
+                </td>
+                <td>4 personas</td>
+                <td><span class="badge-estado badge-activo">Activa</span></td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(4)">✎</button>
+                    <button class="btn-icon btn-danger" title="Dar de baja" onclick="eliminarMesa(4)">🗑</button>
+                </td>
+            </tr>
+
+            <tr data-numero="5" data-capacidad="6">
+                <td>
+                    <div class="mesa-numero">5</div>
+                </td>
+                <td>6 personas</td>
+                <td><span class="badge-estado badge-activo">Activa</span></td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(5)">✎</button>
+                    <button class="btn-icon btn-danger" title="Dar de baja" onclick="eliminarMesa(5)">🗑</button>
+                </td>
+            </tr>
+
+            <tr data-numero="6" data-capacidad="8">
+                <td>
+                    <div class="mesa-numero">6</div>
+                </td>
+                <td>8 personas</td>
+                <td><span class="badge-estado badge-activo">Activa</span></td>
+                <td class="col-acciones">
+                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(6)">✎</button>
+                    <button class="btn-icon btn-danger" title="Dar de baja" onclick="eliminarMesa(6)">🗑</button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p id="sin-resultados" class="sin-resultados" style="display:none;">
+        No hay mesas que coincidan.
+    </p>
+</div>
+
+<!-- MODAL -->
+<div id="modal-mesa" class="modal" style="display:none;">
+    <div class="modal-contenido">
+        <h2 id="modal-titulo">Nueva mesa</h2>
+
+        <form id="form-mesa">
+            <div class="form-fila">
+                <div class="campo">
+                    <label>Número</label>
+                    <input type="number" name="numero" min="1" required>
+                </div>
+
+                <div class="campo">
+                    <label>Capacidad</label>
+                    <select name="capacidad" required>
+                        <option value="">Elegí</option>
+                        <option value="2">2 personas</option>
+                        <option value="4">4 personas</option>
+                        <option value="6">6 personas</option>
+                        <option value="8">8 personas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="campo">
+                <label class="check-label">
+                    <input type="checkbox" name="activa" checked> Mesa activa
+                </label>
+            </div>
+
+            <div class="modal-acciones">
+                <button type="button" class="btn-outline" onclick="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-amarillo">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const buscador = document.getElementById('buscador-mesas');
+    const filtroCapacidad = document.getElementById('filtro-capacidad');
+    const filas = document.querySelectorAll('#tabla-mesas tr');
+    const sinResultados = document.getElementById('sin-resultados');
+
+    function filtrar() {
+        const texto = buscador.value.toLowerCase();
+        const capacidad = filtroCapacidad.value;
+        let visibles = 0;
+        filas.forEach(fila => {
+            const cumpleTexto = (fila.dataset.numero || '').includes(texto);
+            const cumpleCapacidad = !capacidad || fila.dataset.capacidad === capacidad;
+            const visible = cumpleTexto && cumpleCapacidad;
+            fila.style.display = visible ? '' : 'none';
+            if (visible) visibles++;
+        });
+        sinResultados.style.display = visibles === 0 ? 'block' : 'none';
+    }
+
+    buscador.addEventListener('input', filtrar);
+    filtroCapacidad.addEventListener('change', filtrar);
+
+    function abrirModalNuevo() {
+        document.getElementById('modal-titulo').textContent = 'Nueva mesa';
+        document.getElementById('form-mesa').reset();
+        document.getElementById('modal-mesa').style.display = 'flex';
+    }
+
+    function abrirModalEdicion(id) {
+        // TODO: integrar al backend: fetch GET /mesas/<id>.
+        document.getElementById('modal-titulo').textContent = 'Editar mesa #' + id;
+        document.getElementById('modal-mesa').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        document.getElementById('modal-mesa').style.display = 'none';
+    }
+
+    function eliminarMesa(id) {
+        if (!confirm('¿Dar de baja esta mesa?')) return;
+        // TODO: integrar al backend: fetch DELETE /mesas/<id>.
+        alert('Baja (mock). En integración: DELETE /mesas/' + id);
+    }
+
+    document.getElementById('form-mesa').addEventListener('submit', function (e) {
+        e.preventDefault();
+        // TODO: integrar al backend.
+        alert('Guardado (mock). En integración: POST/PUT /mesas');
+        cerrarModal();
+    });
+</script>
+
+{% endblock %}
