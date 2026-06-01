@@ -1,0 +1,304 @@
+{% extends "admin_base.html" %}
+
+{% block titulo %}Gestión de reservas - Admin{% endblock %}
+
+{% block admin_titulo %}Gestión de reservas{% endblock %}
+
+{% block contenido %}
+
+<!-- TARJETAS DE RESUMEN -->
+<div class="resumen-cards">
+    <div class="resumen-card">
+        <p class="resumen-titulo">Hoy</p>
+        <p class="resumen-numero">8</p>
+        <p class="resumen-sub">reservas confirmadas</p>
+    </div>
+    <div class="resumen-card resumen-card-verde">
+        <p class="resumen-titulo">Consumidas</p>
+        <p class="resumen-numero">5</p>
+        <p class="resumen-sub">esta semana</p>
+    </div>
+    <div class="resumen-card resumen-card-rojo">
+        <p class="resumen-titulo">Canceladas</p>
+        <p class="resumen-numero">2</p>
+        <p class="resumen-sub">esta semana</p>
+    </div>
+    <div class="resumen-card resumen-card-amarillo">
+        <p class="resumen-titulo">Próxima</p>
+        <p class="resumen-numero-chico">20:00</p>
+        <p class="resumen-sub">Bob Esponja · 4 personas</p>
+    </div>
+</div>
+
+<!-- FILTROS -->
+<div class="admin-acciones">
+    <input type="text" id="buscador-reservas" class="admin-buscador" placeholder="Buscar por nombre o email...">
+
+    <input type="date" id="filtro-fecha" class="admin-select">
+
+    <select id="filtro-estado" class="admin-select">
+        <option value="">Todos los estados</option>
+        <option value="confirmada">Confirmadas</option>
+        <option value="consumida">Consumidas</option>
+        <option value="cancelada">Canceladas</option>
+        <option value="expirada">Expiradas</option>
+    </select>
+</div>
+
+<!-- TABLA -->
+<div class="admin-tabla-wrapper">
+    <table class="admin-tabla">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Fecha y hora</th>
+                <th class="col-personas">Personas</th>
+                <th class="col-mesa">Mesa</th>
+                <th class="col-estado">Estado</th>
+                <th class="col-acciones-grande">Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="tabla-reservas">
+
+            <!-- CONFIRMADA HOY -->
+            <tr data-busqueda="bob esponja bob@fondodebikini.com" data-estado="confirmada">
+                <td>
+                    <p class="plato-nombre">Bob Esponja</p>
+                    <p class="plato-desc">bob@fondodebikini.com</p>
+                </td>
+                <td>
+                    <p class="reserva-fecha">Hoy</p>
+                    <p class="reserva-hora">20:00</p>
+                </td>
+                <td class="col-personas">4</td>
+                <td class="col-mesa">
+                    <div class="mesa-numero-chico">3</div>
+                </td>
+                <td><span class="badge-estado badge-confirmada">Confirmada</span></td>
+                <td class="col-acciones-grande">
+                    <button class="btn-mini btn-verde" onclick="marcarConsumida(101)">✓ Consumir</button>
+                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(101)">Ver</button>
+                    <button class="btn-mini btn-outline-mini btn-danger-mini"
+                        onclick="cancelarReserva(101)">Cancelar</button>
+                </td>
+            </tr>
+
+            <!-- CONFIRMADA FUTURA -->
+            <tr data-busqueda="patricio estrella patricio@piedra.com" data-estado="confirmada">
+                <td>
+                    <p class="plato-nombre">Patricio Estrella</p>
+                    <p class="plato-desc">patricio@piedra.com</p>
+                </td>
+                <td>
+                    <p class="reserva-fecha">Mañana</p>
+                    <p class="reserva-hora">21:00</p>
+                </td>
+                <td class="col-personas">2</td>
+                <td class="col-mesa">
+                    <div class="mesa-numero-chico">1</div>
+                </td>
+                <td><span class="badge-estado badge-confirmada">Confirmada</span></td>
+                <td class="col-acciones-grande">
+                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(102)">Ver</button>
+                    <button class="btn-mini btn-outline-mini btn-danger-mini"
+                        onclick="cancelarReserva(102)">Cancelar</button>
+                </td>
+            </tr>
+
+            <!-- CONSUMIDA -->
+            <tr data-busqueda="arenita mejillas arenita@texas.com" data-estado="consumida">
+                <td>
+                    <p class="plato-nombre">Arenita Mejillas</p>
+                    <p class="plato-desc">arenita@texas.com</p>
+                </td>
+                <td>
+                    <p class="reserva-fecha">Ayer</p>
+                    <p class="reserva-hora">22:00</p>
+                </td>
+                <td class="col-personas">6</td>
+                <td class="col-mesa">
+                    <div class="mesa-numero-chico">5</div>
+                </td>
+                <td><span class="badge-estado badge-consumida">Consumida</span></td>
+                <td class="col-acciones-grande">
+                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(103)">Ver</button>
+                </td>
+            </tr>
+
+            <!-- CANCELADA -->
+            <tr data-busqueda="calamardo tentaculos calamardo@arrecife.com" data-estado="cancelada">
+                <td>
+                    <p class="plato-nombre">Calamardo Tentáculos</p>
+                    <p class="plato-desc">calamardo@arrecife.com</p>
+                </td>
+                <td>
+                    <p class="reserva-fecha">Ayer</p>
+                    <p class="reserva-hora">20:00</p>
+                </td>
+                <td class="col-personas">2</td>
+                <td class="col-mesa">
+                    <div class="mesa-numero-chico">2</div>
+                </td>
+                <td><span class="badge-estado badge-cancelada">Cancelada</span></td>
+                <td class="col-acciones-grande">
+                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(104)">Ver</button>
+                </td>
+            </tr>
+
+            <!-- EXPIRADA -->
+            <tr data-busqueda="don cangrejo don@krustykrab.com" data-estado="expirada">
+                <td>
+                    <p class="plato-nombre">Don Cangrejo</p>
+                    <p class="plato-desc">don@krustykrab.com</p>
+                </td>
+                <td>
+                    <p class="reserva-fecha">Hace 3 días</p>
+                    <p class="reserva-hora">21:00</p>
+                </td>
+                <td class="col-personas">8</td>
+                <td class="col-mesa">
+                    <div class="mesa-numero-chico">6</div>
+                </td>
+                <td><span class="badge-estado badge-expirada">Expirada</span></td>
+                <td class="col-acciones-grande">
+                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(105)">Ver</button>
+                </td>
+            </tr>
+
+            <!-- CONFIRMADA del fin de semana -->
+            <tr data-busqueda="perla cangrejo perla@krustykrab.com" data-estado="confirmada">
+                <td>
+                    <p class="plato-nombre">Perla Cangrejo</p>
+                    <p class="plato-desc">perla@krustykrab.com</p>
+                </td>
+                <td>
+                    <p class="reserva-fecha">Sábado</p>
+                    <p class="reserva-hora">22:00</p>
+                </td>
+                <td class="col-personas">4</td>
+                <td class="col-mesa">
+                    <div class="mesa-numero-chico">4</div>
+                </td>
+                <td><span class="badge-estado badge-confirmada">Confirmada</span></td>
+                <td class="col-acciones-grande">
+                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(106)">Ver</button>
+                    <button class="btn-mini btn-outline-mini btn-danger-mini"
+                        onclick="cancelarReserva(106)">Cancelar</button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    <p id="sin-resultados" class="sin-resultados" style="display:none;">
+        No hay reservas que coincidan con los filtros.
+    </p>
+</div>
+
+<!-- MODAL DE DETALLE -->
+<div id="modal-detalle" class="modal" style="display:none;">
+    <div class="modal-contenido">
+        <h2>Detalle de reserva</h2>
+
+        <div class="detalle-reserva">
+            <div class="detalle-fila">
+                <span class="detalle-label">Cliente</span>
+                <span class="detalle-valor" id="det-nombre">—</span>
+            </div>
+            <div class="detalle-fila">
+                <span class="detalle-label">Email</span>
+                <span class="detalle-valor" id="det-email">—</span>
+            </div>
+            <div class="detalle-fila">
+                <span class="detalle-label">Fecha</span>
+                <span class="detalle-valor" id="det-fecha">—</span>
+            </div>
+            <div class="detalle-fila">
+                <span class="detalle-label">Hora</span>
+                <span class="detalle-valor" id="det-hora">—</span>
+            </div>
+            <div class="detalle-fila">
+                <span class="detalle-label">Personas</span>
+                <span class="detalle-valor" id="det-personas">—</span>
+            </div>
+            <div class="detalle-fila">
+                <span class="detalle-label">Mesa asignada</span>
+                <span class="detalle-valor" id="det-mesa">—</span>
+            </div>
+            <div class="detalle-fila">
+                <span class="detalle-label">Estado</span>
+                <span class="detalle-valor" id="det-estado">—</span>
+            </div>
+            <div class="detalle-fila">
+                <span class="detalle-label">Token</span>
+                <span class="detalle-valor detalle-token" id="det-token">—</span>
+            </div>
+            <div class="detalle-fila">
+                <span class="detalle-label">Reservada el</span>
+                <span class="detalle-valor" id="det-creada">—</span>
+            </div>
+        </div>
+
+        <div class="modal-acciones">
+            <button type="button" class="btn-outline" onclick="cerrarDetalle()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const buscador = document.getElementById('buscador-reservas');
+    const filtroEstado = document.getElementById('filtro-estado');
+    const filtroFecha = document.getElementById('filtro-fecha');
+    const filas = document.querySelectorAll('#tabla-reservas tr');
+    const sinResultados = document.getElementById('sin-resultados');
+
+    function filtrar() {
+        const texto = buscador.value.toLowerCase();
+        const estado = filtroEstado.value;
+        let visibles = 0;
+        filas.forEach(fila => {
+            const cumpleTexto = (fila.dataset.busqueda || '').includes(texto);
+            const cumpleEstado = !estado || fila.dataset.estado === estado;
+            const visible = cumpleTexto && cumpleEstado;
+            fila.style.display = visible ? '' : 'none';
+            if (visible) visibles++;
+        });
+        sinResultados.style.display = visibles === 0 ? 'block' : 'none';
+    }
+
+    buscador.addEventListener('input', filtrar);
+    filtroEstado.addEventListener('change', filtrar);
+    filtroFecha.addEventListener('change', filtrar);
+
+    function abrirDetalle(id) {
+        // TODO: integrar al backend: fetch GET /admin/reservas/<id> y rellenar campos.
+        document.getElementById('det-nombre').textContent = 'Bob Esponja';
+        document.getElementById('det-email').textContent = 'bob@fondodebikini.com';
+        document.getElementById('det-fecha').textContent = 'Hoy';
+        document.getElementById('det-hora').textContent = '20:00';
+        document.getElementById('det-personas').textContent = '4';
+        document.getElementById('det-mesa').textContent = 'Mesa 3 (4 personas)';
+        document.getElementById('det-estado').textContent = 'Confirmada';
+        document.getElementById('det-token').textContent = 'f7c1b8a2-3d4e-5f6a-7b8c-9d0e1f2a3b4c';
+        document.getElementById('det-creada').textContent = '2026-05-20 18:34';
+        document.getElementById('modal-detalle').style.display = 'flex';
+    }
+
+    function cerrarDetalle() {
+        document.getElementById('modal-detalle').style.display = 'none';
+    }
+
+    function marcarConsumida(id) {
+        if (!confirm('¿Marcar esta reserva como consumida?')) return;
+        // TODO: integrar al backend: fetch POST /admin/reservas/consumir { token }.
+        alert('Marcada como consumida (mock). En integración: POST /admin/reservas/consumir');
+    }
+
+    function cancelarReserva(id) {
+        if (!confirm('¿Cancelar esta reserva? El cliente ya recibió el QR.')) return;
+        // TODO: integrar al backend: fetch PUT /reservas/<token>/cancelar.
+        alert('Cancelada (mock). En integración: PUT /reservas/<token>/cancelar');
+    }
+</script>
+
+{% endblock %}

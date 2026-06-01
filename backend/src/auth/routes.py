@@ -26,3 +26,9 @@ def login():
     session["admin_id"] = admin["id"]
 
     return jsonify({"admin": admin}), 200
+
+
+@auth_bp.route("/auth/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return "", 204

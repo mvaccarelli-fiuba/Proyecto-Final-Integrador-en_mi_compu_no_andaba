@@ -107,3 +107,24 @@
     background: #fff4d6;
     color: #8b6914;
 }
+
+.estado-error {
+    background: #ffe5e5;
+    color: var(--rojo);
+    padding: 40px;
+    text-align: center;
+    margin: 24px 40px;
+    border-radius: 12px;
+    border-left: 4px solid var(--rojo);
+}
+
+#menu-vacio {
+    text-align: center;
+    padding: 80px 40px;
+}
+
+#menu-vacio p {
+    font-size: 18px;
+    color: var(--texto-gris);
+    margin-bottom: 24px;
+}

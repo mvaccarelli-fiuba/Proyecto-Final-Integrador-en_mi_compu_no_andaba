@@ -1,5 +1,3 @@
-<!-- MENU HARDCODEADO, RECONFIGURAR EN LA FASE FINAL CON EL BACKEND-->
-
 {% extends "base.html" %}
 
 {% block titulo %}Menú - Krusty Krab{% endblock %}
@@ -20,178 +18,66 @@
 <!-- FILTROS -->
 <section id="menu-filtros">
     <div class="filtros-container">
-        <a href="#todo" class="filtro filtro-activo">Todo</a>
-        <a href="#vegetariano" class="filtro">🥬 Vegetariano</a>
-        <a href="#vegano" class="filtro">🌱 Vegano</a>
-        <a href="#sin-gluten" class="filtro">🌾 Sin gluten</a>
+        <a href="/menu" class="filtro {% if not filtro_activo %}filtro-activo{% endif %}">
+            Todo
+        </a>
+        <a href="/menu?restriccion=vegetariano"
+            class="filtro {% if filtro_activo == 'vegetariano' %}filtro-activo{% endif %}">
+            🥬 Vegetariano
+        </a>
+        <a href="/menu?restriccion=vegano" class="filtro {% if filtro_activo == 'vegano' %}filtro-activo{% endif %}">
+            🌱 Vegano
+        </a>
+        <a href="/menu?restriccion=gluten" class="filtro {% if filtro_activo == 'gluten' %}filtro-activo{% endif %}">
+            🌾 Sin gluten
+        </a>
     </div>
 </section>
 
-<!-- HAMBURGUESAS -->
+<!-- LISTADO -->
+{% if error %}
+<section class="estado-error">
+    <p>{{ error }}</p>
+</section>
+{% elif platos %}
 <section class="categoria-section">
-    <h2 class="seccion-titulo">Hamburguesas</h2>
-    <div class="titulo-linea linea-amarilla"></div>
-
     <div class="cards-categoria">
-
+        {% for plato in platos %}
         <div class="card-plato card-celeste">
-            <span class="card-badge badge-amarillo">LA FAVORITA</span>
             <div class="card-img">
-                <img src="{{ url_for('static', filename='images/imagenes_menu/hamburguesa_simple.png') }}" alt="Cangreburger Clásica">
+                {% if plato.imagen_url %}
+                <img src="{{ plato.imagen_url }}" alt="{{ plato.nombre }}">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/hamburguesa_simple.png') }}" alt="{{ plato.nombre }}">
+                {% endif %}
             </div>
             <div class="card-info">
-                <h3 class="card-nombre">Cangreburger Clásica</h3>
-                <p class="card-desc">Medallón de angus, lechuga crispa, tomate fresco, cebolla caramelizada y nuestra
-                    salsa secreta del mar.</p>
-                <p class="card-precio">$5.500</p>
-            </div>
-        </div>
+                <h3 class="card-nombre">{{ plato.nombre }}</h3>
+                <p class="card-desc">{{ plato.descripcion }}</p>
 
-        <div class="card-plato card-roja">
-            <span class="card-badge badge-rojo">🌶 PICANTE</span>
-            <div class="card-img">
-                <img src="{{ url_for('static', filename='images/imagenes_menu/hamburguesa_picante.png') }}"
-                    alt="Cangreburger Extrema">
-            </div>
-            <div class="card-info">
-                <h3 class="card-nombre">Cangreburger Extrema</h3>
-                <p class="card-desc">Doble medallón, jalapeños, queso pepper jack, bacon crujiente y salsa sriracha de
-                    arrecife.</p>
-                <p class="card-precio">$7.800</p>
-            </div>
-        </div>
-
-        <div class="card-plato card-verde">
-            <span class="card-badge badge-verde">VEGGIE</span>
-            <div class="card-img">
-                <img src="{{ url_for('static', filename='images/imagenes_menu/hamburguesa_vegana.png') }}" alt="Cangreburger Veggie">
-            </div>
-            <div class="card-info">
-                <h3 class="card-nombre">Cangreburger Veggie</h3>
-                <p class="card-desc">Medallón de legumbres y algas marinas, aguacate, rúcula, tomates cherry y aderezo
-                    de limón.</p>
                 <div class="card-restricciones">
+                    {% if plato.vegetariano %}
                     <span class="resto-badge resto-vegetariano">🥬 Vegetariano</span>
+                    {% endif %}
+                    {% if plato.vegano %}
                     <span class="resto-badge resto-vegano">🌱 Vegano</span>
-                </div>
-                <p class="card-precio">$5.200</p>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<!-- ACOMPAÑAMIENTOS -->
-<section class="categoria-section">
-    <h2 class="seccion-titulo">Acompañamientos</h2>
-    <div class="titulo-linea linea-amarilla"></div>
-
-    <div class="cards-categoria">
-
-        <div class="card-plato card-celeste">
-            <div class="card-img">
-                <img src="{{ url_for('static', filename='images/imagenes_menu/papas_fritas.png') }}" alt="Papas Bikini">
-            </div>
-            <div class="card-info">
-                <h3 class="card-nombre">Papas Bikini</h3>
-                <p class="card-desc">Papas fritas extra crocantes con sal marina y nuestro mix de especias del fondo.
-                </p>
-
-                <p class="card-precio">$2.800</p>
-            </div>
-        </div>
-
-        <div class="card-plato card-verde">
-            <div class="card-img">
-                <img src="{{ url_for('static', filename='images/imagenes_menu/aros_de_cebolla.png') }}" alt="Aros de cebolla">
-            </div>
-            <div class="card-info">
-                <h3 class="card-nombre">Aros de Coral</h3>
-                <p class="card-desc">Aros de cebolla rebozados con panko crocante y salsa BBQ ahumada.</p>
-                <p class="card-precio">$3.200</p>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<!-- BEBIDAS -->
-<section class="categoria-section">
-    <h2 class="seccion-titulo">Bebidas</h2>
-    <div class="titulo-linea linea-amarilla"></div>
-
-    <div class="cards-categoria">
-
-        <div class="card-plato card-verde">
-            <div class="card-img">
-                <img src="{{ url_for('static', filename='images/imagenes_menu/kelp_shake.png') }}" alt="Kelp Shake">
-            </div>
-            <div class="card-info">
-                <h3 class="card-nombre">Kelp Shake</h3>
-                <p class="card-desc">Malteada de algas con un toque dulce. Más rica de lo que suena, palabra de
-                    Calamardo.</p>
-                <div class="card-restricciones">
-                    <span class="resto-badge resto-vegetariano">🥬 Vegetariano</span>
+                    {% endif %}
+                    {% if plato.gluten %}
                     <span class="resto-badge resto-sin-gluten">🌾 Sin gluten</span>
+                    {% endif %}
                 </div>
-                <p class="card-precio">$3.200</p>
+
+                <p class="card-precio">${{ "{:,}".format(plato.precio|int).replace(",", ".") }}</p>
             </div>
         </div>
-
-        <div class="card-plato card-celeste">
-            <div class="card-img">
-                <img src="{{ url_for('static', filename='images/imagenes_menu/limonada_menta_y_jengibre.png') }}" alt="Limonada del Mar">
-            </div>
-            <div class="card-info">
-                <h3 class="card-nombre">Limonada del Mar</h3>
-                <p class="card-desc">Limón fresco con menta y un toque de jengibre, perfecta para acompañar.</p>
-                <div class="card-restricciones">
-                    <span class="resto-badge resto-vegano">🌱 Vegano</span>
-                    <span class="resto-badge resto-sin-gluten">🌾 Sin gluten</span>
-                </div>
-                <p class="card-precio">$2.500</p>
-            </div>
-        </div>
-
-        <div class="card-plato card-celeste">
-            <div class="card-img">
-                <img src="{{ url_for('static', filename='images/imagenes_menu/coca_cola.png') }}" alt="Limonada del Mar">
-            </div>
-            <div class="card-info">
-                <h3 class="card-nombre">Gaseosa Cola Natural</h3>
-                <p class="card-desc">Coca Cola tambien llega a fondo de Bikini y mas fresca que nunca.</p>
-                <div class="card-restricciones">
-                    <span class="resto-badge resto-vegano">🌱 Vegano</span>
-                    <span class="resto-badge resto-sin-gluten">🌾 Sin gluten</span>
-                </div>
-                <p class="card-precio">$2.200</p>
-            </div>
-        </div>
-
+        {% endfor %}
     </div>
 </section>
-
-<!-- POSTRES -->
-<section class="categoria-section">
-    <h2 class="seccion-titulo">Postres</h2>
-    <div class="titulo-linea linea-amarilla"></div>
-
-    <div class="cards-categoria">
-
-        <div class="card-plato card-roja">
-            <div class="card-img">
-                <img src="{{ url_for('static', filename='images/imagenes_menu/pie_de_coral.png') }}" alt="Pie de Coral">
-            </div>
-            <div class="card-info">
-                <h3 class="card-nombre">Pie de Coral</h3>
-                <p class="card-desc">Postre estrella del Krusty Krab. Capas de chocolate, dulce de leche y frutos rojos.
-                </p>
-
-                <p class="card-precio">$3.600</p>
-            </div>
-        </div>
-
-    </div>
+{% else %}
+<section id="menu-vacio">
+    <p>No hay platos disponibles que coincidan.</p>
+    <a href="/menu" class="btn-amarillo">Ver todo el menú</a>
 </section>
+{% endif %}
 
 {% endblock %}

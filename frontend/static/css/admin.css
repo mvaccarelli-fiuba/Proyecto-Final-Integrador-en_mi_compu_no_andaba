@@ -343,3 +343,246 @@
     padding-top: 16px;
     border-top: 1px solid #f0f0f0;
 }
+
+/* Estados (activo / inactivo) */
+.col-estado {
+    width: 100px;
+}
+
+.badge-estado {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-activo {
+    background: #d4f5e1;
+    color: var(--verde);
+}
+
+.badge-inactivo {
+    background: #f0f0f0;
+    color: var(--texto-gris);
+}
+
+/* Número de mesa (círculo) */
+.col-numero {
+    width: 80px;
+}
+
+.mesa-numero {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--celeste);
+    color: var(--blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* ========================================
+   RESERVAS - tarjetas de resumen
+   ======================================== */
+
+.resumen-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.resumen-card {
+    background: var(--blanco);
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid var(--celeste);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.resumen-card-verde {
+    border-left-color: var(--verde);
+}
+
+.resumen-card-rojo {
+    border-left-color: var(--rojo);
+}
+
+.resumen-card-amarillo {
+    border-left-color: var(--amarillo);
+}
+
+.resumen-titulo {
+    font-size: 12px;
+    color: var(--texto-gris);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 8px;
+    font-weight: 600;
+}
+
+.resumen-numero {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--azul-oscuro);
+    margin: 0;
+    line-height: 1;
+}
+
+.resumen-numero-chico {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--azul-oscuro);
+    margin: 0;
+    line-height: 1;
+}
+
+.resumen-sub {
+    font-size: 12px;
+    color: var(--texto-gris);
+    margin: 6px 0 0;
+}
+
+/* RESERVAS - tabla */
+
+.col-personas {
+    width: 90px;
+}
+
+.col-mesa {
+    width: 80px;
+}
+
+.col-acciones-grande {
+    width: 260px;
+}
+
+.mesa-numero-chico {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--celeste);
+    color: var(--blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.reserva-fecha {
+    font-weight: 600;
+    color: var(--azul-oscuro);
+    margin: 0 0 2px;
+    font-size: 13px;
+}
+
+.reserva-hora {
+    color: var(--texto-gris);
+    margin: 0;
+    font-size: 12px;
+}
+
+/* Badges por estado */
+
+.badge-confirmada {
+    background: #dceefb;
+    color: #1c5d99;
+}
+
+.badge-consumida {
+    background: #d4f5e1;
+    color: var(--verde);
+}
+
+.badge-cancelada {
+    background: #ffe5e5;
+    color: var(--rojo);
+}
+
+.badge-expirada {
+    background: #f0f0f0;
+    color: var(--texto-gris);
+}
+
+/* Botones mini en la tabla */
+
+.btn-mini {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: 4px;
+    transition: all 0.15s;
+    font-family: inherit;
+}
+
+.btn-mini.btn-verde {
+    background: var(--verde);
+    color: var(--blanco);
+}
+
+.btn-mini.btn-verde:hover {
+    background: #2a8049;
+}
+
+.btn-outline-mini {
+    background: var(--blanco);
+    color: var(--azul-oscuro);
+    border: 1px solid #d0d0d0;
+}
+
+.btn-outline-mini:hover {
+    border-color: var(--celeste);
+    color: var(--celeste);
+}
+
+.btn-danger-mini {
+    color: var(--rojo);
+}
+
+.btn-danger-mini:hover {
+    border-color: var(--rojo);
+    color: var(--rojo);
+}
+
+/* Detalle modal */
+
+.detalle-reserva {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.detalle-fila {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detalle-label {
+    color: var(--texto-gris);
+    font-size: 13px;
+}
+
+.detalle-valor {
+    color: var(--azul-oscuro);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.detalle-token {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    word-break: break-all;
+    text-align: right;
+    max-width: 60%;
+}
