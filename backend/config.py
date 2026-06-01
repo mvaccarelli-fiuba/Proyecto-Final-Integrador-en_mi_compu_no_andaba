@@ -1,4 +1,4 @@
-# bd_lucas
+"""# bd_lucas
 DB_CONFIG = {
     "host": "localhost",
     "port": 3306,
@@ -6,8 +6,8 @@ DB_CONFIG = {
     "password": "TuContraseña123!",
     "database": "crusty_crab",
 }
-
 """
+
 DB_CONFIG = {
     "host": "localhost",
     "port": 3306,
@@ -15,5 +15,5 @@ DB_CONFIG = {
     "password": "1234",
     "database": "crusty_crab",
 }
-"""
+
 SECRET_KEY = "dev-secret-key-change-in-production"
