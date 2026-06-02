@@ -230,7 +230,7 @@ VALUES (1, 2),
     (4, 4),
     (5, 6),
     (6, 8);
---probamos la reseña con una reserva
+--probamos la reseña con una reserva--------------------------------------------
 INSERT INTO reserva (
         token,
         cliente_nombre,

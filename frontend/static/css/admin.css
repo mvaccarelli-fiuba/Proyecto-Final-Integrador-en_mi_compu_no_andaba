@@ -586,3 +586,30 @@
     text-align: right;
     max-width: 60%;
 }
+
+/* Mensajes flash */
+.alert {
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.alert-exito {
+    background: #d4f5e1;
+    color: var(--verde);
+    border-left: 4px solid var(--verde);
+}
+
+.alert-error {
+    background: #ffe5e5;
+    color: var(--rojo);
+    border-left: 4px solid var(--rojo);
+}
+
+.tabla-img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+}

@@ -6,6 +6,19 @@
 
 {% block contenido %}
 
+<!-- MENSAJES FLASH -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for categoria, mensaje in messages %}
+<div class="alert alert-{{ categoria }}">{{ mensaje }}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+{% if error %}
+<div class="alert alert-error">{{ error }}</div>
+{% endif %}
+
 <!-- BARRA DE ACCIONES -->
 <div class="admin-acciones">
     <input type="text" id="buscador-platos" class="admin-buscador" placeholder="Buscar plato...">
@@ -36,122 +49,52 @@
         </thead>
         <tbody id="tabla-platos">
 
-            <!-- Fila ejemplo 1 -->
-            <tr data-nombre="krabby patty" data-vegetariano="0" data-vegano="0" data-gluten="0">
-                <td>
-                    <div class="img-placeholder">img</div>
-                </td>
-                <td>
-                    <p class="plato-nombre">Krabby Patty</p>
-                    <p class="plato-desc">La hamburguesa secreta de la casa.</p>
-                </td>
-                <td class="col-precio">$5.500</td>
-                <td><span class="restriccion-vacia">—</span></td>
-                <td class="col-acciones">
-                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(1)">✎</button>
-                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(1)">🗑</button>
-                </td>
-            </tr>
+            {% for plato in platos %}
+            <tr data-nombre="{{ plato.nombre|lower }}"
+                data-vegetariano="{% if plato.vegetariano %}1{% else %}0{% endif %}"
+                data-vegano="{% if plato.vegano %}1{% else %}0{% endif %}"
+                data-gluten="{% if plato.gluten %}1{% else %}0{% endif %}">
 
-            <!-- Fila ejemplo 2 -->
-            <tr data-nombre="double krabby" data-vegetariano="0" data-vegano="0" data-gluten="0">
                 <td>
+                    {% if plato.imagen_url %}
+                    <img src="{{ plato.imagen_url }}" alt="{{ plato.nombre }}" class="tabla-img">
+                    {% else %}
                     <div class="img-placeholder">img</div>
+                    {% endif %}
                 </td>
                 <td>
-                    <p class="plato-nombre">Double Krabby</p>
-                    <p class="plato-desc">Doble medallón, doble queso.</p>
+                    <p class="plato-nombre">{{ plato.nombre }}</p>
+                    <p class="plato-desc">{{ plato.descripcion }}</p>
                 </td>
-                <td class="col-precio">$7.800</td>
-                <td><span class="restriccion-vacia">—</span></td>
+                <td class="col-precio">${{ "{:,}".format(plato.precio|int).replace(",", ".") }}</td>
+                <td>
+                    {% if plato.vegetariano or plato.vegano or plato.gluten %}
+                    {% if plato.vegetariano %}<span class="resto-badge resto-vegetariano">🥬 Vegetariano</span>{% endif
+                    %}
+                    {% if plato.vegano %}<span class="resto-badge resto-vegano">🌱 Vegano</span>{% endif %}
+                    {% if plato.gluten %}<span class="resto-badge resto-sin-gluten">🌾 Sin gluten</span>{% endif %}
+                    {% else %}
+                    <span class="restriccion-vacia">—</span>
+                    {% endif %}
+                </td>
                 <td class="col-acciones">
-                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(2)">✎</button>
-                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(2)">🗑</button>
-                </td>
-            </tr>
+                    <button class="btn-icon" title="Editar" onclick='abrirModalEdicion({{ plato | tojson }})'>✎</button>
 
-            <!-- Fila ejemplo 3 -->
-            <tr data-nombre="veggie patty" data-vegetariano="1" data-vegano="0" data-gluten="0">
-                <td>
-                    <div class="img-placeholder">img</div>
-                </td>
-                <td>
-                    <p class="plato-nombre">Veggie Patty</p>
-                    <p class="plato-desc">Versión vegetariana con medallón de lentejas.</p>
-                </td>
-                <td class="col-precio">$5.200</td>
-                <td>
-                    <span class="resto-badge resto-vegetariano">🥬 Vegetariano</span>
-                </td>
-                <td class="col-acciones">
-                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(3)">✎</button>
-                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(3)">🗑</button>
+                    <form method="POST" action="/admin/menu/{{ plato.id }}/borrar" style="display:inline;"
+                        onsubmit="return confirm('¿Eliminar este plato?');">
+                        <button type="submit" class="btn-icon btn-danger" title="Eliminar">🗑</button>
+                    </form>
                 </td>
             </tr>
-
-            <!-- Fila ejemplo 4 -->
-            <tr data-nombre="papas bikini" data-vegetariano="1" data-vegano="1" data-gluten="1">
-                <td>
-                    <div class="img-placeholder">img</div>
-                </td>
-                <td>
-                    <p class="plato-nombre">Papas Bikini</p>
-                    <p class="plato-desc">Papas fritas extra crocantes.</p>
-                </td>
-                <td class="col-precio">$2.800</td>
-                <td>
-                    <span class="resto-badge resto-vegano">🌱 Vegano</span>
-                    <span class="resto-badge resto-sin-gluten">🌾 Sin gluten</span>
-                </td>
-                <td class="col-acciones">
-                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(4)">✎</button>
-                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(4)">🗑</button>
-                </td>
-            </tr>
-
-            <!-- Fila ejemplo 5 -->
-            <tr data-nombre="kelp shake" data-vegetariano="1" data-vegano="1" data-gluten="1">
-                <td>
-                    <div class="img-placeholder">img</div>
-                </td>
-                <td>
-                    <p class="plato-nombre">Kelp Shake</p>
-                    <p class="plato-desc">Malteada de algas.</p>
-                </td>
-                <td class="col-precio">$3.200</td>
-                <td>
-                    <span class="resto-badge resto-vegano">🌱 Vegano</span>
-                    <span class="resto-badge resto-sin-gluten">🌾 Sin gluten</span>
-                </td>
-                <td class="col-acciones">
-                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(5)">✎</button>
-                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(5)">🗑</button>
-                </td>
-            </tr>
-
-            <!-- Fila ejemplo 6 -->
-            <tr data-nombre="pie de coral" data-vegetariano="1" data-vegano="0" data-gluten="0">
-                <td>
-                    <div class="img-placeholder">img</div>
-                </td>
-                <td>
-                    <p class="plato-nombre">Pie de Coral</p>
-                    <p class="plato-desc">Postre estrella del Krusty Krab.</p>
-                </td>
-                <td class="col-precio">$3.600</td>
-                <td>
-                    <span class="resto-badge resto-vegetariano">🥬 Vegetariano</span>
-                </td>
-                <td class="col-acciones">
-                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(6)">✎</button>
-                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarPlato(6)">🗑</button>
-                </td>
-            </tr>
+            {% endfor %}
 
         </tbody>
     </table>
 
-    <p id="sin-resultados" class="sin-resultados" style="display:none;">
+    {% if not platos %}
+    <p class="sin-resultados">No hay platos cargados todavía.</p>
+    {% endif %}
+    <p id="sin-resultados-filtro" class="sin-resultados" style="display:none;">
         No hay platos que coincidan con la búsqueda.
     </p>
 </div>
@@ -161,7 +104,7 @@
     <div class="modal-contenido">
         <h2 id="modal-titulo">Nuevo plato</h2>
 
-        <form id="form-plato">
+        <form id="form-plato" method="POST" action="/admin/menu/nuevo">
             <div class="campo">
                 <label>Nombre</label>
                 <input type="text" name="nombre" required>
@@ -207,15 +150,12 @@
     </div>
 </div>
 
-{% endblock %}
-
-{% block css_extra %}
 <script>
-    // === Búsqueda y filtros (client-side, sin pegarle al backend) ===
+    // === FILTROS (client-side) ===
     const buscador = document.getElementById('buscador-platos');
     const filtro = document.getElementById('filtro-restriccion');
     const filas = document.querySelectorAll('#tabla-platos tr');
-    const sinResultados = document.getElementById('sin-resultados');
+    const sinResultadosFiltro = document.getElementById('sin-resultados-filtro');
 
     function filtrarPlatos() {
         const texto = buscador.value.toLowerCase();
@@ -231,41 +171,43 @@
             if (visible) visibles++;
         });
 
-        sinResultados.style.display = visibles === 0 ? 'block' : 'none';
+        sinResultadosFiltro.style.display = visibles === 0 && filas.length > 0 ? 'block' : 'none';
     }
 
     buscador.addEventListener('input', filtrarPlatos);
     filtro.addEventListener('change', filtrarPlatos);
 
-    // === Modal ===
+    // === MODAL ===
+    const modal = document.getElementById('modal-plato');
+    const formPlato = document.getElementById('form-plato');
+    const modalTitulo = document.getElementById('modal-titulo');
+
     function abrirModalNuevo() {
-        document.getElementById('modal-titulo').textContent = 'Nuevo plato';
-        document.getElementById('form-plato').reset();
-        document.getElementById('modal-plato').style.display = 'flex';
+        modalTitulo.textContent = 'Nuevo plato';
+        formPlato.reset();
+        formPlato.action = '/admin/menu/nuevo';
+        modal.style.display = 'flex';
     }
 
-    function abrirModalEdicion(id) {
-        // TODO: cuando este integrado al backend, hacer fetch GET /platos/<id> y rellenar.
-        document.getElementById('modal-titulo').textContent = 'Editar plato #' + id;
-        document.getElementById('modal-plato').style.display = 'flex';
+    function abrirModalEdicion(plato) {
+        modalTitulo.textContent = 'Editar: ' + plato.nombre;
+        formPlato.action = '/admin/menu/' + plato.id + '/editar';
+
+        // Rellenar el form con los datos del plato
+        formPlato.querySelector('[name="nombre"]').value = plato.nombre;
+        formPlato.querySelector('[name="descripcion"]').value = plato.descripcion || '';
+        formPlato.querySelector('[name="precio"]').value = plato.precio;
+        formPlato.querySelector('[name="imagen_url"]').value = plato.imagen_url || '';
+        formPlato.querySelector('[name="vegetariano"]').checked = !!plato.vegetariano;
+        formPlato.querySelector('[name="vegano"]').checked = !!plato.vegano;
+        formPlato.querySelector('[name="gluten"]').checked = !!plato.gluten;
+
+        modal.style.display = 'flex';
     }
 
     function cerrarModal() {
-        document.getElementById('modal-plato').style.display = 'none';
+        modal.style.display = 'none';
     }
-
-    function eliminarPlato(id) {
-        if (!confirm('¿Eliminar este plato?')) return;
-        // TODO: cuando este integrado al backend, hacer fetch DELETE /platos/<id>.
-        alert('Eliminado (mock). Cuando integremos al backend, se hace DELETE /platos/' + id);
-    }
-
-    // Submit del form
-    document.getElementById('form-plato').addEventListener('submit', function (e) {
-        e.preventDefault();
-        // TODO: cuando este integrado al backend, hacer fetch POST/PUT /platos.
-        alert('Guardado (mock). Cuando integremos al backend, se hace POST o PUT /platos');
-        cerrarModal();
-    });
 </script>
+
 {% endblock %}
