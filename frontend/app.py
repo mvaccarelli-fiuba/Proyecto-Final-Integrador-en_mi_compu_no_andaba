@@ -191,7 +191,104 @@ def admin_menu_borrar(id):
     return redirect(url_for("admin_menu"))
 
 
-##-------------------------------------------------------FUNCIONES MENU------------------------------------------------------
+##-------------------------------------------------------FUNCIONES MESAS------------------------------------------------------
+
+
+@app.route("/admin/mesas")
+@require_admin
+def admin_mesas():
+    response = api_client.get("/mesas")
+
+    if response is None:
+        return render_template(
+            "admin_mesas.html",
+            seccion="mesas",
+            mesas=[],
+            error="No pudimos cargar las mesas. Probá de nuevo en un rato.",
+        )
+
+    if response.status_code == 200:
+        mesas = response.json()
+    else:
+        # 204 = no hay mesas; otro código también cae acá.
+        mesas = []
+
+    return render_template(
+        "admin_mesas.html",
+        seccion="mesas",
+        mesas=mesas,
+        error=None,
+    )
+
+
+@app.route("/admin/mesas/nuevo", methods=["POST"])
+@require_admin
+def admin_mesas_nuevo():
+    mesa_data = {
+        "numero": int(request.form.get("numero") or 0),
+        "capacidad": int(request.form.get("capacidad") or 0),
+        "activa": "activa" in request.form,
+    }
+
+    response = api_client.post("/mesas", json=mesa_data)
+
+    if response is None:
+        flash("Error de conexión con el backend.", "error")
+    elif response.status_code == 201:
+        flash(f"Mesa #{mesa_data['numero']} creada correctamente.", "exito")
+    elif response.status_code == 409:
+        flash(f"Ya existe una mesa con el número {mesa_data['numero']}.", "error")
+    elif response.status_code == 400:
+        flash("Datos inválidos. Revisá el número y la capacidad.", "error")
+    else:
+        flash("No se pudo crear la mesa.", "error")
+
+    return redirect(url_for("admin_mesas"))
+
+
+@app.route("/admin/mesas/<int:id>/editar", methods=["POST"])
+@require_admin
+def admin_mesas_editar(id):
+    mesa_data = {
+        "numero": int(request.form.get("numero") or 0),
+        "capacidad": int(request.form.get("capacidad") or 0),
+        "activa": "activa" in request.form,
+    }
+
+    response = api_client.put(f"/mesas/{id}", json=mesa_data)
+
+    if response is None:
+        flash("Error de conexión con el backend.", "error")
+    elif response.status_code == 200:
+        flash(f"Mesa #{mesa_data['numero']} actualizada.", "exito")
+    elif response.status_code == 404:
+        flash("Esa mesa no existe.", "error")
+    elif response.status_code == 409:
+        flash(f"Ya existe otra mesa con el número {mesa_data['numero']}.", "error")
+    else:
+        flash("No se pudo actualizar la mesa.", "error")
+
+    return redirect(url_for("admin_mesas"))
+
+
+@app.route("/admin/mesas/<int:id>/borrar", methods=["POST"])
+@require_admin
+def admin_mesas_borrar(id):
+    response = api_client.delete(f"/mesas/{id}")
+
+    if response is None:
+        flash("Error de conexión con el backend.", "error")
+    elif response.status_code in (200, 204):
+        flash("Mesa dada de baja.", "exito")
+    elif response.status_code == 404:
+        flash("Esa mesa no existe.", "error")
+    else:
+        flash("No se pudo dar de baja la mesa.", "error")
+
+    return redirect(url_for("admin_mesas"))
+
+
+##-------------------------------------------------------FUNCIONES MESAS------------------------------------------------------
 
 
 @app.route("/nosotros")
@@ -250,12 +347,6 @@ def admin_dashboard():
 @require_admin
 def admin_reservas():
     return render_template("admin_reservas.html", seccion="reservas")
-
-
-@app.route("/admin/mesas")
-@require_admin
-def admin_mesas():
-    return render_template("admin_mesas.html", seccion="mesas")
 
 
 @app.route("/admin/servicios")
