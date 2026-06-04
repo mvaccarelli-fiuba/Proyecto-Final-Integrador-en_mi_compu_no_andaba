@@ -22,7 +22,7 @@ def convert_row_to_dict(row):
 
 
 
-def get_disponibilidad(fechas, cantidad_personas):
+def get_disponibilidad(cantidad_personas, fecha):
     conn = get_connection()
     try:
         cursor = conn.cursor(dictionary=True)
@@ -32,8 +32,14 @@ def get_disponibilidad(fechas, cantidad_personas):
             FROM mesa 
             WHERE capacidad >= %s
             AND activa = True
+            AND id NOT IN (
+                SELECT mesa_id
+                FROM reserva
+                WHERE fecha = %s
+                AND estado = "confirmada"
+            )
             """,
-            (cantidad_personas,)
+            (cantidad_personas, fecha)
         )    
         
         rows = cursor.fetchall()
