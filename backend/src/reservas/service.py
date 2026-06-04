@@ -1,13 +1,13 @@
-import random
+import uuid
 from src.reservas import repository
 
 
-def get_disponibilidad(cantidad_personas):
-    return repository.get_disponibilidad(cantidad_personas)
+def get_disponibilidad(cantidad_personas, fecha):
+    return repository.get_disponibilidad(cantidad_personas, fecha)
 
 
 def create_reserva(reserva_data):
-    token = str(random.randint(100000, 999999))
+    token = str(uuid.uuid4())
     reserva_data["token"] = token
     nueva_reserva = repository.create_reserva(reserva_data)
 
