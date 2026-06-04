@@ -22,7 +22,7 @@ def convert_row_to_dict(row):
 
 
 
-def get_disponibilidad(cantidad_personas):
+def get_disponibilidad(fechas, cantidad_personas):
     conn = get_connection()
     try:
         cursor = conn.cursor(dictionary=True)
