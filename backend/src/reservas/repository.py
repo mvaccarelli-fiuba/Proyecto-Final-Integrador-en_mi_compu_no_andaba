@@ -202,7 +202,17 @@ def get_reservas(estado=None, fecha=None):
     try:
         cursor = conn.cursor(dictionary=True)
 
-        if estado and fecha:
+       if estado == "expirada":
+           cursor.execute(
+               """
+               SELECT *
+               FROM reserva
+               WHERE estado = "confirmada"
+               AND fecha < CURDATE()
+               """
+           )
+
+       elif estado and fecha:
             cursor.execute(
                """
                SELECT * 
