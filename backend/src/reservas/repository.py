@@ -251,6 +251,12 @@ def get_reservas(estado=None, fecha=None):
             )    
 
         reservas = cursor.fetchall()
+        for reserva in reservas:
+            if (
+                reserva["estado"] == "confirmada"
+                and reserva["fecha"] < date.today()
+            ):
+                reserva["estado"] = "expirada"
 
         cursor.close()
 
