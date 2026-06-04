@@ -11,13 +11,14 @@ reservas_bp = Blueprint("reservas", __name__)
 @reservas_bp.route("/disponibilidad", methods=["GET"])
 def get_disponibilidad():
     cantidad_personas = request.args.get("cantidad_personas")
-
-    if not cantidad_personas:
-       return error("400","Bad request","El parametro cantidad_personas es obligatorio",400)
+    fecha = request.args.get("fecha")
+    
+    if not cantidad_personas or not fecha:
+       return error("400","Bad request","El parametro cantidad_personas y fecha son obligatorios",400)
 
                    
     try:
-        mesas = service.get_disponibilidad(int(cantidad_personas))
+        mesas = service.get_disponibilidad(int(cantidad_personas), fecha)
         return jsonify(mesas), 200
 
     except mysql.connector.Error as err:
@@ -30,7 +31,7 @@ def get_disponibilidad():
 
 @reservas_bp.route("/reservas", methods=["POST"])
 def create_reserva():
-    reserva_data = request.form.to.dict()
+    reserva_data = request.json()
 
     if not reserva_data:
         return error("400","Bad Request","No se enviaron datos",400)
@@ -89,10 +90,10 @@ def cancelar_reserva(token):
 @reservas_bp.route("/admin/reservas/consumir", methods=["POST"])
 @require_admin
 def consumir_reserva():
-    data = request.form.to.dict()
+    data = request.json()
 
     if not data or "token" not in data:
-        return error("400", "Bad request", "El token es obligatorio",400)
+        return error("400", "Bad Request", "El token es obligatorio",400)
 
     try:
         service.consumir_reserva(data["token"])
