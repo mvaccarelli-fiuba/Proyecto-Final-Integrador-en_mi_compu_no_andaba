@@ -366,7 +366,22 @@ def admin_dashboard():
 @app.route("/admin/reservas")
 @require_admin
 def admin_reservas():
-    return render_template("admin_reservas.html", seccion="reservas")
+    response = api_client.get("/admin/reservas")
+    
+    if response is None:
+        return render_template(
+            "admin_reservas.html",
+            seccion="reservas",
+            reservas=[],
+            error="No pudimos cargar las reservas. Probá de nuevo en un rato.",
+        )
+        
+    elif response.status_code == 200:
+        reservas = response.json()
+    else:
+        reservas = []
+    
+    return render_template("admin_reservas.html", seccion="reservas", reservas=reservas, error=None)
 
 
 @app.route("/admin/servicios")
