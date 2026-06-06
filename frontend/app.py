@@ -298,6 +298,26 @@ def nosotros():
 
 @app.route("/reservas", methods=["GET", "POST"])
 def reservas():
+     if request.method == "POST":
+        
+        reserva_data = {
+            "cliente_nombre": request.form.get("cliente_nombre"),
+            "cliente_email": request.form.get("cliente_email"),
+            "cantidad_personas": int(request.form.get("cantidad_personas") or 0),
+            "fecha": request.form.get("fecha"),
+            "hora_inicio": request.form.get("hora_inicio")
+        }
+        
+        response = api_client.post("/reservas", json=reserva_data)
+        
+        if response is None:
+            flash("Error de conexión con el backend. Probá de nuevo.", "error")
+            
+        elif response.status_code == 201:
+            flash("Reserva creada exitosamente. Te esperamos!", "exito")
+        else:
+            flash("No se pudo crear la reserva.", "error")
+
     return render_template("reservas.html")
 
 
