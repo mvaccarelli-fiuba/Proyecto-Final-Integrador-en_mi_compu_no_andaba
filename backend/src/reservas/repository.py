@@ -202,55 +202,27 @@ def get_reservas(estado=None, fecha=None):
     try:
         cursor = conn.cursor(dictionary=True)
 
-       if estado == "expirada":
-           cursor.execute(
-               """
-               SELECT *
-               FROM reserva
-               WHERE estado = "confirmada"
-               AND fecha < CURDATE()
-               """
-           )
-
-       elif estado and fecha:
-            cursor.execute(
-               """
-               SELECT * 
-               FROM reserva
-               WHERE estado = %s
-               AND fecha = %s
-               """,
-               (estado, fecha)
-            )
-
-        elif estado:
-            cursor.execute(
-                """
-                SELECT * 
-                FROM reserva 
-                WHERE estado = %s
-                """,
-                (estado,)
-            )    
-        
-        elif fecha:
-            cursor.execute(
-                """
-                SELECT * 
-                FROM reserva
-                WHERE fecha = %s
-                """,
-                (fecha,)
-            )
-        else:
+        if estado is None and fecha is None:
             cursor.execute(
                 """
                 SELECT *
                 FROM reserva
                 """
-            )    
+            )   
+        else:
+            cursor.execute(
+                """
+                SELECT * 
+                FROM reserva
+                WHERE (%s is null or estado = %s)
+                AND (%s is null or fecha = %s)
+                """,
+                (estado, estado, fecha, fecha)
+            )
 
+        
         reservas = cursor.fetchall()
+        
         for reserva in reservas:
             if (
                 reserva["estado"] == "confirmada"
@@ -262,9 +234,9 @@ def get_reservas(estado=None, fecha=None):
 
         return [convert_row_to_dict(row) for row in reservas]
 
-
     except mysql.connector.Error:
         raise
+    
     finally:
         if conn.is_connected():
             conn.close()   
