@@ -31,7 +31,7 @@ def get_disponibilidad():
 
 @reservas_bp.route("/reservas", methods=["POST"])
 def create_reserva():
-    reserva_data = request.json()
+    reserva_data = request.json
 
     if not reserva_data:
         return error("400","Bad Request","No se enviaron datos",400)
