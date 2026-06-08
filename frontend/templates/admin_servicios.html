@@ -6,10 +6,15 @@
 
 {% block contenido %}
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+    <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+{% endwith %}
+
 <!-- BARRA DE ACCIONES -->
 <div class="admin-acciones">
     <input type="text" id="buscador-servicios" class="admin-buscador" placeholder="Buscar servicio...">
-
     <button type="button" class="btn-amarillo btn-grande" onclick="abrirModalNuevo()">
         + Nuevo servicio
     </button>
@@ -22,68 +27,26 @@
             <tr>
                 <th>Servicio</th>
                 <th>Descripción</th>
-                <th class="col-estado">Estado</th>
                 <th class="col-acciones">Acciones</th>
             </tr>
         </thead>
         <tbody id="tabla-servicios">
-
-            <tr data-nombre="estacionamiento">
-                <td>
-                    <p class="plato-nombre">Estacionamiento</p>
-                </td>
-                <td>
-                    <p class="plato-desc">Playa de estacionamiento gratuita.</p>
-                </td>
-                <td><span class="badge-estado badge-activo">Activo</span></td>
+            {% for s in servicios %}
+            <tr data-nombre="{{ s.nombre | lower }}">
+                <td><p class="plato-nombre">{{ s.nombre }}</p></td>
+                <td><p class="plato-desc">{{ s.descripcion }}</p></td>
                 <td class="col-acciones">
-                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(1)">✎</button>
-                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarServicio(1)">🗑</button>
+                    <button class="btn-icon" title="Editar"
+                        onclick="abrirModalEdicion({{ s.id }}, '{{ s.nombre }}', '{{ s.descripcion }}')">✎</button>
+                    <form action="/admin/servicios/{{ s.id }}/borrar" method="POST" style="display:inline"
+                        onsubmit="return confirm('¿Eliminar este servicio?')">
+                        <button type="submit" class="btn-icon btn-danger" title="Eliminar">🗑</button>
+                    </form>
                 </td>
             </tr>
-
-            <tr data-nombre="accesibilidad">
-                <td>
-                    <p class="plato-nombre">Accesibilidad</p>
-                </td>
-                <td>
-                    <p class="plato-desc">Acceso para personas con movilidad reducida.</p>
-                </td>
-                <td><span class="badge-estado badge-activo">Activo</span></td>
-                <td class="col-acciones">
-                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(2)">✎</button>
-                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarServicio(2)">🗑</button>
-                </td>
-            </tr>
-
-            <tr data-nombre="wifi">
-                <td>
-                    <p class="plato-nombre">Wifi</p>
-                </td>
-                <td>
-                    <p class="plato-desc">Wifi gratis para clientes.</p>
-                </td>
-                <td><span class="badge-estado badge-activo">Activo</span></td>
-                <td class="col-acciones">
-                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(3)">✎</button>
-                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarServicio(3)">🗑</button>
-                </td>
-            </tr>
-
-            <tr data-nombre="pet friendly">
-                <td>
-                    <p class="plato-nombre">Pet friendly</p>
-                </td>
-                <td>
-                    <p class="plato-desc">Aceptamos mascotas en el patio.</p>
-                </td>
-                <td><span class="badge-estado badge-inactivo">Inactivo</span></td>
-                <td class="col-acciones">
-                    <button class="btn-icon" title="Editar" onclick="abrirModalEdicion(4)">✎</button>
-                    <button class="btn-icon btn-danger" title="Eliminar" onclick="eliminarServicio(4)">🗑</button>
-                </td>
-            </tr>
-
+            {% else %}
+            <tr><td colspan="3">No hay servicios cargados.</td></tr>
+            {% endfor %}
         </tbody>
     </table>
 
@@ -97,21 +60,17 @@
     <div class="modal-contenido">
         <h2 id="modal-titulo">Nuevo servicio</h2>
 
-        <form id="form-servicio">
+        <form id="form-servicio" method="POST" action="/admin/servicios/nuevo">
+            <input type="hidden" id="servicio-id" name="servicio_id" value="">
+
             <div class="campo">
                 <label>Nombre</label>
-                <input type="text" name="nombre" required>
+                <input type="text" id="campo-nombre" name="nombre" required>
             </div>
 
             <div class="campo">
                 <label>Descripción</label>
-                <textarea name="descripcion" rows="3"></textarea>
-            </div>
-
-            <div class="campo">
-                <label class="check-label">
-                    <input type="checkbox" name="activo" checked> Servicio activo
-                </label>
+                <textarea id="campo-descripcion" name="descripcion" rows="3"></textarea>
             </div>
 
             <div class="modal-acciones">
@@ -122,50 +81,6 @@
     </div>
 </div>
 
-<script>
-    const buscador = document.getElementById('buscador-servicios');
-    const filas = document.querySelectorAll('#tabla-servicios tr');
-    const sinResultados = document.getElementById('sin-resultados');
-
-    buscador.addEventListener('input', () => {
-        const texto = buscador.value.toLowerCase();
-        let visibles = 0;
-        filas.forEach(fila => {
-            const visible = (fila.dataset.nombre || '').includes(texto);
-            fila.style.display = visible ? '' : 'none';
-            if (visible) visibles++;
-        });
-        sinResultados.style.display = visibles === 0 ? 'block' : 'none';
-    });
-
-    function abrirModalNuevo() {
-        document.getElementById('modal-titulo').textContent = 'Nuevo servicio';
-        document.getElementById('form-servicio').reset();
-        document.getElementById('modal-servicio').style.display = 'flex';
-    }
-
-    function abrirModalEdicion(id) {
-        // TODO: integrar al backend: fetch GET /servicios/<id> y rellenar el form.
-        document.getElementById('modal-titulo').textContent = 'Editar servicio #' + id;
-        document.getElementById('modal-servicio').style.display = 'flex';
-    }
-
-    function cerrarModal() {
-        document.getElementById('modal-servicio').style.display = 'none';
-    }
-
-    function eliminarServicio(id) {
-        if (!confirm('¿Eliminar este servicio?')) return;
-        // TODO: integrar al backend: fetch DELETE /servicios/<id>.
-        alert('Eliminado (mock). En integración: DELETE /servicios/' + id);
-    }
-
-    document.getElementById('form-servicio').addEventListener('submit', function (e) {
-        e.preventDefault();
-        // TODO: integrar al backend: POST o PUT /servicios.
-        alert('Guardado (mock). En integración: POST/PUT /servicios');
-        cerrarModal();
-    });
-</script>
+<script src="{{ url_for('static', filename='js/admin_servicios.js') }}"></script>
 
 {% endblock %}

@@ -117,32 +117,24 @@
     <div class="titulo-linea linea-amarilla"></div>
     <p class="seccion-sub">Todo lo que necesitás para una experiencia sin olas</p>
 
+    {% set iconos = {
+        'estacionamiento': '🅿️',
+        'wifi': '📶',
+        'accesibilidad': '♿',
+        'delivery': '🛵',
+        'pet friendly': '🐾'
+    } %}
+
     <div id="cards-servicios">
-
+        {% for servicio in servicios %}
         <div class="card-servicio">
-            <div class="servicio-icono">🅿️</div>
-            <h3 class="servicio-nombre">Estacionamiento</h3>
-            <p class="servicio-desc">Playa de estacionamiento gratuita para todos nuestros clientes</p>
+            <div class="servicio-icono">{{ iconos.get(servicio.nombre | lower, '⭐') }}</div>
+            <h3 class="servicio-nombre">{{ servicio.nombre }}</h3>
+            <p class="servicio-desc">{{ servicio.descripcion }}</p>
         </div>
-
-        <div class="card-servicio">
-            <div class="servicio-icono">📶</div>
-            <h3 class="servicio-nombre">Wifi gratis</h3>
-            <p class="servicio-desc">Conectividad de alta velocidad para que no dejes de compartir tu burger</p>
-        </div>
-
-        <div class="card-servicio">
-            <div class="servicio-icono">♿</div>
-            <h3 class="servicio-nombre">Accesibilidad</h3>
-            <p class="servicio-desc">Instalaciones completamente accesibles y personal entrenado</p>
-        </div>
-
-        <div class="card-servicio">
-            <div class="servicio-icono">🛵</div>
-            <h3 class="servicio-nombre">Delivery</h3>
-            <p class="servicio-desc">Llevamos el sabor del mar directo a tu puerta, rápido y fresquito</p>
-        </div>
-
+        {% else %}
+        <p>No hay servicios disponibles.</p>
+        {% endfor %}
     </div>
 </section>
 
