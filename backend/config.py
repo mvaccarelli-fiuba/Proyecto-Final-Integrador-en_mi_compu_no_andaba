@@ -2,8 +2,8 @@
 DB_CONFIG = {
     "host": "localhost",
     "port": 3306,
-    "user": "root",
-    "password": "TuContraseña123!",
+    "user": "tp_user",
+    "password": "1234",
     "database": "crusty_crab",
 }
 
