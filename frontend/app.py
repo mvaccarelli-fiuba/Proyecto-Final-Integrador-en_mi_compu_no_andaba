@@ -515,7 +515,60 @@ def calcular_resumen_reservas(reservas):
 @app.route("/admin/servicios")
 @require_admin
 def admin_servicios():
-    return render_template("admin_servicios.html", seccion="servicios")
+    response = api_client.get("/servicios")
+    servicios = response.json() if response and response.status_code == 200 else []
+    return render_template("admin_servicios.html", seccion="servicios", servicios=servicios)
+
+
+@app.route("/admin/servicios/nuevo", methods=["POST"])
+@require_admin
+def admin_servicios_nuevo():
+    data = {
+        "nombre": request.form.get("nombre"),
+        "descripcion": request.form.get("descripcion") or "",
+    }
+    response = api_client.post("/servicios", json=data)
+    if response is None:
+        flash("Error de conexión con el backend.", "error")
+    elif response.status_code == 201:
+        flash(f"Servicio '{data['nombre']}' creado correctamente.", "exito")
+    else:
+        flash("No se pudo crear el servicio.", "error")
+    return redirect(url_for("admin_servicios"))
+
+
+@app.route("/admin/servicios/<int:id>/editar", methods=["POST"])
+@require_admin
+def admin_servicios_editar(id):
+    data = {
+        "nombre": request.form.get("nombre"),
+        "descripcion": request.form.get("descripcion") or "",
+    }
+    response = api_client.put(f"/servicios/{id}", json=data)
+    if response is None:
+        flash("Error de conexión con el backend.", "error")
+    elif response.status_code == 200:
+        flash(f"Servicio '{data['nombre']}' actualizado.", "exito")
+    elif response.status_code == 404:
+        flash("Ese servicio no existe.", "error")
+    else:
+        flash("No se pudo actualizar el servicio.", "error")
+    return redirect(url_for("admin_servicios"))
+
+
+@app.route("/admin/servicios/<int:id>/borrar", methods=["POST"])
+@require_admin
+def admin_servicios_borrar(id):
+    response = api_client.delete(f"/servicios/{id}")
+    if response is None:
+        flash("Error de conexión con el backend.", "error")
+    elif response.status_code in (200, 204):
+        flash("Servicio eliminado.", "exito")
+    elif response.status_code == 404:
+        flash("Ese servicio no existe.", "error")
+    else:
+        flash("No se pudo eliminar el servicio.", "error")
+    return redirect(url_for("admin_servicios"))
 
 
 @app.route("/admin/qr")
