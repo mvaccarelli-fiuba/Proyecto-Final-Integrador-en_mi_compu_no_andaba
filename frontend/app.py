@@ -25,7 +25,10 @@ def inicio():
     resenas_response = api_client.get("/resenas")
     resenas = resenas_response.json() if resenas_response and resenas_response.status_code == 200 else []
 
-    return render_template("index.html", servicios=servicios, resenas=resenas)
+    platos_response = api_client.get("/platos")
+    platos = platos_response.json() if platos_response and platos_response.status_code == 200 else []
+
+    return render_template("index.html", servicios=servicios, resenas=resenas, platos=platos)
 
 
 @app.route("/login", methods=["GET", "POST"])
