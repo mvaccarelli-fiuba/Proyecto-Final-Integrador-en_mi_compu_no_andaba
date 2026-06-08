@@ -8,7 +8,7 @@
 
 {% block contenido %}
 
-<!-- HERO de reservas -->
+<!-- HERO -->
 <div id="reservas-hero">
     <p id="hero-tag">RESERVÁ TU MESA</p>
     <h1 id="reservas-titulo">Asegurate tu lugar</h1>
@@ -29,6 +29,7 @@
     <div class="alert alert-error">{{ error }}</div>
     {% endif %}
 
+    {% if not mensaje_exito %}
     <form method="POST" action="/reservas" class="reservas-form">
 
         <!-- Datos del cliente -->
@@ -89,6 +90,12 @@
             🦀 Confirmar reserva
         </button>
     </form>
+    {% else %}
+    <div class="reserva-cta-volver">
+        <a href="/reservas" class="btn-outline">Hacer otra reserva</a>
+        <a href="/" class="btn-amarillo">Ir al inicio</a>
+    </div>
+    {% endif %}
 </section>
 
 <!-- INFO ADICIONAL -->
