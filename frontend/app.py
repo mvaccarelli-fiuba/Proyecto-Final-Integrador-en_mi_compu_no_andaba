@@ -9,7 +9,9 @@ app.secret_key = "crusty-crab-frontend"
 
 @app.route("/")
 def inicio():
-    return render_template("index.html")
+    response = api_client.get("/servicios")
+    servicios = response.json() if response and response.status_code == 200 else []
+    return render_template("index.html", servicios=servicios)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -376,8 +378,8 @@ def resenas_publicas():
 
 
 @app.errorhandler(404)
-def pagina_no_encontrada():
-    return render_template("error.html"), 404
+def pagina_no_encontrada(e):
+    return render_template("pagina_error_404.html"), 404
 
 
 @app.route("/reserva-confirmada")
