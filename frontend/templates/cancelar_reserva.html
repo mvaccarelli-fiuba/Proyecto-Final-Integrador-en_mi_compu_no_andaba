@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block titulo %}Cancelar reserva - Krusty Krab{% endblock %}
+
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/cancelar.css') }}">
+{% endblock %}
+
+{% block contenido %}
+
+<section id="cancelar-section">
+
+    {% if cancelada %}
+    <!-- ESTADO: reserva cancelada exitosamente -->
+    <div class="cancelar-card cancelar-card-exito">
+        <div class="cancelar-icono">✓</div>
+        <h2 class="cancelar-titulo">Reserva cancelada</h2>
+        <p class="cancelar-texto">
+            Tu reserva fue cancelada con éxito. Esperamos verte pronto en otra ocasión 🦀
+        </p>
+        <div class="cancelar-cta">
+            <a href="/" class="btn-outline">Volver al inicio</a>
+            <a href="/reservas" class="btn-amarillo">Hacer otra reserva</a>
+        </div>
+    </div>
+
+    {% elif error %}
+    <!-- ESTADO: error -->
+    <div class="cancelar-card cancelar-card-error">
+        <div class="cancelar-icono">⚠</div>
+        <h2 class="cancelar-titulo">No se puede cancelar</h2>
+        <p class="cancelar-texto">{{ error }}</p>
+
+        {% if reserva %}
+        <div class="reserva-resumen">
+            <p><strong>Cliente:</strong> {{ reserva.cliente_nombre }}</p>
+            <p><strong>Fecha:</strong> {{ reserva.fecha }} a las {{ reserva.hora_inicio }}</p>
+            <p><strong>Estado actual:</strong> {{ reserva.estado }}</p>
+        </div>
+        {% endif %}
+
+        <div class="cancelar-cta">
+            <a href="/" class="btn-outline">Volver al inicio</a>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- ESTADO: pedir confirmación -->
+    <div class="cancelar-card">
+        <h2 class="cancelar-titulo">¿Cancelar tu reserva?</h2>
+        <p class="cancelar-texto">
+            Estás a punto de cancelar la siguiente reserva:
+        </p>
+
+        <div class="reserva-resumen">
+            <p><strong>Cliente:</strong> {{ reserva.cliente_nombre }}</p>
+            <p><strong>Fecha:</strong> {{ reserva.fecha }}</p>
+            <p><strong>Hora:</strong> {{ reserva.hora_inicio }}</p>
+            <p><strong>Comensales:</strong> {{ reserva.cantidad_personas }}</p>
+        </div>
+
+        <p class="cancelar-advertencia">
+            Esta acción no se puede deshacer.
+        </p>
+
+        <form method="POST" action="/cancelar/{{ reserva.token }}">
+            <div class="cancelar-cta">
+                <a href="/" class="btn-outline">No, mantener reserva</a>
+                <button type="submit" class="btn-rojo">Sí, cancelar</button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
+
+</section>
+
+{% endblock %}

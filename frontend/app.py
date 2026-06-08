@@ -1,4 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    session,
+    flash,
+    jsonify,
+)
+
 from src import api_client
 from src.utils import require_admin
 from datetime import date
@@ -292,11 +302,6 @@ def admin_mesas_borrar(id):
 ##-------------------------------------------------------FUNCIONES RESERVAS------------------------------------------------------
 
 
-@app.route("/nosotros")
-def nosotros():
-    return render_template("nosotros.html")
-
-
 @app.route("/reservas", methods=["GET", "POST"])
 def reservas():
     if request.method == "POST":
@@ -350,11 +355,6 @@ def reservas():
     return render_template("reservas.html", error=None, mensaje_exito=None)
 
 
-@app.route("/contacto", methods=["GET", "POST"])
-def contacto():
-    return render_template("contacto.html")
-
-
 @app.route("/resenas")
 def resenas_publicas():
     response = api_client.get("/resenas")
@@ -375,21 +375,9 @@ def resenas_publicas():
     return render_template("resenas.html", resenas=resenas, error=None)
 
 
-@app.errorhandler(404)
-def pagina_no_encontrada():
-    return render_template("error.html"), 404
-
-
 @app.route("/reserva-confirmada")
 def reserva_confirmada():
     return render_template("reserva_confirmada.html")
-
-
-@app.route("/admin/dashboard")
-@require_admin
-def admin_dashboard():
-    # TODO: armar plantilla admin_dashboard.html
-    return "<h1>Dashboard (TODO)</h1>"
 
 
 @app.route("/admin/reservas")
@@ -507,7 +495,147 @@ def calcular_resumen_reservas(reservas):
     }
 
 
+@app.route("/cancelar/<token>")
+def cancelar_reserva_view(token):
+    """
+    Muestra la pagina de confirmacion de cancelación.
+    """
+    response = api_client.get(f"/reservas/{token}")
+
+    if response is None:
+        return render_template(
+            "cancelar_reserva.html",
+            reserva=None,
+            error="No pudimos conectarnos al servidor. Probá de nuevo en un rato.",
+            cancelada=False,
+        )
+
+    if response.status_code == 404:
+        return render_template(
+            "cancelar_reserva.html",
+            reserva=None,
+            error="Esta reserva no existe o el link es inválido.",
+            cancelada=False,
+        )
+
+    if response.status_code != 200:
+        return render_template(
+            "cancelar_reserva.html",
+            reserva=None,
+            error="No pudimos cargar la reserva.",
+            cancelada=False,
+        )
+
+    reserva = response.json()
+
+    # Solo permitir cancelar si esta confirmada
+    if reserva.get("estado") != "confirmada":
+        return render_template(
+            "cancelar_reserva.html",
+            reserva=reserva,
+            error=f"Esta reserva ya está {reserva.get('estado')}, no se puede cancelar.",
+            cancelada=False,
+        )
+
+    return render_template(
+        "cancelar_reserva.html",
+        reserva=reserva,
+        error=None,
+        cancelada=False,
+    )
+
+
+@app.route("/cancelar/<token>", methods=["POST"])
+def cancelar_reserva_confirmar(token):
+    """
+    Procesa la confirmacion de cancelacion.
+    """
+    response = api_client.put(f"/reservas/{token}/cancelar")
+
+    if response is None:
+        return render_template(
+            "cancelar_reserva.html",
+            reserva=None,
+            error="No pudimos conectarnos al servidor. Probá de nuevo.",
+            cancelada=False,
+        )
+
+    if response.status_code == 200:
+        return render_template(
+            "cancelar_reserva.html",
+            reserva=None,
+            error=None,
+            cancelada=True,
+        )
+
+    if response.status_code == 404:
+        return render_template(
+            "cancelar_reserva.html",
+            reserva=None,
+            error="Esta reserva no existe.",
+            cancelada=False,
+        )
+
+    return render_template(
+        "cancelar_reserva.html",
+        reserva=None,
+        error="No se pudo cancelar la reserva. Probá de nuevo o contactanos.",
+        cancelada=False,
+    )
+
+
+@app.route("/admin/reservas/consumir-qr", methods=["POST"])
+@require_admin
+def admin_reservas_consumir_qr():
+    """
+    Endpoint para que la página de escaneo de QR consuma reservas.
+    A diferencia de admin_reservas_consumir, este devuelve JSON
+    en vez de redirigir.
+    """
+    token = request.form.get("token")
+
+    if not token:
+        return jsonify({"mensaje": "Token vacío"}), 400
+
+    response = api_client.post("/admin/reservas/consumir", json={"token": token})
+
+    if response is None:
+        return jsonify({"mensaje": "No pudimos conectarnos al servidor"}), 503
+
+    if response.status_code == 200:
+        return jsonify({"mensaje": "Reserva consumida correctamente"}), 200
+
+    if response.status_code == 404:
+        return jsonify({"mensaje": "Reserva no encontrada"}), 404
+
+    # Otros casos (ya consumida, ya cancelada, etc.)
+    try:
+        backend_error = response.json()
+        descripcion = backend_error.get("errors", [{}])[0].get(
+            "description", "Error desconocido"
+        )
+    except Exception:
+        descripcion = "No se pudo consumir la reserva"
+
+    return jsonify({"mensaje": descripcion}), response.status_code
+
+
 ##-------------------------------------------------------FUNCIONES ------------------------------------------------------
+
+
+@app.route("/contacto", methods=["GET", "POST"])
+def contacto():
+    return render_template("contacto.html")
+
+
+@app.route("/nosotros")
+def nosotros():
+    return render_template("nosotros.html")
+
+
+@app.errorhandler(404)
+def pagina_no_encontrada():
+    return render_template("error.html"), 404
 
 
 @app.route("/admin/servicios")
@@ -519,8 +647,16 @@ def admin_servicios():
 @app.route("/admin/qr")
 @require_admin
 def admin_qr():
-    # TODO: armar plantilla admin_qr.html
-    return "<h1>Validar QR (TODO)</h1>"
+    return render_template(
+        "admin_qr.html", seccion="qr", admin_email=session["admin"]["email"]
+    )
+
+
+@app.route("/admin/dashboard")
+@require_admin
+def admin_dashboard():
+    # TODO: armar plantilla admin_dashboard.html
+    return "<h1>Dashboard (TODO)</h1>"
 
 
 if __name__ == "__main__":
