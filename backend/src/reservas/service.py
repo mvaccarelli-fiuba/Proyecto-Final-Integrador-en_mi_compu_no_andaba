@@ -15,7 +15,7 @@ def create_reserva(reserva_data):
 
     return {
         "id": nueva_reserva,
-        "token": token
+        "token": token,
         "qr": ruta_qr
     }
 

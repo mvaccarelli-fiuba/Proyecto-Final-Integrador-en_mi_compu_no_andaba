@@ -298,7 +298,7 @@ def nosotros():
 
 @app.route("/reservas", methods=["GET", "POST"])
 def reservas():
-     if request.method == "POST":
+    if request.method == "POST":
         
         reserva_data = {
             "cliente_nombre": request.form.get("cliente_nombre"),
