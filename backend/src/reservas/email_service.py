@@ -2,6 +2,9 @@ import os
 import smtplib
 from email.message import EmailMessage
 
+FRONTEND_URL = "http://127.0.0.1:5002"
+
+
 from config import (
     EMAIL_HOST,
     EMAIL_PORT,
@@ -59,6 +62,20 @@ Krusty Krab
     </table>
 
     <p>Adjuntamos el <strong>QR de tu reserva</strong>. Mostralo al llegar al local.</p>
+
+    <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 32px 0;">
+
+    <p style="color: #5F5E5A; font-size: 14px;">
+      ¿No vas a poder venir? Podés cancelar tu reserva acá:
+    </p>
+    <p style="margin: 16px 0;">
+      <a href="{FRONTEND_URL}/cancelar/{reserva['token']}"
+         style="background: #c33149; color: white; padding: 10px 20px;
+                text-decoration: none; border-radius: 6px; display: inline-block;
+                font-weight: 600;">
+        Cancelar reserva
+      </a>
+    </p>
 
     <p style="margin-top: 30px; color: #5F5E5A; font-size: 12px;">
       Token: {reserva["token"]}<br>
