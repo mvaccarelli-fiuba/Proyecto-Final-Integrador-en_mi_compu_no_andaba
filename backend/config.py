@@ -3,7 +3,7 @@ DB_CONFIG = {
     "host": "localhost",
     "port": 3306,
     "user": "root",
-    "password": "Ju@nfer10",
+    "password": "TuContraseña123!",
     "database": "crusty_crab",
 }
 
