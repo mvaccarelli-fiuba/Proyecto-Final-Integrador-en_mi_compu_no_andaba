@@ -385,12 +385,38 @@ def reserva_confirmada():
     return render_template("reserva_confirmada.html")
 
 
+
 @app.route("/admin/dashboard")
 @require_admin
 def admin_dashboard():
-    # TODO: armar plantilla admin_dashboard.html
-    return "<h1>Dashboard (TODO)</h1>"
+    return render_template("admin_dashboard.html", seccion="dashboard")
 
+@app.route("/admin/stats/ocupacion")
+@require_admin
+def admin_stats_ocupacion():
+    response = api_client.get("/admin/stats/ocupacion")
+    if response is None or not response.ok:
+        return jsonify({"error": "No se pudo conectar con el backend"}), 502
+    return response.json(), response.status_code
+
+
+@app.route("/admin/stats/cancelaciones")
+@require_admin
+def admin_stats_cancelaciones():
+    response = api_client.get("/admin/stats/cancelaciones")
+    if response is None or not response.ok:
+        return jsonify({"error": "No se pudo conectar con el backend"}), 502
+    return response.json(), response.status_code
+
+
+@app.route("/admin/stats/reservas")
+@require_admin
+def admin_stats_reservas():
+    periodo = request.args.get("periodo", "meses")
+    response = api_client.get(f"/admin/stats/reservas?periodo={periodo}")
+    if response is None or not response.ok:
+        return jsonify({"error": "No se pudo conectar con el backend"}), 502
+    return response.json(), response.status_code
 
 @app.route("/admin/reservas")
 @require_admin
