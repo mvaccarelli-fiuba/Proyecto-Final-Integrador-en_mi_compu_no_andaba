@@ -87,6 +87,33 @@
     margin-top: 8px;
 }
 
+.input-con-ojito {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-con-ojito input {
+    width: 100%;
+    padding-right: 48px;
+}
+
+#toggle-password {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    line-height: 1;
+    color: var(--texto-gris);
+}
+
+#toggle-password:hover {
+    color: var(--azul-oscuro);
+}
+
 .login-pie {
     text-align: center;
     margin-top: 24px;
