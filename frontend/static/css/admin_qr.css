@@ -1,0 +1,111 @@
+.qr-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 24px;
+    max-width: 1100px;
+}
+
+@media (max-width: 900px) {
+    .qr-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.qr-camara-card,
+.qr-estado-card {
+    background: var(--blanco);
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    padding: 28px;
+}
+
+.qr-subtitulo {
+    color: var(--azul-oscuro);
+    font-size: 20px;
+    margin: 0 0 8px;
+}
+
+.qr-instruccion,
+.qr-ayuda {
+    color: var(--texto-gris);
+    font-size: 13px;
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+
+.qr-ayuda {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+    font-size: 12px;
+}
+
+/* Estilo del scanner */
+#qr-reader {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#qr-reader video {
+    border-radius: 12px;
+}
+
+#qr-reader__dashboard_section {
+    padding: 12px 0 !important;
+}
+
+#qr-reader__dashboard_section_csr button {
+    font-family: inherit;
+    background: var(--celeste) !important;
+    color: var(--blanco) !important;
+    border: none !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* TARJETA DE ESTADO */
+.qr-estado {
+    text-align: center;
+    padding: 24px 16px;
+    border-radius: 10px;
+    margin-top: 12px;
+}
+
+.qr-estado-esperando {
+    background: var(--gris-claro);
+}
+
+.qr-estado-procesando {
+    background: #fff4d6;
+    color: #8b6914;
+}
+
+.qr-estado-ok {
+    background: #d4f5e1;
+    color: var(--verde);
+}
+
+.qr-estado-error {
+    background: #ffe5e5;
+    color: var(--rojo);
+}
+
+.qr-estado-icono {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.qr-estado-titulo {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 8px 0;
+}
+
+.qr-estado-texto {
+    font-size: 14px;
+    line-height: 1.4;
+    margin: 0 0 16px;
+    color: var(--texto-oscuro);
+}
