@@ -2,6 +2,13 @@
    RESERVAS
    ======================================== */
 
+.reserva-cta-volver {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 24px;
+}
+
 #reservas-hero {
     background: linear-gradient(180deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
     text-align: center;
