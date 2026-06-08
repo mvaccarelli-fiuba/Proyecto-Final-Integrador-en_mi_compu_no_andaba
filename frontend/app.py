@@ -19,9 +19,13 @@ app.secret_key = "crusty-crab-frontend"
 
 @app.route("/")
 def inicio():
-    response = api_client.get("/servicios")
-    servicios = response.json() if response and response.status_code == 200 else []
-    return render_template("index.html", servicios=servicios)
+    servicios_response = api_client.get("/servicios")
+    servicios = servicios_response.json() if servicios_response and servicios_response.status_code == 200 else []
+
+    resenas_response = api_client.get("/resenas")
+    resenas = resenas_response.json() if resenas_response and resenas_response.status_code == 200 else []
+
+    return render_template("index.html", servicios=servicios, resenas=resenas)
 
 
 @app.route("/login", methods=["GET", "POST"])
