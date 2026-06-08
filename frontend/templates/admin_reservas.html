@@ -6,44 +6,65 @@
 
 {% block contenido %}
 
+<!-- MENSAJES FLASH -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for categoria, mensaje in messages %}
+<div class="alert alert-{{ categoria }}">{{ mensaje }}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+{% if error %}
+<div class="alert alert-error">{{ error }}</div>
+{% endif %}
+
 <!-- TARJETAS DE RESUMEN -->
 <div class="resumen-cards">
     <div class="resumen-card">
         <p class="resumen-titulo">Hoy</p>
-        <p class="resumen-numero">8</p>
+        <p class="resumen-numero">{{ resumen.hoy }}</p>
         <p class="resumen-sub">reservas confirmadas</p>
     </div>
     <div class="resumen-card resumen-card-verde">
         <p class="resumen-titulo">Consumidas</p>
-        <p class="resumen-numero">5</p>
-        <p class="resumen-sub">esta semana</p>
+        <p class="resumen-numero">{{ resumen.consumidas }}</p>
+        <p class="resumen-sub">en total</p>
     </div>
     <div class="resumen-card resumen-card-rojo">
         <p class="resumen-titulo">Canceladas</p>
-        <p class="resumen-numero">2</p>
-        <p class="resumen-sub">esta semana</p>
+        <p class="resumen-numero">{{ resumen.canceladas }}</p>
+        <p class="resumen-sub">en total</p>
     </div>
     <div class="resumen-card resumen-card-amarillo">
         <p class="resumen-titulo">Próxima</p>
-        <p class="resumen-numero-chico">20:00</p>
-        <p class="resumen-sub">Bob Esponja · 4 personas</p>
+        {% if resumen.proxima %}
+        <p class="resumen-numero-chico">{{ resumen.proxima.hora_inicio }}</p>
+        <p class="resumen-sub">{{ resumen.proxima.cliente_nombre }} · {{ resumen.proxima.cantidad_personas }} personas
+        </p>
+        {% else %}
+        <p class="resumen-numero-chico">—</p>
+        <p class="resumen-sub">no hay para hoy</p>
+        {% endif %}
     </div>
 </div>
 
 <!-- FILTROS -->
-<div class="admin-acciones">
+<form method="GET" action="/admin/reservas" class="admin-acciones">
     <input type="text" id="buscador-reservas" class="admin-buscador" placeholder="Buscar por nombre o email...">
 
-    <input type="date" id="filtro-fecha" class="admin-select">
+    <input type="date" name="fecha" class="admin-select" value="{{ fecha_filtro or '' }}">
 
-    <select id="filtro-estado" class="admin-select">
+    <select name="estado" class="admin-select">
         <option value="">Todos los estados</option>
-        <option value="confirmada">Confirmadas</option>
-        <option value="consumida">Consumidas</option>
-        <option value="cancelada">Canceladas</option>
-        <option value="expirada">Expiradas</option>
+        <option value="confirmada" {% if estado_filtro=='confirmada' %}selected{% endif %}>Confirmadas</option>
+        <option value="consumida" {% if estado_filtro=='consumida' %}selected{% endif %}>Consumidas</option>
+        <option value="cancelada" {% if estado_filtro=='cancelada' %}selected{% endif %}>Canceladas</option>
+        <option value="expirada" {% if estado_filtro=='expirada' %}selected{% endif %}>Expiradas</option>
     </select>
-</div>
+
+    <button type="submit" class="btn-amarillo">Filtrar</button>
+</form>
 
 <!-- TABLA -->
 <div class="admin-tabla-wrapper">
@@ -60,138 +81,60 @@
         </thead>
         <tbody id="tabla-reservas">
 
-            <!-- CONFIRMADA HOY -->
-            <tr data-busqueda="bob esponja bob@fondodebikini.com" data-estado="confirmada">
+            {% for reserva in reservas %}
+            <tr data-busqueda="{{ reserva.cliente_nombre|lower }} {{ reserva.cliente_email|lower }}">
                 <td>
-                    <p class="plato-nombre">Bob Esponja</p>
-                    <p class="plato-desc">bob@fondodebikini.com</p>
+                    <p class="plato-nombre">{{ reserva.cliente_nombre }}</p>
+                    <p class="plato-desc">{{ reserva.cliente_email }}</p>
                 </td>
                 <td>
-                    <p class="reserva-fecha">Hoy</p>
-                    <p class="reserva-hora">20:00</p>
+                    <p class="reserva-fecha">{{ reserva.fecha }}</p>
+                    <p class="reserva-hora">{{ reserva.hora_inicio }}</p>
                 </td>
-                <td class="col-personas">4</td>
+                <td class="col-personas">{{ reserva.cantidad_personas }}</td>
                 <td class="col-mesa">
-                    <div class="mesa-numero-chico">3</div>
+                    <div class="mesa-numero-chico">{{ reserva.mesa_id }}</div>
                 </td>
-                <td><span class="badge-estado badge-confirmada">Confirmada</span></td>
+                <td>
+                    {% if reserva.estado == "confirmada" %}
+                    <span class="badge-estado badge-confirmada">Confirmada</span>
+                    {% elif reserva.estado == "consumida" %}
+                    <span class="badge-estado badge-consumida">Consumida</span>
+                    {% elif reserva.estado == "cancelada" %}
+                    <span class="badge-estado badge-cancelada">Cancelada</span>
+                    {% elif reserva.estado == "expirada" %}
+                    <span class="badge-estado badge-expirada">Expirada</span>
+                    {% endif %}
+                </td>
                 <td class="col-acciones-grande">
-                    <button class="btn-mini btn-verde" onclick="marcarConsumida(101)">✓ Consumir</button>
-                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(101)">Ver</button>
-                    <button class="btn-mini btn-outline-mini btn-danger-mini"
-                        onclick="cancelarReserva(101)">Cancelar</button>
-                </td>
-            </tr>
+                    {% if reserva.estado == "confirmada" %}
+                    <form method="POST" action="/admin/reservas/consumir" style="display:inline;"
+                        onsubmit="return confirm('¿Marcar esta reserva como consumida?');">
+                        <input type="hidden" name="token" value="{{ reserva.token }}">
+                        <button type="submit" class="btn-mini btn-verde">✓ Consumir</button>
+                    </form>
 
-            <!-- CONFIRMADA FUTURA -->
-            <tr data-busqueda="patricio estrella patricio@piedra.com" data-estado="confirmada">
-                <td>
-                    <p class="plato-nombre">Patricio Estrella</p>
-                    <p class="plato-desc">patricio@piedra.com</p>
-                </td>
-                <td>
-                    <p class="reserva-fecha">Mañana</p>
-                    <p class="reserva-hora">21:00</p>
-                </td>
-                <td class="col-personas">2</td>
-                <td class="col-mesa">
-                    <div class="mesa-numero-chico">1</div>
-                </td>
-                <td><span class="badge-estado badge-confirmada">Confirmada</span></td>
-                <td class="col-acciones-grande">
-                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(102)">Ver</button>
-                    <button class="btn-mini btn-outline-mini btn-danger-mini"
-                        onclick="cancelarReserva(102)">Cancelar</button>
-                </td>
-            </tr>
+                    <form method="POST" action="/admin/reservas/cancelar" style="display:inline;"
+                        onsubmit="return confirm('¿Cancelar esta reserva? El cliente ya recibió el QR.');">
+                        <input type="hidden" name="token" value="{{ reserva.token }}">
+                        <button type="submit" class="btn-mini btn-outline-mini btn-danger-mini">Cancelar</button>
+                    </form>
+                    {% endif %}
 
-            <!-- CONSUMIDA -->
-            <tr data-busqueda="arenita mejillas arenita@texas.com" data-estado="consumida">
-                <td>
-                    <p class="plato-nombre">Arenita Mejillas</p>
-                    <p class="plato-desc">arenita@texas.com</p>
-                </td>
-                <td>
-                    <p class="reserva-fecha">Ayer</p>
-                    <p class="reserva-hora">22:00</p>
-                </td>
-                <td class="col-personas">6</td>
-                <td class="col-mesa">
-                    <div class="mesa-numero-chico">5</div>
-                </td>
-                <td><span class="badge-estado badge-consumida">Consumida</span></td>
-                <td class="col-acciones-grande">
-                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(103)">Ver</button>
+                    <button class="btn-mini btn-outline-mini"
+                        onclick='abrirDetalle({{ reserva | tojson }})'>Ver</button>
                 </td>
             </tr>
-
-            <!-- CANCELADA -->
-            <tr data-busqueda="calamardo tentaculos calamardo@arrecife.com" data-estado="cancelada">
-                <td>
-                    <p class="plato-nombre">Calamardo Tentáculos</p>
-                    <p class="plato-desc">calamardo@arrecife.com</p>
-                </td>
-                <td>
-                    <p class="reserva-fecha">Ayer</p>
-                    <p class="reserva-hora">20:00</p>
-                </td>
-                <td class="col-personas">2</td>
-                <td class="col-mesa">
-                    <div class="mesa-numero-chico">2</div>
-                </td>
-                <td><span class="badge-estado badge-cancelada">Cancelada</span></td>
-                <td class="col-acciones-grande">
-                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(104)">Ver</button>
-                </td>
-            </tr>
-
-            <!-- EXPIRADA -->
-            <tr data-busqueda="don cangrejo don@krustykrab.com" data-estado="expirada">
-                <td>
-                    <p class="plato-nombre">Don Cangrejo</p>
-                    <p class="plato-desc">don@krustykrab.com</p>
-                </td>
-                <td>
-                    <p class="reserva-fecha">Hace 3 días</p>
-                    <p class="reserva-hora">21:00</p>
-                </td>
-                <td class="col-personas">8</td>
-                <td class="col-mesa">
-                    <div class="mesa-numero-chico">6</div>
-                </td>
-                <td><span class="badge-estado badge-expirada">Expirada</span></td>
-                <td class="col-acciones-grande">
-                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(105)">Ver</button>
-                </td>
-            </tr>
-
-            <!-- CONFIRMADA del fin de semana -->
-            <tr data-busqueda="perla cangrejo perla@krustykrab.com" data-estado="confirmada">
-                <td>
-                    <p class="plato-nombre">Perla Cangrejo</p>
-                    <p class="plato-desc">perla@krustykrab.com</p>
-                </td>
-                <td>
-                    <p class="reserva-fecha">Sábado</p>
-                    <p class="reserva-hora">22:00</p>
-                </td>
-                <td class="col-personas">4</td>
-                <td class="col-mesa">
-                    <div class="mesa-numero-chico">4</div>
-                </td>
-                <td><span class="badge-estado badge-confirmada">Confirmada</span></td>
-                <td class="col-acciones-grande">
-                    <button class="btn-mini btn-outline-mini" onclick="abrirDetalle(106)">Ver</button>
-                    <button class="btn-mini btn-outline-mini btn-danger-mini"
-                        onclick="cancelarReserva(106)">Cancelar</button>
-                </td>
-            </tr>
+            {% endfor %}
 
         </tbody>
     </table>
 
-    <p id="sin-resultados" class="sin-resultados" style="display:none;">
-        No hay reservas que coincidan con los filtros.
+    {% if not reservas %}
+    <p class="sin-resultados">No hay reservas que coincidan con los filtros.</p>
+    {% endif %}
+    <p id="sin-resultados-filtro" class="sin-resultados" style="display:none;">
+        No hay reservas que coincidan con la búsqueda.
     </p>
 </div>
 
@@ -246,58 +189,38 @@
 </div>
 
 <script>
+    // === BUSCADOR client-side (filtra texto en tabla) ===
     const buscador = document.getElementById('buscador-reservas');
-    const filtroEstado = document.getElementById('filtro-estado');
-    const filtroFecha = document.getElementById('filtro-fecha');
     const filas = document.querySelectorAll('#tabla-reservas tr');
-    const sinResultados = document.getElementById('sin-resultados');
+    const sinResultadosFiltro = document.getElementById('sin-resultados-filtro');
 
-    function filtrar() {
+    buscador.addEventListener('input', () => {
         const texto = buscador.value.toLowerCase();
-        const estado = filtroEstado.value;
         let visibles = 0;
         filas.forEach(fila => {
-            const cumpleTexto = (fila.dataset.busqueda || '').includes(texto);
-            const cumpleEstado = !estado || fila.dataset.estado === estado;
-            const visible = cumpleTexto && cumpleEstado;
+            const visible = (fila.dataset.busqueda || '').includes(texto);
             fila.style.display = visible ? '' : 'none';
             if (visible) visibles++;
         });
-        sinResultados.style.display = visibles === 0 ? 'block' : 'none';
-    }
+        sinResultadosFiltro.style.display = visibles === 0 && filas.length > 0 ? 'block' : 'none';
+    });
 
-    buscador.addEventListener('input', filtrar);
-    filtroEstado.addEventListener('change', filtrar);
-    filtroFecha.addEventListener('change', filtrar);
-
-    function abrirDetalle(id) {
-        // TODO: integrar al backend: fetch GET /admin/reservas/<id> y rellenar campos.
-        document.getElementById('det-nombre').textContent = 'Bob Esponja';
-        document.getElementById('det-email').textContent = 'bob@fondodebikini.com';
-        document.getElementById('det-fecha').textContent = 'Hoy';
-        document.getElementById('det-hora').textContent = '20:00';
-        document.getElementById('det-personas').textContent = '4';
-        document.getElementById('det-mesa').textContent = 'Mesa 3 (4 personas)';
-        document.getElementById('det-estado').textContent = 'Confirmada';
-        document.getElementById('det-token').textContent = 'f7c1b8a2-3d4e-5f6a-7b8c-9d0e1f2a3b4c';
-        document.getElementById('det-creada').textContent = '2026-05-20 18:34';
+    // === MODAL DE DETALLE ===
+    function abrirDetalle(reserva) {
+        document.getElementById('det-nombre').textContent = reserva.cliente_nombre;
+        document.getElementById('det-email').textContent = reserva.cliente_email;
+        document.getElementById('det-fecha').textContent = reserva.fecha;
+        document.getElementById('det-hora').textContent = reserva.hora_inicio;
+        document.getElementById('det-personas').textContent = reserva.cantidad_personas;
+        document.getElementById('det-mesa').textContent = 'Mesa ' + reserva.mesa_id;
+        document.getElementById('det-estado').textContent = reserva.estado;
+        document.getElementById('det-token').textContent = reserva.token;
+        document.getElementById('det-creada').textContent = reserva.created_at || '—';
         document.getElementById('modal-detalle').style.display = 'flex';
     }
 
     function cerrarDetalle() {
         document.getElementById('modal-detalle').style.display = 'none';
-    }
-
-    function marcarConsumida(id) {
-        if (!confirm('¿Marcar esta reserva como consumida?')) return;
-        // TODO: integrar al backend: fetch POST /admin/reservas/consumir { token }.
-        alert('Marcada como consumida (mock). En integración: POST /admin/reservas/consumir');
-    }
-
-    function cancelarReserva(id) {
-        if (!confirm('¿Cancelar esta reserva? El cliente ya recibió el QR.')) return;
-        // TODO: integrar al backend: fetch PUT /reservas/<token>/cancelar.
-        alert('Cancelada (mock). En integración: PUT /reservas/<token>/cancelar');
     }
 </script>
 

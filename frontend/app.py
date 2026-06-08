@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from src import api_client
 from src.utils import require_admin
+from datetime import date
 
 app = Flask(__name__)
 app.secret_key = "crusty-crab-frontend"
@@ -288,7 +289,7 @@ def admin_mesas_borrar(id):
     return redirect(url_for("admin_mesas"))
 
 
-##-------------------------------------------------------FUNCIONES------------------------------------------------------
+##-------------------------------------------------------FUNCIONES RESERVAS------------------------------------------------------
 
 
 @app.route("/nosotros")
@@ -298,27 +299,55 @@ def nosotros():
 
 @app.route("/reservas", methods=["GET", "POST"])
 def reservas():
-     if request.method == "POST":
-        
+    if request.method == "POST":
         reserva_data = {
             "cliente_nombre": request.form.get("cliente_nombre"),
             "cliente_email": request.form.get("cliente_email"),
             "cantidad_personas": int(request.form.get("cantidad_personas") or 0),
             "fecha": request.form.get("fecha"),
-            "hora_inicio": request.form.get("hora_inicio")
+            "hora_inicio": request.form.get("hora_inicio"),
         }
-        
-        response = api_client.post("/reservas", json=reserva_data)
-        
-        if response is None:
-            flash("Error de conexión con el backend. Probá de nuevo.", "error")
-            
-        elif response.status_code == 201:
-            flash("Reserva creada exitosamente. Te esperamos!", "exito")
-        else:
-            flash("No se pudo crear la reserva.", "error")
 
-    return render_template("reservas.html")
+        # Validación básica antes de pegarle al backend
+        campos_vacios = [k for k, v in reserva_data.items() if not v]
+        if campos_vacios:
+            return render_template(
+                "reservas.html",
+                error="Completá todos los campos del formulario.",
+                mensaje_exito=None,
+            )
+
+        response = api_client.post("/reservas", json=reserva_data)
+
+        if response is None:
+            return render_template(
+                "reservas.html",
+                error="No pudimos conectarnos al servidor. Probá de nuevo en un rato.",
+                mensaje_exito=None,
+            )
+
+        if response.status_code == 201:
+            return render_template(
+                "reservas.html",
+                error=None,
+                mensaje_exito=f"¡Reserva confirmada! Te enviamos los detalles a {reserva_data['cliente_email']}.",
+            )
+
+        if response.status_code == 404:
+            return render_template(
+                "reservas.html",
+                error="No hay mesas disponibles para esa fecha y cantidad de personas.",
+                mensaje_exito=None,
+            )
+
+        return render_template(
+            "reservas.html",
+            error="No se pudo crear la reserva. Revisá los datos.",
+            mensaje_exito=None,
+        )
+
+    # mostrar el form
+    return render_template("reservas.html", error=None, mensaje_exito=None)
 
 
 @app.route("/contacto", methods=["GET", "POST"])
@@ -366,22 +395,119 @@ def admin_dashboard():
 @app.route("/admin/reservas")
 @require_admin
 def admin_reservas():
-    response = api_client.get("/admin/reservas")
-    
+    estado_filtro = request.args.get("estado")
+    fecha_filtro = request.args.get("fecha")
+
+    # Armamos los query params para el backend
+    params = []
+    if estado_filtro:
+        params.append(f"estado={estado_filtro}")
+    if fecha_filtro:
+        params.append(f"fecha={fecha_filtro}")
+    query = "?" + "&".join(params) if params else ""
+
+    response = api_client.get(f"/admin/reservas{query}")
+
     if response is None:
         return render_template(
             "admin_reservas.html",
             seccion="reservas",
             reservas=[],
+            resumen={"hoy": 0, "consumidas": 0, "canceladas": 0, "proxima": None},
             error="No pudimos cargar las reservas. Probá de nuevo en un rato.",
+            estado_filtro=estado_filtro,
+            fecha_filtro=fecha_filtro,
         )
-        
-    elif response.status_code == 200:
+
+    if response.status_code == 200:
         reservas = response.json()
     else:
         reservas = []
-    
-    return render_template("admin_reservas.html", seccion="reservas", reservas=reservas, error=None)
+
+    # Calculamos métricas para las tarjetas de resumen
+    resumen = calcular_resumen_reservas(reservas)
+
+    return render_template(
+        "admin_reservas.html",
+        seccion="reservas",
+        reservas=reservas,
+        resumen=resumen,
+        error=None,
+        estado_filtro=estado_filtro,
+        fecha_filtro=fecha_filtro,
+    )
+
+
+@app.route("/admin/reservas/consumir", methods=["POST"])
+@require_admin
+def admin_reservas_consumir():
+    token = request.form.get("token")
+
+    if not token:
+        flash("Token vacío.", "error")
+        return redirect(url_for("admin_reservas"))
+
+    response = api_client.post("/admin/reservas/consumir", json={"token": token})
+
+    if response is None:
+        flash("Error de conexión con el backend.", "error")
+    elif response.status_code == 200:
+        flash("Reserva marcada como consumida.", "exito")
+    elif response.status_code == 404:
+        flash("Reserva no encontrada o ya consumida/cancelada.", "error")
+    else:
+        flash("No se pudo consumir la reserva.", "error")
+
+    return redirect(url_for("admin_reservas"))
+
+
+@app.route("/admin/reservas/cancelar", methods=["POST"])
+@require_admin
+def admin_reservas_cancelar():
+    token = request.form.get("token")
+
+    if not token:
+        flash("Token vacío.", "error")
+        return redirect(url_for("admin_reservas"))
+
+    response = api_client.put(f"/reservas/{token}/cancelar")
+
+    if response is None:
+        flash("Error de conexión con el backend.", "error")
+    elif response.status_code == 200:
+        flash("Reserva cancelada.", "exito")
+    elif response.status_code == 404:
+        flash("Reserva no encontrada o ya cancelada.", "error")
+    else:
+        flash("No se pudo cancelar la reserva.", "error")
+
+    return redirect(url_for("admin_reservas"))
+
+
+def calcular_resumen_reservas(reservas):
+    """Calcula métricas básicas a partir de la lista de reservas."""
+    hoy = date.today().isoformat()
+    reservas_hoy = [
+        r for r in reservas if r.get("fecha") == hoy and r.get("estado") == "confirmada"
+    ]
+    consumidas = [r for r in reservas if r.get("estado") == "consumida"]
+    canceladas = [r for r in reservas if r.get("estado") == "cancelada"]
+
+    # Próxima reserva del día = la confirmada de hoy con hora más temprana que aún no pasó
+    proxima = None
+    if reservas_hoy:
+        ordenadas = sorted(reservas_hoy, key=lambda r: r.get("hora_inicio") or "")
+        proxima = ordenadas[0]
+
+    return {
+        "hoy": len(reservas_hoy),
+        "consumidas": len(consumidas),
+        "canceladas": len(canceladas),
+        "proxima": proxima,
+    }
+
+
+##-------------------------------------------------------FUNCIONES ------------------------------------------------------
 
 
 @app.route("/admin/servicios")
