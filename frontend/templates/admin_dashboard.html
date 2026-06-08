@@ -1,0 +1,444 @@
+{% extends "admin_base.html" %}
+
+{% block titulo %}Dashboard - Admin Krusty Krab{% endblock %}
+
+{% block admin_titulo %}Dashboard{% endblock %}
+
+{% block css_extra %}
+<style>
+  /* ── Grid principal ── */
+  .dash-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  /* Reutilizamos .resumen-card del admin.css */
+  .resumen-card .resumen-numero { line-height: 1.1; }
+
+  /* ── Layout dos columnas ── */
+  .dash-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 960px) { .dash-grid { grid-template-columns: 1fr; } }
+
+  /* ── Panel blanco genérico ── */
+  .dash-panel {
+    background: var(--blanco);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.05);
+  }
+  .dash-panel-titulo {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--azul-oscuro);
+    margin: 0 0 20px;
+    letter-spacing: .3px;
+  }
+
+  /* ── Tabs período ── */
+  .periodo-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .periodo-btn {
+    padding: 6px 16px;
+    border: 2px solid var(--azul-oscuro);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--azul-oscuro);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all .15s;
+  }
+  .periodo-btn.activo,
+  .periodo-btn:hover {
+    background: var(--azul-oscuro);
+    color: var(--blanco);
+  }
+  .chart-wrap { position: relative; height: 260px; }
+
+  /* ── Ocupación ── */
+  .ocup-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  .ocup-donut-wrap {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    flex-shrink: 0;
+  }
+  .ocup-pct-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .ocup-pct-num {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--azul-oscuro);
+    line-height: 1;
+  }
+  .ocup-pct-sub {
+    font-size: 11px;
+    color: var(--texto-gris);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .ocup-filas {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ocup-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--gris-claro);
+  }
+  .ocup-fila-label { font-size: 13px; color: #555; }
+  .ocup-fila-val { font-size: 15px; font-weight: 700; color: var(--azul-oscuro); }
+
+  /* ── Top cancelaciones ── */
+  .cancel-table { width: 100%; border-collapse: collapse; }
+  .cancel-table th {
+    text-align: left;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--azul-oscuro);
+    background: var(--gris-claro);
+  }
+  .cancel-table th:first-child { border-radius: 8px 0 0 8px; }
+  .cancel-table th:last-child  { border-radius: 0 8px 8px 0; }
+  .cancel-table td {
+    padding: 13px 14px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: #333;
+    vertical-align: middle;
+  }
+  .cancel-table tr:last-child td { border-bottom: none; }
+  .cancel-rank {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--celeste);
+    color: var(--blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .cancel-email { font-size: 12px; color: var(--texto-gris); margin-top: 2px; }
+
+  /* Reutilizamos badge-cancelada del admin.css */
+  .cancel-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #ffe5e5;
+    color: var(--rojo);
+  }
+
+  /* ── Loading / empty states ── */
+  .dash-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--texto-gris);
+    font-size: 13px;
+    padding: 16px 0;
+  }
+  .spinner {
+    width: 18px; height: 18px;
+    border: 3px solid #ddd;
+    border-top-color: var(--celeste);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .dash-empty {
+    text-align: center;
+    color: var(--texto-gris);
+    padding: 32px;
+    font-size: 14px;
+  }
+</style>
+{% endblock %}
+
+{% block contenido %}
+
+<!-- ── TARJETAS RESUMEN ── -->
+<div class="dash-cards" id="dash-cards">
+  <div class="resumen-card">
+    <div class="dash-loading"><span class="spinner"></span> Cargando…</div>
+  </div>
+</div>
+
+<!-- ── FILA: GRÁFICO + OCUPACIÓN ── -->
+<div class="dash-grid">
+
+  <!-- Gráfico de reservas -->
+  <div class="dash-panel">
+    <p class="dash-panel-titulo">Reservas por período</p>
+    <div class="periodo-tabs">
+      <button class="periodo-btn activo" data-periodo="meses">Meses</button>
+      <button class="periodo-btn" data-periodo="semanas">Semanas</button>
+      <button class="periodo-btn" data-periodo="dias">Días</button>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="chart-reservas"></canvas>
+    </div>
+  </div>
+
+  <!-- Ocupación -->
+  <div class="dash-panel">
+    <p class="dash-panel-titulo">Ocupación hoy</p>
+    <div class="ocup-inner" id="ocup-wrap">
+      <div class="dash-loading"><span class="spinner"></span> Cargando…</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── FILA: TOP CANCELACIONES ── -->
+<div class="dash-panel">
+  <p class="dash-panel-titulo">Top 5 · Clientes con más cancelaciones</p>
+  <div id="cancel-wrap">
+    <div class="dash-loading"><span class="spinner"></span> Cargando…</div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+/* ── helpers ── */
+async function api(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(r.status);
+  return r.json();
+}
+function loader() {
+  return '<div class="dash-loading"><span class="spinner"></span> Cargando…</div>';
+}
+
+/* ── 1. TARJETAS ── */
+async function cargarCards() {
+  try {
+    const [ocup, cancel] = await Promise.all([
+      api('/admin/stats/ocupacion'),
+      api('/admin/stats/cancelaciones'),
+    ]);
+    const totalCancel = cancel.data.reduce((s, c) => s + c.total_cancelaciones, 0);
+    document.getElementById('dash-cards').innerHTML = `
+      <div class="resumen-card">
+        <p class="resumen-titulo">Mesas totales</p>
+        <p class="resumen-numero">${ocup.total_mesas}</p>
+        <p class="resumen-sub">en el local</p>
+      </div>
+      <div class="resumen-card resumen-card-verde">
+        <p class="resumen-titulo">Ocupadas hoy</p>
+        <p class="resumen-numero">${ocup.mesas_reservadas_hoy}</p>
+        <p class="resumen-sub">${ocup.porcentaje_ocupacion}% de ocupación</p>
+      </div>
+      <div class="resumen-card">
+        <p class="resumen-titulo">Libres hoy</p>
+        <p class="resumen-numero">${ocup.mesas_libres_hoy}</p>
+        <p class="resumen-sub">disponibles ahora</p>
+      </div>
+      <div class="resumen-card resumen-card-rojo">
+        <p class="resumen-titulo">Cancelaciones</p>
+        <p class="resumen-numero">${totalCancel}</p>
+        <p class="resumen-sub">total registradas</p>
+      </div>
+    `;
+  } catch {
+    document.getElementById('dash-cards').innerHTML =
+      '<p class="resumen-sub">No se pudieron cargar los datos.</p>';
+  }
+}
+
+/* ── 2. GRÁFICO RESERVAS ── */
+let chartInst = null;
+
+async function cargarGrafico(periodo = 'meses') {
+  const canvas = document.getElementById('chart-reservas');
+  if (chartInst) { chartInst.destroy(); chartInst = null; }
+
+  try {
+    const json = await api(`/admin/stats/reservas?periodo=${periodo}`);
+    chartInst = new Chart(canvas.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: json.data.map(d => d.etiqueta),
+        datasets: [{
+          label: 'Reservas',
+          data: json.data.map(d => d.total),
+          backgroundColor: 'rgba(26,42,74,.75)',
+          borderColor: 'rgba(26,42,74,1)',
+          borderWidth: 2,
+          borderRadius: 6,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.parsed.y} reserva${ctx.parsed.y !== 1 ? 's' : ''}`
+            }
+          }
+        },
+        scales: {
+          x: { grid: { display: false } },
+          y: {
+            beginAtZero: true,
+            ticks: { stepSize: 1, precision: 0 },
+            grid: { color: '#f0f0f0' }
+          }
+        }
+      }
+    });
+  } catch {
+    canvas.parentElement.innerHTML =
+      '<p class="dash-empty">No se pudo cargar el gráfico.</p>';
+  }
+}
+
+document.querySelectorAll('.periodo-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.periodo-btn').forEach(b => b.classList.remove('activo'));
+    btn.classList.add('activo');
+    cargarGrafico(btn.dataset.periodo);
+  });
+});
+
+/* ── 3. OCUPACIÓN ── */
+async function cargarOcupacion() {
+  const wrap = document.getElementById('ocup-wrap');
+  try {
+    const d = await api('/admin/stats/ocupacion');
+    const libre = Math.max(0, 100 - d.porcentaje_ocupacion);
+
+    wrap.innerHTML = `
+      <div class="ocup-donut-wrap">
+        <canvas id="chart-donut" width="170" height="170"></canvas>
+        <div class="ocup-pct-label">
+          <span class="ocup-pct-num">${d.porcentaje_ocupacion}%</span>
+          <span class="ocup-pct-sub">ocupación</span>
+        </div>
+      </div>
+      <div class="ocup-filas">
+        <div class="ocup-fila">
+          <span class="ocup-fila-label">🪑 Mesas totales</span>
+          <span class="ocup-fila-val">${d.total_mesas}</span>
+        </div>
+        <div class="ocup-fila">
+          <span class="ocup-fila-label">✅ Reservadas hoy</span>
+          <span class="ocup-fila-val">${d.mesas_reservadas_hoy}</span>
+        </div>
+        <div class="ocup-fila">
+          <span class="ocup-fila-label">🟢 Libres hoy</span>
+          <span class="ocup-fila-val">${d.mesas_libres_hoy}</span>
+        </div>
+      </div>
+    `;
+
+    new Chart(document.getElementById('chart-donut').getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Ocupadas', 'Libres'],
+        datasets: [{
+          data: [d.porcentaje_ocupacion, libre],
+          backgroundColor: ['var(--celeste)', '#e5e7eb'],
+          borderWidth: 0,
+          hoverOffset: 4,
+        }]
+      },
+      options: {
+        responsive: false,
+        cutout: '74%',
+        plugins: { legend: { display: false }, tooltip: { enabled: true } }
+      }
+    });
+  } catch {
+    wrap.innerHTML = '<p class="dash-empty">No se pudieron cargar los datos.</p>';
+  }
+}
+
+/* ── 4. CANCELACIONES ── */
+async function cargarCancelaciones() {
+  const wrap = document.getElementById('cancel-wrap');
+  try {
+    const json = await api('/admin/stats/cancelaciones');
+    const data = json.data;
+
+    if (!data.length) {
+      wrap.innerHTML = '<p class="dash-empty">🎉 No hay cancelaciones registradas.</p>';
+      return;
+    }
+
+    const filas = data.map((c, i) => `
+      <tr>
+        <td><div class="cancel-rank">${i + 1}</div></td>
+        <td>
+          <div style="font-weight:600;color:var(--azul-oscuro)">${c.cliente_nombre}</div>
+          <div class="cancel-email">${c.cliente_email}</div>
+        </td>
+        <td><span class="cancel-badge">${c.total_cancelaciones} cancelación${c.total_cancelaciones !== 1 ? 'es' : ''}</span></td>
+      </tr>
+    `).join('');
+
+    wrap.innerHTML = `
+      <table class="cancel-table">
+        <thead>
+          <tr>
+            <th style="width:48px">#</th>
+            <th>Cliente</th>
+            <th style="width:160px">Cancelaciones</th>
+          </tr>
+        </thead>
+        <tbody>${filas}</tbody>
+      </table>
+    `;
+  } catch {
+    wrap.innerHTML = '<p class="dash-empty">No se pudieron cargar los datos.</p>';
+  }
+}
+
+/* ── Iniciar ── */
+cargarCards();
+cargarGrafico('meses');
+cargarOcupacion();
+cargarCancelaciones();
+</script>
+
+{% endblock %}
