@@ -70,43 +70,20 @@
     <div class="titulo-linea linea-roja"></div>
 
     <div id="cards-resenas">
-
+        {% for resena in resenas[:3] %}
         <div class="card-resena">
             <div class="resena-header">
-                <div class="avatar avatar-verde">MG</div>
+                <div class="avatar">{{ resena.nombre[:2] | upper }}</div>
                 <div>
-                    <p class="resena-nombre">Marina González</p>
-                    <p class="resena-estrellas">★★★★★</p>
+                    <p class="resena-nombre">{{ resena.nombre }}</p>
+                    <p class="resena-estrellas">{% for i in range(resena.estrellas) %}★{% endfor %}</p>
                 </div>
             </div>
-            <p class="resena-texto">"Juro que pensé pasar, pero una burger me hará sentir como sirena. La Clásica es un
-                crimen delicioso, ya voy cuatro veces este mes 🍔"</p>
+            <p class="resena-texto">"{{ resena.comentario }}"</p>
         </div>
-
-        <div class="card-resena">
-            <div class="resena-header">
-                <div class="avatar avatar-naranja">TD</div>
-                <div>
-                    <p class="resena-nombre">Tomás Parayra</p>
-                    <p class="resena-estrellas">★★★★★</p>
-                </div>
-            </div>
-            <p class="resena-texto">"Me avisaron la Extrema picaba pero fui a aguantar el picante… spoiler: no. Para
-                volvé al día siguiente por más 🌶"</p>
-        </div>
-
-        <div class="card-resena">
-            <div class="resena-header">
-                <div class="avatar avatar-celeste">LR</div>
-                <div>
-                    <p class="resena-nombre">Luna Ramos</p>
-                    <p class="resena-estrellas">★★★★★</p>
-                </div>
-            </div>
-            <p class="resena-texto">"Soy vegetariana y siempre termino mirando el menú ajena… hasta que probé la Veggie.
-                Me hicieron creer en el mar 🌊"</p>
-        </div>
-
+        {% else %}
+        <p>No hay reseñas todavía.</p>
+        {% endfor %}
     </div>
 </section>
 
