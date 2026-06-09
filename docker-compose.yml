@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  mysql:
+  db:
     image: mysql:8.0
     container_name: crusty_crab_db
     environment:
@@ -10,9 +8,10 @@ services:
       MYSQL_USER: tp_user
       MYSQL_PASSWORD: "1234"
     ports:
-      - "3306:3306"
+      - "127.0.0.1:3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./backend/db:/docker-entrypoint-initdb.d
     networks:
       - crusty_network
     healthcheck:
@@ -26,16 +25,16 @@ services:
       dockerfile: Dockerfile
     container_name: crusty_crab_backend
     environment:
-      DB_HOST: mysql
+      DB_HOST: db
       DB_PORT: 3306
       DB_USER: tp_user
       DB_PASSWORD: "1234"
       DB_NAME: crusty_crab
       FLASK_ENV: development
     ports:
-      - "5000:5000"
+      - "127.0.0.1:5000:5000"
     depends_on:
-      mysql:
+      db:
         condition: service_healthy
     networks:
       - crusty_network
@@ -52,7 +51,7 @@ services:
       BACKEND_URL: http://backend:5000
       FLASK_ENV: development
     ports:
-      - "5001:5001"
+      - "127.0.0.1:5001:5001"
     depends_on:
       - backend
     networks:
