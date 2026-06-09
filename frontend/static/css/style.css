@@ -201,6 +201,25 @@ section {
     margin-bottom: 24px;
 }
 
+#cards-menu.cards-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 960px;
+    margin: 0 auto 24px;
+}
+
+@media (max-width: 768px) {
+    #cards-menu.cards-menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    #cards-menu.cards-menu-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .card-plato {
     border-radius: 16px;
     width: 280px;

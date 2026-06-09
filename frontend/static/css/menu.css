@@ -71,11 +71,23 @@
 }
 
 .cards-categoria {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 32px;
+    max-width: 960px;
+    margin: 32px auto 0;
+}
+
+@media (max-width: 768px) {
+    .cards-categoria {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .cards-categoria {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Restricciones */

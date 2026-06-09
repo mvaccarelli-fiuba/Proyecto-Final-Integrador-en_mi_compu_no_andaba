@@ -17,48 +17,34 @@
     <div class="titulo-linea"></div>
     <p class="seccion-sub">Burguers diseñadas con los mejores ingredientes del océano</p>
 
-    <div id="cards-menu">
+    {% set imagenes = [
+        'images/imagenes_menu/hamburguesa_simple.png',
+        'images/imagenes_menu/hamburguesa_picante.png',
+        'images/imagenes_menu/hamburguesa_vegana.png',
+        'images/imagenes_menu/papas_fritas.png',
+        'images/imagenes_menu/aros_de_cebolla.png',
+        'images/imagenes_menu/kelp_shake.png'
+    ] %}
 
+    <div id="cards-menu" class="cards-menu-grid">
+        {% for plato in platos[:6] %}
         <div class="card-plato card-celeste">
-            <span class="card-badge badge-amarillo">LA FAVORITA</span>
             <div class="card-img">
-                <img src="{{ url_for('static', filename='images/imagenes_menu/hamburguesa_simple.png')}}"
-                    alt="imagen_cangreburguer_simple">
+                {% if plato.imagen_url %}
+                <img src="{{ plato.imagen_url }}" alt="{{ plato.nombre }}">
+                {% else %}
+                <img src="{{ url_for('static', filename=imagenes[loop.index0 % imagenes|length]) }}" alt="{{ plato.nombre }}">
+                {% endif %}
             </div>
             <div class="card-info">
-                <h3 class="card-nombre">Cangreburger Clásica</h3>
-                <p class="card-desc">Medallón de angus, lechuga crispa, tomate fresco, cebolla caramelizada y nuestra
-                    salsa secreta del mar.</p>
-                <p class="card-precio">$5.500</p>
+                <h3 class="card-nombre">{{ plato.nombre }}</h3>
+                <p class="card-desc">{{ plato.descripcion }}</p>
+                <p class="card-precio">${{ "{:,}".format(plato.precio|int).replace(",", ".") }}</p>
             </div>
         </div>
-
-        <div class="card-plato card-roja">
-            <span class="card-badge badge-rojo">🌶 PICANTE</span>
-            <div class="card-img"><img
-                    src="{{url_for('static', filename='images/imagenes_menu/hamburguesa_picante.png')}}"
-                    alt="imagen_cangreburguer_picante"></div>
-            <div class="card-info">
-                <h3 class="card-nombre">Cangreburger Extrema</h3>
-                <p class="card-desc">Doble medallón, jalapeños, queso pepper jack, bacon crujiente y salsa sriracha de
-                    arrecife.</p>
-                <p class="card-precio">$7.800</p>
-            </div>
-        </div>
-
-        <div class="card-plato card-verde">
-            <span class="card-badge badge-verde">VEGGIE</span>
-            <div class="card-img"><img
-                    src="{{ url_for('static', filename='images/imagenes_menu/hamburguesa_vegana.png')}}"
-                    alt="imagen_cangreburguer_vegana"></div>
-            <div class="card-info">
-                <h3 class="card-nombre">Cangreburger Veggie</h3>
-                <p class="card-desc">Medallón de legumbres y algas marinas, aguacate, rúcula, tomates cherry y aderezo
-                    de limón.</p>
-                <p class="card-precio">$5.200</p>
-            </div>
-        </div>
-
+        {% else %}
+        <p>No hay platos disponibles.</p>
+        {% endfor %}
     </div>
 
     <a href="/menu" class="link-carta">Ver carta completa →</a>
@@ -70,43 +56,20 @@
     <div class="titulo-linea linea-roja"></div>
 
     <div id="cards-resenas">
-
+        {% for resena in resenas[:3] %}
         <div class="card-resena">
             <div class="resena-header">
-                <div class="avatar avatar-verde">MG</div>
+                <div class="avatar">{{ resena.nombre[:2] | upper }}</div>
                 <div>
-                    <p class="resena-nombre">Marina González</p>
-                    <p class="resena-estrellas">★★★★★</p>
+                    <p class="resena-nombre">{{ resena.nombre }}</p>
+                    <p class="resena-estrellas">{% for i in range(resena.estrellas) %}★{% endfor %}</p>
                 </div>
             </div>
-            <p class="resena-texto">"Juro que pensé pasar, pero una burger me hará sentir como sirena. La Clásica es un
-                crimen delicioso, ya voy cuatro veces este mes 🍔"</p>
+            <p class="resena-texto">"{{ resena.comentario }}"</p>
         </div>
-
-        <div class="card-resena">
-            <div class="resena-header">
-                <div class="avatar avatar-naranja">TD</div>
-                <div>
-                    <p class="resena-nombre">Tomás Parayra</p>
-                    <p class="resena-estrellas">★★★★★</p>
-                </div>
-            </div>
-            <p class="resena-texto">"Me avisaron la Extrema picaba pero fui a aguantar el picante… spoiler: no. Para
-                volvé al día siguiente por más 🌶"</p>
-        </div>
-
-        <div class="card-resena">
-            <div class="resena-header">
-                <div class="avatar avatar-celeste">LR</div>
-                <div>
-                    <p class="resena-nombre">Luna Ramos</p>
-                    <p class="resena-estrellas">★★★★★</p>
-                </div>
-            </div>
-            <p class="resena-texto">"Soy vegetariana y siempre termino mirando el menú ajena… hasta que probé la Veggie.
-                Me hicieron creer en el mar 🌊"</p>
-        </div>
-
+        {% else %}
+        <p>No hay reseñas todavía.</p>
+        {% endfor %}
     </div>
 </section>
 
