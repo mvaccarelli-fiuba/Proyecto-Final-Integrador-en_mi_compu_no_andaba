@@ -1,10 +1,12 @@
+import os
+
 # bd_lucas
 DB_CONFIG = {
-    "host": "localhost",
-    "port": 3306,
-    "user": "tp_user",
-    "password": "1234",
-    "database": "crusty_crab",
+    "host": os.getenv("DB_HOST", "localhost"),
+    "port": int(os.getenv("DB_PORT", 3306)),
+    "user": os.getenv("DB_USER", "tp_user"),
+    "password": os.getenv("DB_PASSWORD", "1234"),
+    "database": os.getenv("DB_NAME", "crusty_crab"),
 }
 
 """
