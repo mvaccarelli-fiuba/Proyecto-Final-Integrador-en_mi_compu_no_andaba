@@ -2,7 +2,7 @@ import os
 import smtplib
 from email.message import EmailMessage
 
-FRONTEND_URL = "http://127.0.0.1:5002"
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://127.0.0.1:5001")
 
 
 from config import (
@@ -107,4 +107,66 @@ Krusty Krab
         return True
     except smtplib.SMTPException as e:
         print(f"[ERROR] No se pudo enviar el mail: {e}")
+        return False
+
+
+def enviar_email_resena(reserva):
+    """
+    Envía un mail al cliente invitándolo a dejar una reseña después
+    de que su reserva fue marcada como consumida.
+    """
+    msg = EmailMessage()
+    msg["Subject"] = "¿Cómo te fue en Krusty Krab? Dejanos tu opinión"
+    msg["From"] = f"{EMAIL_FROM_NAME} <{EMAIL_USER}>"
+    msg["To"] = reserva["cliente_email"]
+
+    cuerpo_texto = f"""
+Hola {reserva["cliente_nombre"]},
+
+¡Gracias por venir a Krusty Krab!
+
+Nos encantaría saber qué te pareció la experiencia. Dejanos tu reseña acá:
+{FRONTEND_URL}/resena/{reserva["token"]}
+
+Tu opinión nos ayuda a mejorar y a que otros clientes nos conozcan.
+
+¡Gracias!
+Krusty Krab
+"""
+    msg.set_content(cuerpo_texto)
+
+    cuerpo_html = f"""
+<html>
+  <body style="font-family: Arial, sans-serif; color: #042C53;">
+    <h2 style="color: #185FA5;">¡Gracias por venir! 🦀</h2>
+    <p>Hola <strong>{reserva["cliente_nombre"]}</strong>,</p>
+    <p>Esperamos que la hayas pasado genial en Krusty Krab.</p>
+    <p>Nos encantaría saber qué te pareció la experiencia. Tu opinión vale oro 🌟</p>
+
+    <p style="margin: 24px 0;">
+      <a href="{FRONTEND_URL}/resena/{reserva['token']}"
+         style="background: #FFC03D; color: #042C53; padding: 12px 24px;
+                text-decoration: none; border-radius: 6px; display: inline-block;
+                font-weight: 700;">
+        Dejar mi reseña
+      </a>
+    </p>
+
+    <p style="margin-top: 30px; color: #5F5E5A; font-size: 12px;">
+      ¡Te esperamos pronto!<br>
+      Krusty Krab
+    </p>
+  </body>
+</html>
+"""
+    msg.add_alternative(cuerpo_html, subtype="html")
+
+    try:
+        with smtplib.SMTP(EMAIL_HOST, EMAIL_PORT) as smtp:
+            smtp.starttls()
+            smtp.login(EMAIL_USER, EMAIL_PASSWORD)
+            smtp.send_message(msg)
+        return True
+    except smtplib.SMTPException as e:
+        print(f"[ERROR] No se pudo enviar el mail de reseña: {e}")
         return False

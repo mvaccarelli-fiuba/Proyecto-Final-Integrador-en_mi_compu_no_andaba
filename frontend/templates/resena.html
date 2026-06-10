@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block titulo %}Dejá tu reseña - Krusty Krab{% endblock %}
+
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/resena.css') }}">
+{% endblock %}
+
+{% block contenido %}
+
+<section id="resena-section">
+
+    {% if enviada %}
+    <!-- ÉXITO -->
+    <div class="resena-card resena-card-exito">
+        <div class="resena-icono">🌟</div>
+        <h2 class="resena-titulo">¡Gracias por tu reseña!</h2>
+        <p class="resena-texto">
+            Tu opinión nos ayuda mucho. ¡Esperamos verte pronto de vuelta!
+        </p>
+        <div class="resena-cta">
+            <a href="/" class="btn-outline">Volver al inicio</a>
+            <a href="/resenas" class="btn-amarillo">Ver todas las reseñas</a>
+        </div>
+    </div>
+
+    {% elif error %}
+    <!-- ERROR -->
+    <div class="resena-card resena-card-error">
+        <div class="resena-icono">⚠</div>
+        <h2 class="resena-titulo">No se puede enviar la reseña</h2>
+        <p class="resena-texto">{{ error }}</p>
+        <div class="resena-cta">
+            <a href="/" class="btn-outline">Volver al inicio</a>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- FORM DE RESEÑA -->
+    <div class="resena-card">
+        <h2 class="resena-titulo">¿Cómo te fue en Krusty Krab?</h2>
+        <p class="resena-texto">
+            Hola <strong>{{ reserva.cliente_nombre }}</strong>, contanos qué te pareció.
+        </p>
+
+        <form method="POST" action="/resena/{{ reserva.token }}" class="resena-form">
+
+            <div class="campo">
+                <label for="estrellas">Puntaje</label>
+                <select id="estrellas" name="estrellas" required>
+                    <option value="">Elegí del 1 al 5</option>
+                    <option value="5">⭐⭐⭐⭐⭐ 5 - Excelente</option>
+                    <option value="4">⭐⭐⭐⭐ 4 - Muy bueno</option>
+                    <option value="3">⭐⭐⭐ 3 - Bueno</option>
+                    <option value="2">⭐⭐ 2 - Regular</option>
+                    <option value="1">⭐ 1 - Malo</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="comentario">Tu opinión</label>
+                <textarea id="comentario" name="comentario" rows="5" placeholder="Contanos cómo fue tu experiencia..."
+                    required></textarea>
+            </div>
+
+            <div class="resena-cta">
+                <a href="/" class="btn-outline">Ahora no</a>
+                <button type="submit" class="btn-amarillo">Enviar reseña</button>
+            </div>
+        </form>
+    </div>
+
+    {% endif %}
+
+</section>
+
+{% endblock %}
