@@ -156,3 +156,24 @@ VALUES (
         4,
         'Soy vegetariana y siempre termino mirando el menú ajena, hasta que probé la Veggie. Excelente.'
     );
+-- ============================================
+-- Actualización de imágenes de platos
+-- ============================================
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/hamburguesa_simple.png'
+WHERE id = 1;
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/hamburguesa_picante.png'
+WHERE id = 2;
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/hamburguesa_vegana.png'
+WHERE id = 3;
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/papas_fritas.png'
+WHERE id = 4;
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/kelp_shake.png'
+WHERE id = 5;
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/pie_de_coral.png'
+WHERE id = 6;

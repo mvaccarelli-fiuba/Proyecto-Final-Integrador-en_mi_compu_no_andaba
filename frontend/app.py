@@ -20,15 +20,29 @@ app.secret_key = "crusty-crab-frontend"
 @app.route("/")
 def inicio():
     servicios_response = api_client.get("/servicios")
-    servicios = servicios_response.json() if servicios_response and servicios_response.status_code == 200 else []
+    servicios = (
+        servicios_response.json()
+        if servicios_response and servicios_response.status_code == 200
+        else []
+    )
 
     resenas_response = api_client.get("/resenas")
-    resenas = resenas_response.json() if resenas_response and resenas_response.status_code == 200 else []
+    resenas = (
+        resenas_response.json()
+        if resenas_response and resenas_response.status_code == 200
+        else []
+    )
 
     platos_response = api_client.get("/platos")
-    platos = platos_response.json() if platos_response and platos_response.status_code == 200 else []
+    platos = (
+        platos_response.json()
+        if platos_response and platos_response.status_code == 200
+        else []
+    )
 
-    return render_template("index.html", servicios=servicios, resenas=resenas, platos=platos)
+    return render_template(
+        "index.html", servicios=servicios, resenas=resenas, platos=platos
+    )
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -364,26 +378,6 @@ def reservas():
     return render_template("reservas.html", error=None, mensaje_exito=None)
 
 
-@app.route("/resenas")
-def resenas_publicas():
-    response = api_client.get("/resenas")
-
-    if response is None:
-        return render_template(
-            "resenas.html",
-            resenas=[],
-            error="No pudimos cargar las reseñas. Probá de nuevo en un rato.",
-        )
-
-    if response.status_code == 200:
-        resenas = response.json()
-    else:
-        # 204 = no hay reseñas todavía, también caemos acá si hay error.
-        resenas = []
-
-    return render_template("resenas.html", resenas=resenas, error=None)
-
-
 @app.errorhandler(404)
 def pagina_no_encontrada(e):
     return render_template("pagina_error_404.html"), 404
@@ -634,6 +628,132 @@ def admin_reservas_consumir_qr():
     return jsonify({"mensaje": descripcion}), response.status_code
 
 
+##-------------------------------------------------------FUNCIONES RESENA ------------------------------------------------------
+@app.route("/resenas")
+def resenas_publicas():
+    response = api_client.get("/resenas")
+
+    if response is None:
+        return render_template(
+            "resenas.html",
+            resenas=[],
+            error="No pudimos cargar las reseñas. Probá de nuevo en un rato.",
+        )
+
+    if response.status_code == 200:
+        resenas = response.json()
+    else:
+        # 204 = no hay reseñas todavía, también caemos acá si hay error.
+        resenas = []
+
+    return render_template("resenas.html", resenas=resenas, error=None)
+
+
+@app.route("/resena/<token>")
+def resena_view(token):
+    """Muestra el form de reseña."""
+    response = api_client.get(f"/reservas/{token}")
+
+    if response is None:
+        return render_template(
+            "resena.html",
+            reserva=None,
+            error="No pudimos conectarnos al servidor.",
+            enviada=False,
+        )
+
+    if response.status_code == 404:
+        return render_template(
+            "resena.html",
+            reserva=None,
+            error="Esta reserva no existe o el link es inválido.",
+            enviada=False,
+        )
+
+    if response.status_code != 200:
+        return render_template(
+            "resena.html",
+            reserva=None,
+            error="No pudimos cargar la reserva.",
+            enviada=False,
+        )
+
+    reserva = response.json()
+
+    if reserva.get("estado") != "consumida":
+        return render_template(
+            "resena.html",
+            reserva=reserva,
+            error="Solo podés reseñar reservas que ya hayas consumido.",
+            enviada=False,
+        )
+
+    return render_template(
+        "resena.html",
+        reserva=reserva,
+        error=None,
+        enviada=False,
+    )
+
+
+@app.route("/resena/<token>", methods=["POST"])
+def resena_enviar(token):
+    """Procesa el envío de la reseña."""
+    estrellas = request.form.get("estrellas")
+    comentario = request.form.get("comentario", "").strip()
+
+    if not estrellas or not comentario:
+        # Mantenemos el form abierto con error
+        response = api_client.get(f"/reservas/{token}")
+        reserva = response.json() if response and response.status_code == 200 else None
+        return render_template(
+            "resena.html",
+            reserva=reserva,
+            error="Completá el puntaje y el comentario.",
+            enviada=False,
+        )
+
+    data = {
+        "token": token,
+        "estrellas": int(estrellas),
+        "comentario": comentario,
+    }
+
+    response = api_client.post("/resenas", json=data)
+
+    if response is None:
+        return render_template(
+            "resena.html",
+            reserva=None,
+            error="No pudimos conectarnos al servidor.",
+            enviada=False,
+        )
+
+    if response.status_code in (200, 201):
+        return render_template(
+            "resena.html",
+            reserva=None,
+            error=None,
+            enviada=True,
+        )
+
+    # Error del backend (por ejemplo, ya existe reseña)
+    try:
+        backend_error = response.json()
+        descripcion = backend_error.get("errors", [{}])[0].get(
+            "description", "No se pudo enviar la reseña."
+        )
+    except Exception:
+        descripcion = "No se pudo enviar la reseña."
+
+    return render_template(
+        "resena.html",
+        reserva=None,
+        error=descripcion,
+        enviada=False,
+    )
+
+
 ##-------------------------------------------------------FUNCIONES ------------------------------------------------------
 
 
@@ -657,7 +777,9 @@ def pagina_no_encontrada():
 def admin_servicios():
     response = api_client.get("/servicios")
     servicios = response.json() if response and response.status_code == 200 else []
-    return render_template("admin_servicios.html", seccion="servicios", servicios=servicios)
+    return render_template(
+        "admin_servicios.html", seccion="servicios", servicios=servicios
+    )
 
 
 @app.route("/admin/servicios/nuevo", methods=["POST"])

@@ -1,6 +1,5 @@
 import os
 
-# bd_lucas
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
     "port": int(os.getenv("DB_PORT", 3306)),
@@ -17,6 +16,16 @@ DB_CONFIG = {
     "password": "1234",
     "database": "crusty_crab",
 }"""
+# bd_lucas
+"""
+DB_CONFIG = {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "TuContraseña123!",
+    "database": "crusty_crab",
+}"""
+
 
 SECRET_KEY = "dev-secret-key-change-in-production"
 
