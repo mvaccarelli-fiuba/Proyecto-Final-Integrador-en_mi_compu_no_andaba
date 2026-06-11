@@ -1,7 +1,7 @@
 import uuid
 from src.reservas import repository
 from src.reservas.qr_service import generar_qr
-from src.reservas.email_service import enviar_email_reserva
+from src.reservas.email_service import enviar_email_reserva, enviar_email_resena
 
 
 def get_disponibilidad(cantidad_personas, fecha):
@@ -35,7 +35,16 @@ def cancelar_reserva(token):
 
 
 def consumir_reserva(token):
-    return repository.consumir_reserva(token)
+    # Primero traemos la reserva para saber el email del cliente
+    reserva = repository.get_reserva(token)
+
+    # Después la consumimos
+    repository.consumir_reserva(token)
+
+    # Y mandamos el mail invitando a reseñar
+    from src.reservas.email_service import enviar_email_resena
+
+    enviar_email_resena(reserva)
 
 
 def get_reservas(estado=None, fecha=None):

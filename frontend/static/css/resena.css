@@ -1,0 +1,94 @@
+#resena-section {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    background: linear-gradient(180deg, var(--azul-oscuro) 0%, var(--azul-medio) 100%);
+}
+
+.resena-card {
+    background: var(--blanco);
+    border-radius: 16px;
+    padding: 48px 40px;
+    max-width: 540px;
+    width: 100%;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+.resena-icono {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #fff4d6;
+    color: #8b6914;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 24px;
+}
+
+.resena-card-exito .resena-icono {
+    background: #d4f5e1;
+}
+
+.resena-card-error .resena-icono {
+    background: #ffe5e5;
+    color: var(--rojo);
+}
+
+.resena-titulo {
+    color: var(--azul-oscuro);
+    font-size: 28px;
+    margin: 0 0 16px;
+}
+
+.resena-texto {
+    color: var(--texto-gris);
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 0 24px;
+}
+
+.resena-form {
+    text-align: left;
+    margin-top: 24px;
+}
+
+.resena-form .campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.resena-form label {
+    font-weight: 600;
+    color: var(--azul-oscuro);
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.resena-form select,
+.resena-form textarea {
+    font-family: inherit;
+    padding: 10px 14px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.resena-form select:focus,
+.resena-form textarea:focus {
+    outline: none;
+    border-color: var(--celeste);
+}
+
+.resena-cta {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}

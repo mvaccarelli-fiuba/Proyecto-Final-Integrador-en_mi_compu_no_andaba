@@ -1,9 +1,10 @@
-# bd_lucas
+import os
+
 DB_CONFIG = {
     "host": "localhost",
     "port": 3306,
     "user": "root",
-    "password": "TuContraseña123!",
+    "password": "Ju@nfer10",
     "database": "crusty_crab",
 }
 
@@ -15,12 +16,21 @@ DB_CONFIG = {
     "password": "1234",
     "database": "crusty_crab",
 }"""
+# bd_lucas
+"""
+DB_CONFIG = {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "TuContraseña123!",
+    "database": "crusty_crab",
+}"""
+
 
 SECRET_KEY = "dev-secret-key-change-in-production"
 
 ##email:crustycrabtp@gmail.com
 ##contraseña:#grupo-20-en_mi_compu_andaba
-
 ##contraseña para la aplicacion del dispositivo : crvb qxdz ydvq mnmz
 
 

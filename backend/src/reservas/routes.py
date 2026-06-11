@@ -136,7 +136,7 @@ def cancelar_reserva(token):
 @reservas_bp.route("/admin/reservas/consumir", methods=["POST"])
 @require_admin
 def consumir_reserva():
-    data = request.json()
+    data = request.get_json()
 
     if not data or "token" not in data:
         return error("400", "Bad Request", "El token es obligatorio", 400)

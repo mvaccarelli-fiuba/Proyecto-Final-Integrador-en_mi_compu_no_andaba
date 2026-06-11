@@ -3,10 +3,11 @@ Todas las rutas del frontend usan estas funciones en vez de hacer
 requests sueltos. Si cambia la URL del backend, se toca acá.
 """
 
+import os
 import requests
 from flask import session
 
-BACKEND_URL = "http://127.0.0.1:5000"
+BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:5000")
 TIMEOUT = 5  # segundos
 
 
