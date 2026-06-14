@@ -33,7 +33,41 @@
 
 #resenas-ordenar {
     display: flex;
+    gap: 12px;
     justify-content: center;
+    flex-wrap: wrap;
+    margin: 24px 0;
+}
+
+.btn-orden {
+    background: var(--blanco);
+    color: var(--azul-oscuro);
+    border: 2px solid #e0e0e0;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-orden:hover {
+    border-color: var(--celeste);
+    color: var(--celeste);
+}
+
+.btn-orden.activo {
+    background: var(--azul-oscuro);
+    color: var(--blanco);
+    border-color: var(--azul-oscuro);
+}
+
+.btn-orden.activo:hover {
+    color: var(--blanco);
 }
 
 #resenas-orden {
