@@ -39,7 +39,7 @@
                 <div>
                     <p class="resena-nombre">{{ resena.nombre }}</p>
                     <p class="resena-estrellas">
-                        {% for i in range(5) %}{% if i < resena.estrellas %}★{% else %}☆{% endif %}{% endfor %} </p>
+                        {% for i in range(5) %}{% if i <resena.estrellas %}★{% else %}☆{% endif %}{% endfor %} </p>
                             {% if resena.created_at %}
                             <p class="resena-fecha">{{ resena.created_at[:10] }}</p>
                             {% endif %}

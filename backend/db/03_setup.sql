@@ -1,7 +1,10 @@
 -- Admin de prueba. Email: admin@crustycrab.com / Password: admin1234
--- TODO: migrar a password hasheada con werkzeug antes de la entrega del 17/6.
 INSERT INTO admin (email, password_hash, nombre)
-VALUES ('admin@crustycrab.com', 'admin1234', 'Mr. Krabs');
+VALUES (
+        'admin@crustycrab.com',
+        'scrypt:32768:8:1$0IhwKX8BQX7WJL0D$f77e0b8e767776bb168034d9b6a160562f61378649c471f5cbd7c7b9f4a021b81047cbe15bdc5ad024a2b38ef45965308e0161804085c68130dfd44ccfadd169',
+        'Mr. Krabs'
+    );
 INSERT INTO categoria_plato (nombre)
 VALUES ('Hamburguesas'),
     ('Acompañamientos'),
