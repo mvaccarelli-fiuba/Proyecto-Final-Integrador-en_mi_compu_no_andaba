@@ -68,6 +68,7 @@ def create_reserva(reserva_data):
             FROM mesa
             WHERE capacidad >= %s
             AND activa = TRUE
+            ORDER BY capacidad ASC
             LIMIT 1
             """,
             (reserva_data["cantidad_personas"],),

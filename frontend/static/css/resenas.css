@@ -107,7 +107,7 @@
 }
 
 #resenas-listado {
-    padding: 56px 80px;
+    padding: 35px 80px;
 }
 
 .cards-resenas-full {
@@ -122,4 +122,20 @@
     color: var(--texto-gris);
     font-size: 12px;
     margin-top: 2px;
+}
+
+.btn-orden.activo {
+  background: var(--azul-oscuro);
+  color: var(--blanco);
+  border-color: var(--azul-oscuro);
+}
+
+.btn-orden {
+  background: var(--blanco);
+  color: var(--azul-oscuro);
+  border: 2px solid #e0e0e0;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-weight: 600;
+  font-size: 14px;
 }
