@@ -568,8 +568,9 @@ def admin_servicios():
 @app.route("/admin/qr")
 @require_admin
 def admin_qr():
-    # TODO: armar plantilla admin_qr.html
-    return "<h1>Validar QR (TODO)</h1>"
+    return render_template(
+        "admin_qr.html", seccion="qr", admin_email=session["admin"]["email"]
+    )
 
 
 if __name__ == "__main__":
