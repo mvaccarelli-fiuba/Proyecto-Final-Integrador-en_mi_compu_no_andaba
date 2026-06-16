@@ -1,0 +1,145 @@
+{% extends "admin_base.html" %}
+
+{% block titulo %}Validar QR - Admin{% endblock %}
+
+{% block admin_titulo %}Validar QR de reserva{% endblock %}
+
+{% block css_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_qr.css') }}">
+{% endblock %}
+
+{% block contenido %}
+
+<div class="qr-layout">
+
+    <!-- LADO IZQUIERDO: LA CÁMARA -->
+    <div class="qr-camara-card">
+        <h3 class="qr-subtitulo">Apuntá la cámara al QR</h3>
+        <p class="qr-instruccion">El escaneo es automático. Sólo apuntá y esperá.</p>
+
+        <div id="qr-reader"></div>
+
+        <p class="qr-ayuda">
+            ¿No se ve la cámara?
+            La primera vez tu navegador pide permiso para usarla.
+            Si la rechazaste por error, andá a configuración del sitio y habilitala.
+        </p>
+    </div>
+
+    <!-- LADO DERECHO: ESTADO Y ÚLTIMA VALIDACIÓN -->
+    <div class="qr-estado-card">
+        <h3 class="qr-subtitulo">Estado</h3>
+
+        <div id="qr-estado-inicial" class="qr-estado qr-estado-esperando">
+            <div class="qr-estado-icono">📷</div>
+            <p class="qr-estado-titulo">Esperando QR...</p>
+            <p class="qr-estado-texto">Apuntá la cámara al código QR del cliente.</p>
+        </div>
+
+        <div id="qr-estado-procesando" class="qr-estado qr-estado-procesando" style="display:none;">
+            <div class="qr-estado-icono">⏳</div>
+            <p class="qr-estado-titulo">Validando...</p>
+            <p class="qr-estado-texto">Marcando reserva como consumida.</p>
+        </div>
+
+        <div id="qr-estado-ok" class="qr-estado qr-estado-ok" style="display:none;">
+            <div class="qr-estado-icono">✓</div>
+            <p class="qr-estado-titulo">¡Reserva consumida!</p>
+            <p class="qr-estado-texto" id="qr-mensaje-ok">Token validado.</p>
+            <button class="btn-amarillo" onclick="resetear()">Validar otra</button>
+        </div>
+
+        <div id="qr-estado-error" class="qr-estado qr-estado-error" style="display:none;">
+            <div class="qr-estado-icono">⚠</div>
+            <p class="qr-estado-titulo">No se pudo validar</p>
+            <p class="qr-estado-texto" id="qr-mensaje-error">Error</p>
+            <button class="btn-outline" onclick="resetear()">Reintentar</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- Librería de escaneo (html5-qrcode desde CDN) -->
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+<script>
+    let scanner = null;
+    let procesando = false;
+
+    function mostrarEstado(id) {
+        document.getElementById('qr-estado-inicial').style.display = 'none';
+        document.getElementById('qr-estado-procesando').style.display = 'none';
+        document.getElementById('qr-estado-ok').style.display = 'none';
+        document.getElementById('qr-estado-error').style.display = 'none';
+        document.getElementById(id).style.display = 'block';
+    }
+
+    async function consumirReserva(token) {
+        if (procesando) return;
+        procesando = true;
+        mostrarEstado('qr-estado-procesando');
+
+        try {
+            const formData = new FormData();
+            formData.append('token', token);
+
+            const respuesta = await fetch('/admin/reservas/consumir-qr', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await respuesta.json();
+
+            if (respuesta.ok) {
+                document.getElementById('qr-mensaje-ok').textContent =
+                    data.mensaje || 'Reserva validada correctamente';
+                mostrarEstado('qr-estado-ok');
+            } else {
+                document.getElementById('qr-mensaje-error').textContent =
+                    data.mensaje || 'No se pudo validar la reserva';
+                mostrarEstado('qr-estado-error');
+            }
+        } catch (error) {
+            document.getElementById('qr-mensaje-error').textContent =
+                'Error de conexión con el servidor';
+            mostrarEstado('qr-estado-error');
+        }
+    }
+
+    function onScanSuccess(decodedText, decodedResult) {
+        if (procesando) return;
+        // Pausamos el scanner para no detectar el mismo QR mil veces
+        scanner.pause(true);
+        consumirReserva(decodedText);
+    }
+
+    function onScanError(errorMessage) {
+        // Esto se dispara MUCHAS veces (cada frame que no detecta QR).
+        // Lo ignoramos para no llenar la consola.
+    }
+
+    function resetear() {
+        procesando = false;
+        mostrarEstado('qr-estado-inicial');
+        if (scanner) {
+            scanner.resume();
+        }
+    }
+
+    // Inicializar el scanner cuando la página carga
+    window.addEventListener('load', () => {
+        scanner = new Html5QrcodeScanner(
+            "qr-reader",
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 },
+                rememberLastUsedCamera: true,
+                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+            },
+            false
+        );
+        scanner.render(onScanSuccess, onScanError);
+    });
+</script>
+
+{% endblock %}

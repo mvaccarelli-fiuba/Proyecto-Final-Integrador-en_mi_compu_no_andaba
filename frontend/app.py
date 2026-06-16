@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
 from src import api_client
 from src.utils import require_admin
 from datetime import date
@@ -9,7 +9,30 @@ app.secret_key = "crusty-crab-frontend"
 
 @app.route("/")
 def inicio():
-    return render_template("index.html")
+    servicios_response = api_client.get("/servicios")
+    servicios = (
+        servicios_response.json()
+        if servicios_response and servicios_response.status_code == 200
+        else []
+    )
+
+    resenas_response = api_client.get("/resenas")
+    resenas = (
+        resenas_response.json()
+        if resenas_response and resenas_response.status_code == 200
+        else []
+    )
+
+    platos_response = api_client.get("/platos")
+    platos = (
+        platos_response.json()
+        if platos_response and platos_response.status_code == 200
+        else []
+    )
+
+    return render_template(
+        "index.html", servicios=servicios, resenas=resenas, platos=platos
+    )
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -385,12 +408,38 @@ def reserva_confirmada():
     return render_template("reserva_confirmada.html")
 
 
+
 @app.route("/admin/dashboard")
 @require_admin
 def admin_dashboard():
-    # TODO: armar plantilla admin_dashboard.html
-    return "<h1>Dashboard (TODO)</h1>"
+    return render_template("admin_dashboard.html", seccion="dashboard")
 
+@app.route("/admin/stats/ocupacion")
+@require_admin
+def admin_stats_ocupacion():
+    response = api_client.get("/admin/stats/ocupacion")
+    if response is None or not response.ok:
+        return jsonify({"error": "No se pudo conectar con el backend"}), 502
+    return response.json(), response.status_code
+
+
+@app.route("/admin/stats/cancelaciones")
+@require_admin
+def admin_stats_cancelaciones():
+    response = api_client.get("/admin/stats/cancelaciones")
+    if response is None or not response.ok:
+        return jsonify({"error": "No se pudo conectar con el backend"}), 502
+    return response.json(), response.status_code
+
+
+@app.route("/admin/stats/reservas")
+@require_admin
+def admin_stats_reservas():
+    periodo = request.args.get("periodo", "meses")
+    response = api_client.get(f"/admin/stats/reservas?periodo={periodo}")
+    if response is None or not response.ok:
+        return jsonify({"error": "No se pudo conectar con el backend"}), 502
+    return response.json(), response.status_code
 
 @app.route("/admin/reservas")
 @require_admin
@@ -519,9 +568,10 @@ def admin_servicios():
 @app.route("/admin/qr")
 @require_admin
 def admin_qr():
-    # TODO: armar plantilla admin_qr.html
-    return "<h1>Validar QR (TODO)</h1>"
+    return render_template(
+        "admin_qr.html", seccion="qr", admin_email=session["admin"]["email"]
+    )
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5002, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)

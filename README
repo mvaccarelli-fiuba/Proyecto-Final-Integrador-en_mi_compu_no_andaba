@@ -1,1 +1,286 @@
+# Krusty Krab — Documento del Proyecto
 
+---
+
+## 1. Descripción del proyecto
+
+Sitio web para **Krusty Krab**, una hamburguesería ficticia.
+
+La plataforma permite a los clientes:
+
+- Consultar el menú.
+- Leer reseñas.
+- Conocer los servicios extras del local.
+- Realizar reservas en línea con asignación automática de mesa.
+
+Las reservas confirmadas se envían por email con un **código QR** que el cliente presenta al llegar al local.
+
+Una vez consumida la reserva, el cliente puede dejar una reseña sobre su experiencia.
+
+El sitio cuenta además con un **panel de administración** que permite:
+
+- Gestionar el menú.
+- Administrar mesas y servicios extras.
+- Validar reservas mediante QR.
+- Consultar dashboards con métricas operativas.
+
+---
+
+## 2. Hipótesis y supuestos
+
+Se asumen las siguientes hipótesis y supuestos:
+
+- El local tiene una única sucursal con capacidad fija.
+- El horario de atención es fijo según día de la semana.
+- Las reservas operan por slots fijos de **1 hora**.
+- El local cuenta con un conjunto fijo de mesas, cada una con su capacidad.
+- Una mesa solo puede tener una reserva por slot.
+- Al crear la reserva, el sistema asigna automáticamente la mesa más chica que cubra la cantidad de personas, optimizando la ocupación del local.
+- La cantidad de personas por reserva tiene:
+  - mínimo: 1 persona
+  - máximo: capacidad de la mesa más grande del local.
+- Cada reserva está asociada a un **QR único**, utilizado como identificador y llave de acceso para:
+  - cancelación
+  - reseñas
+- Las reseñas se publican libremente, pero solo pueden realizarlas usuarios cuya reserva fue marcada como **consumida**.
+- Las reseñas pueden ser dadas de baja por el administrador.
+- Existe un rol de **administrador**.
+
+---
+
+## 3. Alcance
+
+### 3.1 Usuario público (sin autenticación)
+
+- Visualización de información del local:
+  - fotos
+  - dirección
+  - horarios
+- Carta del menú con:
+  - fotos
+  - precios
+  - descripciones
+  - restricciones alimenticias
+- Listado de reseñas con puntaje.
+- Listado de servicios extras:
+  - estacionamiento
+  - accesibilidad
+  - wifi
+  - etc.
+- Flujo de reserva en pasos:
+  1. elección de fecha
+  2. cantidad de personas
+  3. horario disponible
+  4. confirmación
+- Recepción de email de confirmación con:
+  - código QR
+  - link de cancelación
+- Cancelación de reserva desde el email.
+- Recepción de email con link para publicar una reseña una vez consumida la reserva.
+
+---
+
+### 3.2 Administrador (autenticado)
+
+- ABM de platos del menú:
+  - imagen
+  - precio
+  - categoría
+  - restricciones alimenticias
+- ABM de servicios extras.
+- ABM de mesas:
+  - número de mesa
+  - capacidad
+- Validación de QR para marcar una reserva como consumida.
+- Listado e historial completo de reservas con filtros.
+- Baja de reseñas inapropiadas.
+- Dashboard con métricas:
+  - reservas por período
+  - canceladas
+  - consumidas
+  - ocupación promedio
+  - usuarios con más cancelaciones
+
+---
+
+### 3.3 Estados de una reserva
+
+Una reserva puede encontrarse en uno de los siguientes estados:
+
+- **confirmada**: creada por el cliente y aún no transcurrió.
+- **cancelada**: cancelada por el cliente antes de su fecha.
+- **consumida**: el administrador validó el QR en el local.
+- **expirada**: la fecha pasó sin ser consumida ni cancelada (estado calculado).
+
+---
+
+## 4. Backlog de producto
+
+El backlog se organiza en **épicas** que agrupan historias relacionadas.
+
+---
+
+### Épica 1 — Setup del proyecto
+
+- Crear repositorio GitHub y estrategia de ramas:
+  - `main`
+  - `dev`
+  - `feature/*`
+- Definir estructura:
+  - backend
+  - frontend
+  - db
+  - docs
+- Script SQL de creación de tablas.
+- Script SQL de datos de prueba (seed).
+- Archivo `init.sh` con instalación de dependencias.
+- README inicial con instrucciones de despliegue.
+
+---
+
+### Épica 2 — Autenticación del administrador
+
+- Modelo de usuario admin en backend.
+- Endpoint `POST /admin/login`.
+- Pantalla de login admin.
+- Logout y manejo de sesión.
+
+---
+
+### Épica 3 — Menú público
+
+**Endpoints públicos**
+
+- `GET /platos`
+- `GET /platos/:id`
+
+**Endpoints admin**
+
+- `POST /platos`
+- `PUT /platos`
+- `DELETE /platos`
+
+**Funcionalidades**
+
+- Subida y servido de imágenes.
+- Manejo de restricciones alimenticias.
+
+**Frontend**
+
+- Carta pública con filtros.
+- Panel admin con ABM de platos.
+
+---
+
+### Épica 4 — Servicios extras
+
+- Endpoint público `GET /servicios`.
+- Endpoints admin `/servicios`.
+- Landing pública con servicios.
+- ABM admin de servicios.
+
+---
+
+### Épica 5 — Reservas
+
+**Administración**
+
+- ABM de mesas (número y capacidad).
+
+**Endpoints**
+
+- `GET /disponibilidad`
+- `POST /reservas`
+- `GET /reservas/:token`
+- `PUT /reservas/:token/cancelar`
+- `POST /admin/reservas/consumir`
+- `GET /admin/reservas`
+
+**Funcionalidades**
+
+- Asignación automática de mesa.
+- Generación de token único.
+- Cálculo de estado expirada.
+- Generación de imagen QR.
+- Envío de email con:
+  - QR adjunto
+  - link de cancelación.
+
+**Frontend público**
+
+- Flujo paso a paso:
+  - fecha → personas → horario → confirmar
+- Pantalla de cancelación.
+
+**Frontend admin**
+
+- Validación de QR.
+- Listado e historial con filtros.
+
+---
+
+### Épica 6 — Reseñas
+
+**Endpoints**
+
+- `GET /resenas`
+- `POST /resenas`
+- `DELETE /admin/resenas/:id`
+
+**Reglas**
+
+- Solo reseñas asociadas a reservas consumidas.
+- Email automático invitando a reseñar.
+
+**Frontend**
+
+- Sección pública de reseñas.
+- Pantalla de carga desde link de email.
+- Panel admin para eliminación.
+
+---
+
+### Épica 7 — Dashboard administrador
+
+**Endpoints**
+
+- `GET /admin/stats/reservas`
+- `GET /admin/stats/cancelaciones`
+- `GET /admin/stats/ocupacion`
+
+**Frontend**
+
+- Dashboard con KPIs y gráficos.
+
+---
+
+### Épica 8 — Landing y diseño
+
+- Diseño responsive.
+- Galería de fotos del local.
+- Información de contacto.
+- Dirección y horarios.
+- Footer institucional.
+
+---
+
+### Épica 9 — Funcionalidades deseables
+
+- Dockerización del proyecto.
+
+---
+
+### Épica 10 — Documentación e informe
+
+- Informe final:
+  - carátula
+  - integrantes
+  - resumen
+  - introducción
+  - solución
+  - tecnología
+  - conclusión
+- Documentación de endpoints.
+- Instrucciones de despliegue.
+
+---

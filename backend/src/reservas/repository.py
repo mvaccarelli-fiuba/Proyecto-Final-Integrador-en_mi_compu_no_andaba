@@ -68,15 +68,14 @@ def create_reserva(reserva_data):
             FROM mesa
             WHERE capacidad >= %s
             AND activa = TRUE
+            ORDER BY capacidad ASC
             LIMIT 1
             """,
             (reserva_data["cantidad_personas"],),
         )
         mesa = cursor.fetchone()
-
         if not mesa:
             raise ValueError("No hay mesas disponibles")
-
         cursor.execute(
             """
             INSERT INTO reserva
@@ -105,7 +104,10 @@ def create_reserva(reserva_data):
         nueva_reserva_id = cursor.lastrowid
         cursor.close()
         return nueva_reserva_id
-    except mysql.connector.Error:
+    except mysql.connector.Error as err:
+        if err.errno == 1062:
+            raise ValueError
+
         raise
     finally:
         if conn.is_connected():
@@ -239,6 +241,46 @@ def get_reservas(estado=None, fecha=None):
     except mysql.connector.Error:
         raise
 
+    finally:
+        if conn.is_connected():
+            conn.close()
+
+
+def get_reserva_por_token(token):
+    """Devuelve la reserva si existe, o None."""
+    conn = get_connection()
+    try:
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute(
+            """
+            SELECT id, token, cliente_nombre, cliente_email, estado
+            FROM reserva
+            WHERE token = %s
+            """,
+            (token,),
+        )
+        row = cursor.fetchone()
+        cursor.close()
+        if row:
+            return convert_row_to_dict(row)
+        return None
+    finally:
+        if conn.is_connected():
+            conn.close()
+
+
+def existe_resena_para_reserva(reserva_id):
+    """Devuelve True si ya existe una reseña para esa reserva."""
+    conn = get_connection()
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id FROM resena WHERE reserva_id = %s",
+            (reserva_id,),
+        )
+        existe = cursor.fetchone() is not None
+        cursor.close()
+        return existe
     finally:
         if conn.is_connected():
             conn.close()

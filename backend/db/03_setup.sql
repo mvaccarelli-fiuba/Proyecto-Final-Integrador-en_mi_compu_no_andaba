@@ -1,0 +1,182 @@
+-- Admin de prueba. Email: admin@crustycrab.com / Password: admin1234
+INSERT INTO admin (email, password_hash, nombre)
+VALUES (
+        'admin@crustycrab.com',
+        'scrypt:32768:8:1$GZjMqmxQr8MLIOL0$ae16263f38f2b59c4ec4d2b31495f2902e1bbbf1ecda993984ca1b387acd5f65265bbd9707eaf3e6f5b78268d4cf7033bcb3053a3ce7dc951a446a5a692a6909',
+        'Mr. Krabs'
+    );
+INSERT INTO categoria_plato (nombre)
+VALUES ('Hamburguesas'),
+    ('Acompañamientos'),
+    ('Bebidas'),
+    ('Postres');
+INSERT INTO plato (
+        nombre,
+        descripcion,
+        precio,
+        categoria_id,
+        es_vegetariano,
+        es_vegano,
+        sin_gluten
+    )
+VALUES (
+        'Krabby Patty',
+        'La hamburguesa secreta de la casa.',
+        5500.00,
+        1,
+        FALSE,
+        FALSE,
+        FALSE
+    ),
+    (
+        'Double Krabby',
+        'Doble medallón, doble queso.',
+        7800.00,
+        1,
+        FALSE,
+        FALSE,
+        FALSE
+    ),
+    (
+        'Veggie Patty',
+        'Versión vegetariana con medallón de lentejas.',
+        5200.00,
+        1,
+        TRUE,
+        FALSE,
+        FALSE
+    ),
+    (
+        'Papas Bikini',
+        'Papas fritas extra crocantes.',
+        2800.00,
+        2,
+        TRUE,
+        TRUE,
+        TRUE
+    ),
+    (
+        'Kelp Shake',
+        'Malteada de algas.',
+        3200.00,
+        3,
+        TRUE,
+        TRUE,
+        TRUE
+    ),
+    (
+        'Pie de Coral',
+        'Postre de la casa.',
+        3600.00,
+        4,
+        TRUE,
+        FALSE,
+        FALSE
+    );
+-- Papas -> Vegano
+INSERT INTO servicio_extra (nombre, descripcion)
+VALUES (
+        'Estacionamiento',
+        'Playa de estacionamiento gratuita.'
+    ),
+    (
+        'Accesibilidad',
+        'Acceso para personas con movilidad reducida.'
+    ),
+    (
+        'Wifi',
+        'Wifi gratis para clientes.'
+    ),
+    (
+        'Pet friendly',
+        'Aceptamos mascotas en el patio.'
+    );
+INSERT INTO mesa (numero, capacidad)
+VALUES (1, 2),
+    (2, 2),
+    (3, 4),
+    (4, 4),
+    (5, 6),
+    (6, 8);
+-- probamos la reseña con una reserva
+INSERT INTO reserva (
+        token,
+        cliente_nombre,
+        cliente_email,
+        cantidad_personas,
+        fecha,
+        hora_inicio,
+        mesa_id,
+        estado
+    )
+VALUES (
+        'test-token-1',
+        'Marina González',
+        'marina@test.com',
+        2,
+        '2026-05-15',
+        '20:00',
+        1,
+        'consumida'
+    ),
+    (
+        'test-token-2',
+        'Tomás Parayra',
+        'tomas@test.com',
+        4,
+        '2026-05-14',
+        '21:00',
+        3,
+        'consumida'
+    ),
+    (
+        'test-token-3',
+        'Luna Ramos',
+        'luna@test.com',
+        2,
+        '2026-05-13',
+        '22:00',
+        2,
+        'consumida'
+    );
+-- Ahora las reseñas:
+INSERT INTO resena (reserva_id, autor, puntaje, comentario)
+VALUES (
+        1,
+        'Marina González',
+        5,
+        'Juro que pensé pasar, pero una burger me hará sentir como sirena. La Clásica es un crimen delicioso, ya voy cuatro veces este mes.'
+    ),
+    (
+        2,
+        'Tomás Parayra',
+        5,
+        'Me avisaron que la Extrema picaba pero fui a aguantar. Spoiler: no aguanté, pero volvería igual.'
+    ),
+    (
+        3,
+        'Luna Ramos',
+        4,
+        'Soy vegetariana y siempre termino mirando el menú ajena, hasta que probé la Veggie. Excelente.'
+    );
+-- ============================================
+-- Actualización de imágenes de platos
+-- ============================================
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/hamburguesa_simple.png'
+WHERE id = 1;
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/hamburguesa_picante.png'
+WHERE id = 2;
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/hamburguesa_vegana.png'
+WHERE id = 3;
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/papas_fritas.png'
+WHERE id = 4;
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/kelp_shake.png'
+WHERE id = 5;
+UPDATE plato
+SET imagen_url = '/static/images/imagenes_menu/pie_de_coral.png'
+WHERE id = 6;
