@@ -74,10 +74,8 @@ def create_reserva(reserva_data):
             (reserva_data["cantidad_personas"],),
         )
         mesa = cursor.fetchone()
-
         if not mesa:
             raise ValueError("No hay mesas disponibles")
-
         cursor.execute(
             """
             INSERT INTO reserva
@@ -106,7 +104,10 @@ def create_reserva(reserva_data):
         nueva_reserva_id = cursor.lastrowid
         cursor.close()
         return nueva_reserva_id
-    except mysql.connector.Error:
+    except mysql.connector.Error as err:
+        if err.errno == 1062:
+            raise ValueError
+
         raise
     finally:
         if conn.is_connected():
