@@ -31,7 +31,6 @@ services:
       DB_PASSWORD: "1234"
       DB_NAME: crusty_crab
       FLASK_ENV: development
-      FRONTEND_URL: "http://127.0.0.1:5001"
     ports:
       - "127.0.0.1:5000:5000"
     depends_on:
