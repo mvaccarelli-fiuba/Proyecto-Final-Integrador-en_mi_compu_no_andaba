@@ -385,7 +385,7 @@ async function cargarOcupacion() {
       },
       options: {
         responsive: false,
-        cutout: '74%',
+        cutout: '70%',
         plugins: { legend: { display: false }, tooltip: { enabled: true } }
       }
     });
@@ -413,7 +413,7 @@ async function cargarCancelaciones() {
           <div style="font-weight:600;color:var(--azul-oscuro)">${c.cliente_nombre}</div>
           <div class="cancel-email">${c.cliente_email}</div>
         </td>
-        <td><span class="cancel-badge">${c.total_cancelaciones} cancelación${c.total_cancelaciones !== 1 ? 'es' : ''}</span></td>
+        <td><span class="cancel-badge">${c.total_cancelaciones} ${c.total_cancelaciones !== 1 ? 'cancelaciones' : 'cancelación'}</span></td>
       </tr>
     `).join('');
 

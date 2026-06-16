@@ -2,7 +2,7 @@
 INSERT INTO admin (email, password_hash, nombre)
 VALUES (
         'admin@crustycrab.com',
-        'scrypt:32768:8:1$0IhwKX8BQX7WJL0D$f77e0b8e767776bb168034d9b6a160562f61378649c471f5cbd7c7b9f4a021b81047cbe15bdc5ad024a2b38ef45965308e0161804085c68130dfd44ccfadd169',
+        'scrypt:32768:8:1$GZjMqmxQr8MLIOL0$ae16263f38f2b59c4ec4d2b31495f2902e1bbbf1ecda993984ca1b387acd5f65265bbd9707eaf3e6f5b78268d4cf7033bcb3053a3ce7dc951a446a5a692a6909',
         'Mr. Krabs'
     );
 INSERT INTO categoria_plato (nombre)

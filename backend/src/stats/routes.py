@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify
 import mysql.connector
 
+from src.stats import service
 from src.stats import repository
 from src.utils import error, require_admin
 
@@ -13,7 +14,7 @@ def stats_reservas():
     periodo = request.args.get("periodo", "meses").lower()
 
     try:
-        data = repository.get_stats_reservas(periodo)
+        data = service.get_stats_reservas(periodo)
         return jsonify({"periodo": periodo, "data": data}), 200
     except mysql.connector.Error as err:
         return error(
@@ -35,7 +36,7 @@ def stats_reservas():
 @require_admin
 def stats_cancelaciones():
     try:
-        data = repository.get_stats_cancelaciones()
+        data = service.get_stats_cancelaciones()
         return jsonify({"data": data}), 200
     except mysql.connector.Error as err:
         return error(
@@ -57,7 +58,7 @@ def stats_cancelaciones():
 @require_admin
 def stats_ocupacion():
     try:
-        data = repository.get_stats_ocupacion()
+        data = service.get_stats_ocupacion()
         return jsonify(data), 200
     except mysql.connector.Error as err:
         return error(

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
 from src import api_client
 from src.utils import require_admin
 from datetime import date
@@ -9,7 +9,30 @@ app.secret_key = "crusty-crab-frontend"
 
 @app.route("/")
 def inicio():
-    return render_template("index.html")
+    servicios_response = api_client.get("/servicios")
+    servicios = (
+        servicios_response.json()
+        if servicios_response and servicios_response.status_code == 200
+        else []
+    )
+
+    resenas_response = api_client.get("/resenas")
+    resenas = (
+        resenas_response.json()
+        if resenas_response and resenas_response.status_code == 200
+        else []
+    )
+
+    platos_response = api_client.get("/platos")
+    platos = (
+        platos_response.json()
+        if platos_response and platos_response.status_code == 200
+        else []
+    )
+
+    return render_template(
+        "index.html", servicios=servicios, resenas=resenas, platos=platos
+    )
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -550,4 +573,4 @@ def admin_qr():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5002, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)
