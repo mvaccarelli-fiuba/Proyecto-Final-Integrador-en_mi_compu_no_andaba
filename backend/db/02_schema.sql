@@ -23,13 +23,7 @@ CREATE TABLE restriccion_alimenticia (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(60) NOT NULL UNIQUE
 );
--- -------------------------------------------------------------
--- Categorías de plato (catálogo: hamburguesas, bebidas, postres, etc.)
--- -------------------------------------------------------------
-CREATE TABLE categoria_plato (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(80) NOT NULL UNIQUE
-);
+
 -- -------------------------------------------------------------
 -- Platos del menú
 -- -------------------------------------------------------------
@@ -39,13 +33,11 @@ CREATE TABLE plato (
     descripcion TEXT,
     precio DECIMAL(10, 2) NOT NULL CHECK (precio >= 0),
     imagen_url VARCHAR(255),
-    categoria_id INT NOT NULL,
     disponible BOOLEAN NOT NULL DEFAULT TRUE,
     es_vegetariano BOOLEAN NOT NULL DEFAULT FALSE,
     es_vegano BOOLEAN NOT NULL DEFAULT FALSE,
     sin_gluten BOOLEAN NOT NULL DEFAULT FALSE,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (categoria_id) REFERENCES categoria_plato(id)
 );
 -- -------------------------------------------------------------
 -- Servicios extras (estacionamiento, wifi, accesibilidad, ...)
