@@ -106,7 +106,6 @@ def get_platos_con_restriccion(restriccion):
             FROM plato
             WHERE {column} = TRUE AND disponible = TRUE
             ORDER BY id
-            LIMIT 10
             """
         )
         rows = cursor.fetchall()
@@ -213,8 +212,8 @@ def delete_plato(id):
         cursor = conn.cursor()
         cursor.execute(
             """
-            UPDATE plato
-            SET disponible = FALSE
+            DELETE
+            FROM plato
             WHERE id = %s
             """,
             (id,),
