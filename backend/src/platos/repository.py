@@ -95,14 +95,7 @@ def get_platos_con_restriccion(restriccion):
         cursor = conn.cursor(dictionary=True)
         cursor.execute(
             f"""
-            SELECT id, nombre, descripcion, precio,
-                es_vegano AS vegano,
-                es_vegetariano AS vegetariano,
-                sin_gluten AS gluten,
-                imagen_url,
-                disponible AS activo,
-                created_at,
-                categoria_id
+            SELECT *
             FROM plato
             WHERE {column} = TRUE AND disponible = TRUE
             ORDER BY id
