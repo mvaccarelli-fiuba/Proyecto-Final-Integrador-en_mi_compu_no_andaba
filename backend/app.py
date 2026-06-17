@@ -9,8 +9,6 @@ from src.mesas.routes import mesas_bp
 from src.reservas.routes import reservas_bp
 from src.stats.routes import stats_bp
 
-# A medida que cada dominio se mergee a main, descomentar la linea.
-
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
